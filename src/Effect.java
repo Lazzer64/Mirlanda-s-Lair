@@ -9,6 +9,7 @@ class Effects {
 	static Effect
 	none = new no_effect(),
 	weak_heal = new weak_heal_effect(),
+	medium_heal = new med_heal_effect(),
 	weak_burn = new weak_fire();
 }
 
