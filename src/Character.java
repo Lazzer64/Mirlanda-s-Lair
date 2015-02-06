@@ -10,6 +10,8 @@ public class Character {
 	Race race;
 	Profession profession;
 	Inventory inventory;
+	Status status = Status.none;
+	int statusTurns = 0;
 
 
 	/**
@@ -170,6 +172,19 @@ public class Character {
 		this.mana -= burn;
 	}
 
+	public void setStatus(Status status){
+		this.status = status;
+		this.statusTurns = status.turns;
+	}
+	
+	public void tickStatus(){
+		if(statusTurns > 0){
+			statusTurns--;
+		} else {
+			status = Status.none;
+		}
+	}
+	
 	public void use(Item i){
 		i.use(this);
 	}

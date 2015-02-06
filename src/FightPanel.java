@@ -130,8 +130,25 @@ class FightPanel extends GamePanel{
 
 		c2.useCombatAction(c2Act, c1);
 		addText(" \n The enemy retaliated with " + c2Act.getFlavorText());
+		
+		//tickStatus();
 	}
-	
+
+	void tickStatus(){
+		if(c1.statusTurns > 0){
+			c1.status.effect.use(c2, c1);
+			addText(c1.status.effect.getFlavor());
+			c1.tickStatus();
+		}
+		
+		if(c2.statusTurns > 0){
+			c2.status.effect.use(c1, c2);
+			addText(c2.status.effect.getFlavor());
+			c2.tickStatus();
+		}
+		
+	}
+
 	void giveRewards(){
 		Main.openScreen(Main.dp);
 		int initLevel = c1.level;
