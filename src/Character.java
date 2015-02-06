@@ -175,7 +175,7 @@ public class Character {
 	}
 
 	public void death(){
-		System.out.println("RIP in peace " + name + ".");
+		//System.out.println("RIP in peace " + name + ".");
 	}
 
 	public String title(){

@@ -10,9 +10,7 @@ class FightPanel extends GamePanel{
 	Monster c2;
 	Character target = c2;
 	int selected = 0;
-	String text = "COMBAT TEXT HERE!";
 	boolean target_select = false;
-	Color textColor = Color.black;
 	
 	public FightPanel(Hero c1, Monster c2){
 		super();
@@ -24,27 +22,13 @@ class FightPanel extends GamePanel{
 		setText("You encounter a hostile!",Color.red);
 	}
 
-	public void setText(String text){
-		this.text = text;
-	}
-	
-	public void setText(String text, Color textColor){
-		this.text = text;
-		this.textColor = textColor;
-	}
-
-	public void addText(String text){
-		setText(this.text + text);
-		repaint();
-	}
-
 	public void paint(Graphics g){
 		g.setColor(Color.BLACK);
 		drawAllyStats(c1,5,15,g);
 		drawEnemyStats(c2,5,15,g);
 		g.drawString("vs.", (GameWindow.width - 24)/2, 27);
-		drawCombatText(5,50,50,g);
-		drawCombatActions(Main.c.getCombatActions(),15,100,g);
+		drawCombatText(5,50,75,g);
+		drawCombatActions(Main.c.getCombatActions(),15,125,g);
 		g.setColor(Color.BLACK);
 		drawPopup(g);
 		textColor = Color.black;
@@ -63,7 +47,7 @@ class FightPanel extends GamePanel{
 
 		t = c.name;
 		x_space = this.getFontMetrics(this.getFont()).stringWidth(t);
-		g.drawString(t, Main.gw.width - x_space - x, y);
+		g.drawString(t, GameWindow.width - x_space - x, y);
 
 		t = "Health: " + c.health + "/" + c.max_health;
 		x_space = this.getFontMetrics(this.getFont()).stringWidth(t);
@@ -80,47 +64,8 @@ class FightPanel extends GamePanel{
 		g.setColor(Color.black);
 		g.drawRect(x, y, GameWindow.width - x * 2, size);
 		g.setColor(textColor);
-		
-		String line = "";
-		String word = "";
-		int y_move = y;
-		int x_buffer = x + 3;
-		for(int i = 0; i < text.toCharArray().length; i++){
-			char c = text.toCharArray()[i];
-			// find words
-			if(c != ' ' && i != text.toCharArray().length - 1){
-				word += c;
-			} else if(c == ' ') {
-				if(getFontMetrics(getFont()).stringWidth(line + word) > (GameWindow.width - x_buffer * 2)){
-					y_move += 14;
-					g.drawString(line, x_buffer, y_move);
-					line = "";
-				}
-				if(word.compareTo("\t") == 0){
-					word += "    ";
-				}
+		wrapedText(x+3, y, GameWindow.width - x - 3, text, g);
 
-				if(word.compareTo("\n") == 0){
-					y_move += 14;
-					g.drawString(line, x_buffer, y_move);
-					line = "";
-				} else {
-					line += word + " ";
-					word = "";
-				}
-			} else {
-				// if end of the line
-				if(getFontMetrics(getFont()).stringWidth(line + word) > (GameWindow.width - x_buffer * 2)){
-					y_move += 14;
-					g.drawString(line, x_buffer, y_move);
-					line = "";
-				}
-				line += word + text.toCharArray()[text.length()-1] + " ";
-				word = "";
-				y_move += 14;
-				g.drawString(line, x_buffer, y_move);
-			}
-		}
 	}
 
 	void drawCombatActions(CombatAction[] a, int x, int y, Graphics g){

@@ -401,10 +401,6 @@ class DungeonPanel extends GamePanel{
 		g.setColor(Room.black);
 		g.drawRect(Main.c.x * cell_size, Main.c.y * cell_size, cell_size, cell_size);
 
-//		g.setColor(Room.red);
-//		int size = 100;
-//		g.drawOval(Main.c.x * cell_size - (size / 2),Main.c.y * cell_size - (size / 2), size, size);
-
 		drawPopup(g);
 		
 	}
