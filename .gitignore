@@ -44,7 +44,7 @@ Temporary Items
 
 # Ignore bin
 /bin
-/.settings
+/".settings"
 !.classpath
 !.project
 !forms-1.3.0.jar
