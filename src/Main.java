@@ -35,7 +35,7 @@ public class Main {
 		c.revealRooms();
 		c.give(new Item[]{Consumable.red_potion,Consumable.blue_potion,Consumable.red_potion});
 		c.give(Map.full_map);
-		
+		c.give(Jewelry.burn_ring);
 	}
 
 	public static void openScreen(JPanel p){
