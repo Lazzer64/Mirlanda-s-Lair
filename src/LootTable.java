@@ -20,7 +20,8 @@ public class LootTable extends Hashtable<Item, Double>{
 	}},
 
 	dragon = new LootTable() {{
-		put(Consumable.orange_potion, 1.00);
+		put(Jewelry.burn_ring, .50);
+		put(Jewelry.heal_ring, .50);
 	}};
 
 	
