@@ -71,5 +71,19 @@ class weak_fire implements Effect {
 		return " burns " + targetName + " for " + dmg + ".";
 	}
 	
+}
+
+class weak_poison implements Effect {
+	
+	int dmg = 2;
+	String targetName = "Target";
+	
+	public void use(Character caster, Character target){
+		targetName = target.name;
+		target.damage(dmg);
+	}
+	public String getFlavor(){
+		return " poisons " + targetName + " for " + dmg + ".";
+	}
 	
 }
