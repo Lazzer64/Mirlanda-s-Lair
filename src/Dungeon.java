@@ -4,8 +4,11 @@ import java.awt.Graphics;
 import java.awt.event.KeyEvent;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.util.ArrayList;
+
+import javax.imageio.ImageIO;
 
 
 public class Dungeon {
@@ -348,6 +351,8 @@ class Room {
 class DungeonPanel extends GamePanel{
 
 	Dungeon dungeon;
+	int cell_size;
+	boolean fogEnabled = false;
 
 	public DungeonPanel(Dungeon d){
 		super();
@@ -360,7 +365,7 @@ class DungeonPanel extends GamePanel{
 	public void paint(Graphics g){
 
 		// Calculate cell size, if the cells do not fit evenly adjust size
-		int cell_size = (int) GameWindow.height/(dungeon.rooms.length);
+		cell_size = (int) GameWindow.height/(dungeon.rooms.length);
 		if(cell_size % GameWindow.height != 0){
 			cell_size = (int) GameWindow.height/(dungeon.rooms.length - 1);
 		}
@@ -401,8 +406,28 @@ class DungeonPanel extends GamePanel{
 		g.setColor(Room.black);
 		g.drawRect(Main.c.x * cell_size, Main.c.y * cell_size, cell_size, cell_size);
 
+		if(fogEnabled){
+			drawFog(g);
+		}
+
 		drawPopup(g);
-		
+
+	}
+
+	void drawFog(Graphics g){
+		int fogSize = 200;
+		int center_x = Main.c.x * cell_size - (fogSize/2);
+		int center_y = Main.c.y * cell_size - (fogSize/2);
+		g.setColor(Color.BLACK);
+		g.fillRect(0, 0, center_x, GameWindow.height); // left black out
+		g.fillRect(0, 0, GameWindow.width, center_y); // top black out
+		g.fillRect(center_x + fogSize, 0, GameWindow.height, GameWindow.width); // right black out
+		g.fillRect(0, center_y + fogSize, GameWindow.width, GameWindow.height); // bottom black out
+
+		try {
+			g.drawImage(ImageIO.read(new File("img/fog.png")), center_x, center_y, fogSize, fogSize, null);
+		} catch (IOException e) {e.printStackTrace();}
+
 	}
 
 

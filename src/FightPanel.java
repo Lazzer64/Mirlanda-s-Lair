@@ -11,7 +11,7 @@ class FightPanel extends GamePanel{
 	Character target = c2;
 	int selected = 0;
 	boolean target_select = false;
-	
+
 	public FightPanel(Hero c1, Monster c2){
 		super();
 		this.c1 = c1;
@@ -107,16 +107,7 @@ class FightPanel extends GamePanel{
 		CombatAction c2Act = c2.action();
 
 		if(c1.mana >= c1Act.getCost()){
-			c1.useCombatAction(c1Act, c2);
-			setText("You use " + c1Act.getFlavorText());
-			if(c1.jewelry != Jewelry.none){
-				c1.jewelry.effect.use(c1, c2);
-				addText(" \n Your jewelry " + c1.jewelry.effect.getFlavor());
-			}
-
-			c2.useCombatAction(c2Act, c1);
-			addText(" \n The enemy retaliated with " + c2Act.getFlavorText());
-
+			executeActions(c1Act,c2Act);
 		} else {
 			setText("You do not have enough mana to use that!");
 		}
@@ -124,27 +115,43 @@ class FightPanel extends GamePanel{
 		if(c1.health <= 0){
 			Main.restartGame();
 		} else if(c2.health <= 0){
-			Main.openScreen(Main.dp);
-			int initLevel = c1.level;
-			// Rewards for killing enemy
-			Item[] loot = c2.getLoot();
-			int exp_reward = c2.level;
-			Main.c.grantExp(exp_reward);
-			Main.c.give(loot);
-			//
-			GamePanel panel = ((GamePanel)Main.gw.getContentPane());
-			panel.openPopup(
-					" \n You have defeated " + c2.name + "!"
-							+" \n  \n -  -  -  Reward  -  -  -"
-							+" \n " + exp_reward + " exp."
-							+" \n " + Main.itemsToText(loot));
-			if(c1.level > initLevel){
-				((GamePanel)Main.gw.getContentPane()).openPopup(((GamePanel)Main.gw.getContentPane()).popText 
-						+ " \n  \n LEVEL UP!"
-						+ " \n You are now level " + c1.level);
-			}
+			giveRewards();
 		}
 
+	}
+
+	void executeActions(CombatAction c1Act, CombatAction c2Act){
+		c1.useCombatAction(c1Act, c2);
+		setText("You use " + c1Act.getFlavorText());
+		if(c1.jewelry != Jewelry.none){
+			c1.jewelry.effect.use(c1, c2);
+			addText(" \n Your jewelry " + c1.jewelry.effect.getFlavor());
+		}
+
+		c2.useCombatAction(c2Act, c1);
+		addText(" \n The enemy retaliated with " + c2Act.getFlavorText());
+	}
+	
+	void giveRewards(){
+		Main.openScreen(Main.dp);
+		int initLevel = c1.level;
+		// Rewards for killing enemy
+		Item[] loot = c2.getLoot();
+		int exp_reward = c2.level;
+		Main.c.grantExp(exp_reward);
+		Main.c.give(loot);
+		//
+		GamePanel panel = ((GamePanel)Main.gw.getContentPane());
+		panel.openPopup(
+				" \n You have defeated " + c2.name + "!"
+						+" \n  \n -  -  -  Reward  -  -  -"
+						+" \n " + exp_reward + " exp."
+						+" \n " + Main.itemsToText(loot));
+		if(c1.level > initLevel){
+			((GamePanel)Main.gw.getContentPane()).openPopup(((GamePanel)Main.gw.getContentPane()).popText 
+					+ " \n  \n LEVEL UP!"
+					+ " \n You are now level " + c1.level);
+		}
 	}
 
 	public CombatAction getSelected(){
