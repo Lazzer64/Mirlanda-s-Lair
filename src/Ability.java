@@ -29,7 +29,7 @@ public enum Ability implements CombatAction {
 		double roll = Math.random();
 		double chance = (caster.dexterity/50.0);
 		double crit_mult = 2 + (caster.dexterity/5);
-		chance = 1;
+
 		crit = (roll <= chance);
 
 		use_damage += (int) (caster.strength/5); // Strength addition to hit
