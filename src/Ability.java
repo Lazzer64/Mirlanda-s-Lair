@@ -33,17 +33,17 @@ public enum Ability implements CombatAction {
 		crit = (roll <= chance);
 
 		use_damage += (int) (caster.strength/5); // Strength addition to hit
-		if(crit){use_damage *= crit_mult; flavor += " *i CRIT!  * ";}
+		if(crit){use_damage *= crit_mult; flavor += " *i *cDEX CRIT! *c * ";}
 
 
 		if(damage > 0 && heal <= 0){ // If damage ability
 			target.damage(use_damage);
-			flavor += " *b " + name + " * , dealing *cRED " + use_damage + " *c damage.";
+			flavor += " *b " + name + " * , dealing *cSTR *b " + use_damage + " * *c damage.";
 		} 
 
 		else if(heal > 0 && damage <= 0){ // if healing ability
 			target.heal(heal);
-			flavor += " *b " + name + " * , healing for *cBLUE " + heal + " *c ";
+			flavor += " *b " + name + " * , healing for *cINT " + heal + " *c ";
 		} 
 
 		else { // if damage and healing
@@ -103,12 +103,12 @@ enum Magic_Ability implements CombatAction{
 
 		if(damage > 0 && heal <= 0){ // If damage ability
 			target.damage(use_damage);
-			flavor += " *b " + name + " *b , dealing *cBLUE " + use_damage + " *c damage.";
+			flavor += " *b " + name + " * , dealing *cINT  *b " + use_damage + " * *c damage.";
 		} 
 
 		else if(heal > 0 && damage <= 0){ // if healing ability
 			target.heal(heal);
-			flavor += " *b " + name + " * , healing for *cBLUE " + heal + " *c ";
+			flavor += " *b " + name + " * , healing for *cINT  *b " + heal + " * *c ";
 		} 
 
 		else { // if damage and healing

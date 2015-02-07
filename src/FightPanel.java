@@ -19,7 +19,7 @@ class FightPanel extends GamePanel{
 		setPreferredSize(new Dimension(GameWindow.width,GameWindow.height));
 		setBounds(0, 0, GameWindow.width, GameWindow.height);
 		setLayout(null);
-		setText("You *i encounter a *cRED *b hostile!");
+		setText("You encounter a *cRED *b hostile! * ");
 	}
 
 	public void paint(Graphics g){
@@ -111,12 +111,14 @@ class FightPanel extends GamePanel{
 			setText("You do not have enough *cBLUE mana *c to use that!");
 		}
 
+	}
+
+	void checkHealths(){
 		if(c1.health <= 0){
 			Main.restartGame();
 		} else if(c2.health <= 0){
 			giveRewards();
 		}
-
 	}
 
 	void executeActions(CombatAction c1Act, CombatAction c2Act){
@@ -131,6 +133,13 @@ class FightPanel extends GamePanel{
 		addText(" \n The enemy retaliated with " + c2Act.getFlavorText());
 
 		//tickStatus();
+		
+		if(c1.health <= 0){
+			setText("You have been *b *cRED Slain");
+		} else if(c2.health <= 0){
+			setText("You have *b *cRED defeated * *c " + c2.name + ".");
+		}
+		
 	}
 
 	void tickStatus(){
@@ -198,6 +207,7 @@ class FightPanel extends GamePanel{
 
 	@Override
 	public void keyPressed(KeyEvent e) {
+		checkHealths();
 		switch(e.getKeyCode()){
 		case KeyEvent.VK_UP:
 			if(!target_select){

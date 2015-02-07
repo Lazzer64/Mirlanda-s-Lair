@@ -88,7 +88,7 @@ class weak_fire implements Effect {
 		return false;
 	}
 	public String getFlavor(){
-		return " burns " + targetName + " for " + dmg + ".";
+		return " *i *cRED burns * *c " + targetName + " for *cRED  *b " + dmg + " * *c .";
 	}
 }
 

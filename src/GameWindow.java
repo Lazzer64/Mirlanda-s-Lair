@@ -121,7 +121,11 @@ abstract class GamePanel extends JPanel implements KeyListener{
 	}
 
 	void wrapedText(int x, int y, int width, String text, Graphics g){
-		int y_move = y + 14;
+		wrapedText(x,y,14,width,text,g);
+	}
+	
+	void wrapedText(int x, int y, int spacing, int width, String text, Graphics g){
+		int y_move = y + spacing;
 		int x_buffer = x;
 		int curr_x = x_buffer;
 		int end = text.indexOf(' ');
@@ -132,7 +136,7 @@ abstract class GamePanel extends JPanel implements KeyListener{
 			if(word.compareTo("\t") == 0){ // Check if the word is a tab
 				word += "    ";
 			} else if(word.compareTo("\n") == 0){ // Check if the word is a new line
-				y_move += 14;
+				y_move += spacing;
 				curr_x = x_buffer;
 				word = "";
 			} else if(word.startsWith("*c")){ // Check if the word is a color change
@@ -150,19 +154,25 @@ abstract class GamePanel extends JPanel implements KeyListener{
 			}
 			if(word != "") word += " ";
 			int wordWidth = getFontMetrics(getFont()).stringWidth(word);
-			if(curr_x + wordWidth > x + width){y_move += 14;curr_x = x_buffer;} // If the word needs to be wrapped
+			if(curr_x + wordWidth > x + width){y_move += spacing;curr_x = x_buffer;} // If the word needs to be wrapped
 			g.drawString(word, curr_x, y_move); // Draw the String at curr_x and y_move
 			text = text.substring(end + 1); // Remove the word from the text String
 			curr_x += wordWidth;
 			end = text.indexOf(' '); // Find the next space
 		}
 		int wordWidth = getFontMetrics(getFont()).stringWidth(text);
-		if(curr_x + wordWidth > x + width){y_move += 14;curr_x = x_buffer;} // Check wrap
+		if(curr_x + wordWidth > x + width){y_move += spacing;curr_x = x_buffer;} // Check wrap
 		g.drawString(text, curr_x, y_move); // Draw the remaining string
 		g.setFont(normalFont);
 	}
 
 	Color parseColor(String color){
+		Color healthColor = new Color(204,0,79);
+		Color manaColor = new Color(80,150,255);
+		Color strColor = new Color(166,0,65);
+		Color dexColor = new Color(65,166,0);
+		Color intColor = new Color(36,117,243);
+		
 		switch(color){
 		case "RED":
 			return Color.RED;
@@ -172,6 +182,16 @@ abstract class GamePanel extends JPanel implements KeyListener{
 			return Color.GREEN;
 		case "YELLOW":
 			return Color.YELLOW;
+		case "HEALTH":
+			return healthColor;
+		case "MANA":
+			return manaColor;
+		case "STR":
+			return strColor;
+		case "DEX":
+			return dexColor;
+		case "INT":
+			return intColor;
 		default:
 			return Color.BLACK;
 		}
