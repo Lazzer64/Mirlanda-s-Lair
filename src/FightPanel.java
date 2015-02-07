@@ -19,7 +19,7 @@ class FightPanel extends GamePanel{
 		setPreferredSize(new Dimension(GameWindow.width,GameWindow.height));
 		setBounds(0, 0, GameWindow.width, GameWindow.height);
 		setLayout(null);
-		setText("You encounter a hostile!",Color.red);
+		setText("You *i encounter a *cRED *b hostile!");
 	}
 
 	public void paint(Graphics g){
@@ -65,7 +65,6 @@ class FightPanel extends GamePanel{
 		g.drawRect(x, y, GameWindow.width - x * 2, size);
 		g.setColor(textColor);
 		wrapedText(x+3, y, GameWindow.width - x - 3, text, g);
-
 	}
 
 	void drawCombatActions(CombatAction[] a, int x, int y, Graphics g){
@@ -109,7 +108,7 @@ class FightPanel extends GamePanel{
 		if(c1.mana >= c1Act.getCost()){
 			executeActions(c1Act,c2Act);
 		} else {
-			setText("You do not have enough mana to use that!");
+			setText("You do not have enough *cBLUE mana *c to use that!");
 		}
 
 		if(c1.health <= 0){
@@ -123,7 +122,7 @@ class FightPanel extends GamePanel{
 	void executeActions(CombatAction c1Act, CombatAction c2Act){
 		c1.useCombatAction(c1Act, c2);
 		setText("You use " + c1Act.getFlavorText());
-		
+
 		if(c1.jewelry.effect.use(c1,c2)){
 			addText(" \n Your jewelry " + c1.jewelry.effect.getFlavor());
 		}

@@ -59,14 +59,14 @@ abstract class GamePanel extends JPanel implements KeyListener{
 	String popText = "";
 	String text = "";
 	Color textColor = Color.BLACK;
-	
+
 	public GamePanel(){
 		super();
 		setPreferredSize(new Dimension(GameWindow.width,GameWindow.height));
 		setBounds(0, 0, GameWindow.width, GameWindow.height);
 		setLayout(null);
 	}
-	
+
 
 	public void togglePopup(){
 		showPop = !showPop;
@@ -105,11 +105,11 @@ abstract class GamePanel extends JPanel implements KeyListener{
 			centeredText(y,size,popText,g);
 		}
 	}
-	
+
 	public void setText(String text){
 		this.text = text;
 	}
-	
+
 	public void setText(String text, Color textColor){
 		this.text = text;
 		this.textColor = textColor;
@@ -119,55 +119,69 @@ abstract class GamePanel extends JPanel implements KeyListener{
 		setText(this.text + text);
 		repaint();
 	}
-	
-	void wrapedText(int x, int y, int width, String text, Graphics g){
-		String line = "";
-		String word = "";
-		int y_move = y;
-		int x_buffer = x;
-		for(int i = 0; i < text.toCharArray().length; i++){
-			char c = text.toCharArray()[i];
-			// find words
-			if(c != ' ' && i != text.toCharArray().length - 1){
-				word += c;
-			} else if(c == ' ') {
-				if(getFontMetrics(getFont()).stringWidth(line + word) > (width - x)){
-					y_move += 14;
-					g.drawString(line, x_buffer, y_move);
-					line = "";
-				}
-				if(word.compareTo("\t") == 0){
-					word += "    ";
-				}
 
-				if(word.compareTo("\n") == 0){
-					y_move += 14;
-					g.drawString(line, x_buffer, y_move);
-					line = "";
-				} else {
-					line += word + " ";
-					word = "";
-				}
-			} else {
-				// if end of the line
-				if(getFontMetrics(getFont()).stringWidth(line + word) > (width - x)){
-					y_move += 14;
-					g.drawString(line, x_buffer, y_move);
-					line = "";
-				}
-				line += word + text.toCharArray()[text.length()-1] + " ";
-				word = "";
+	void wrapedText(int x, int y, int width, String text, Graphics g){
+		int y_move = y + 14;
+		int x_buffer = x;
+		int curr_x = x_buffer;
+		int end = text.indexOf(' ');
+		Font normalFont = getFont();
+		g.setColor(Color.BLACK);
+		while(end!=-1){ // While there are spaces in the text
+			String word = text.substring(0, end); // Isolate the word
+			if(word.compareTo("\t") == 0){ // Check if the word is a tab
+				word += "    ";
+			} else if(word.compareTo("\n") == 0){ // Check if the word is a new line
 				y_move += 14;
-				g.drawString(line, x_buffer, y_move);
+				curr_x = x_buffer;
+				word = "";
+			} else if(word.startsWith("*c")){ // Check if the word is a color change
+				g.setColor(parseColor(word.substring(2)));
+				word = "";
+			} else if(word.compareTo("*b") == 0){ // Check if the word is a bold
+				g.setFont(new Font(null, Font.BOLD, g.getFont().getSize()));
+				word = "";
+			} else if(word.compareTo("*i") == 0){ // Check if the word is a bold
+				g.setFont(new Font(null, Font.ITALIC, g.getFont().getSize()));
+				word = "";
+			} else if(word.compareTo("*") == 0){ // Check for plain text
+				g.setFont(normalFont);
+				word = "";
 			}
+			if(word != "") word += " ";
+			int wordWidth = getFontMetrics(getFont()).stringWidth(word);
+			if(curr_x + wordWidth > x + width){y_move += 14;curr_x = x_buffer;} // If the word needs to be wrapped
+			g.drawString(word, curr_x, y_move); // Draw the String at curr_x and y_move
+			text = text.substring(end + 1); // Remove the word from the text String
+			curr_x += wordWidth;
+			end = text.indexOf(' '); // Find the next space
+		}
+		int wordWidth = getFontMetrics(getFont()).stringWidth(text);
+		if(curr_x + wordWidth > x + width){y_move += 14;curr_x = x_buffer;} // Check wrap
+		g.drawString(text, curr_x, y_move); // Draw the remaining string
+		g.setFont(normalFont);
+	}
+
+	Color parseColor(String color){
+		switch(color){
+		case "RED":
+			return Color.RED;
+		case "BLUE":
+			return Color.BLUE;
+		case "GREEN":
+			return Color.GREEN;
+		case "YELLOW":
+			return Color.YELLOW;
+		default:
+			return Color.BLACK;
 		}
 	}
-	
+
 	void centeredText(int y, int width, String text, Graphics g){
 
 		String line = "";
 		String word = "";
-		
+
 		int y_move = y;
 		for(int i = 0; i < text.toCharArray().length; i++){
 			char c = text.toCharArray()[i];

@@ -29,29 +29,27 @@ public enum Ability implements CombatAction {
 		double roll = Math.random();
 		double chance = (caster.dexterity/50.0);
 		double crit_mult = 2 + (caster.dexterity/5);
-		
+		chance = 1;
 		crit = (roll <= chance);
 
 		use_damage += (int) (caster.strength/5); // Strength addition to hit
-		if(crit){use_damage *= crit_mult; flavor += "CRIT! ";}
+		if(crit){use_damage *= crit_mult; flavor += " *i CRIT!  * ";}
 
-		//System.out.println("Chance: " + chance + " roll: " + roll +  " crit: " + crit);
-		//System.out.println("Base damage: " + damage + " use damage: " + use_damage);
 
 		if(damage > 0 && heal <= 0){ // If damage ability
 			target.damage(use_damage);
-			flavor += name + ", dealing " + use_damage + " damage.";
+			flavor += " *b " + name + " * , dealing *cRED " + use_damage + " *c damage.";
 		} 
 
 		else if(heal > 0 && damage <= 0){ // if healing ability
 			target.heal(heal);
-			flavor += name + ", healing for " + heal;
+			flavor += " *b " + name + " * , healing for *cBLUE " + heal + " *c ";
 		} 
 
 		else { // if damage and healing
 			target.damage(use_damage);
-			target.heal(heal);
-			flavor += "You used " + name + ", dealing " + use_damage + " damage, and healing for " + heal + ".";
+			caster.heal(heal);
+			flavor += "You used *b " + name + " * , dealing " + use_damage + " damage, and healing for " + heal + ".";
 		}
 
 	}
@@ -105,18 +103,18 @@ enum Magic_Ability implements CombatAction{
 
 		if(damage > 0 && heal <= 0){ // If damage ability
 			target.damage(use_damage);
-			flavor += name + ", dealing " + use_damage + " damage.";
+			flavor += " *b " + name + " *b , dealing *cBLUE " + use_damage + " *c damage.";
 		} 
 
 		else if(heal > 0 && damage <= 0){ // if healing ability
 			target.heal(heal);
-			flavor += name + ", healing for " + heal;
+			flavor += " *b " + name + " * , healing for *cBLUE " + heal + " *c ";
 		} 
 
 		else { // if damage and healing
 			target.damage(use_damage);
-			target.heal(heal);
-			flavor += name + ", dealing " + use_damage + " damage, and healing for " + heal + ".";
+			caster.heal(heal);
+			flavor += " *b " + name + " *b , dealing " + use_damage + " damage, and healing for " + heal + ".";
 		}
 	}
 
