@@ -186,7 +186,7 @@ enum Jewelry implements Item{
 	none("None", Effects.none),
 	copper("Copper Ring", Effects.none),
 	heal_ring("Lesser Ring of Life", Effects.weak_heal),
-	burn_ring("Lesser Ring of Fire", Effects.weak_fire);
+	fire_ring("Lesser Ring of Fire", Effects.weak_fire);
 	
 	String name;
 	Effect effect;

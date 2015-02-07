@@ -1,6 +1,6 @@
 public interface Effect {
 
-	void use(Character caster, Character target);
+	boolean use(Character caster, Character target);
 	String getFlavor();
 
 }
@@ -16,8 +16,9 @@ class Effects {
 
 
 class no_effect implements Effect {
-	public void use(Character a, Character b){
 
+	public boolean use(Character a, Character b){
+		return false;
 	}
 	public String getFlavor() {
 		return null;
@@ -28,9 +29,10 @@ class weak_heal_effect implements Effect {
 
 	String name = "heal";
 	int healamnt = 1;
-
-	public void use(Character caster, Character target) {
+	
+	public boolean use(Character caster, Character target) {
 		caster.heal(healamnt);
+		return true;
 	}
 
 	public String getFlavor() {
@@ -46,9 +48,10 @@ class weak_heal_effect implements Effect {
 class med_heal_effect implements Effect{
 	String name = "heal";
 	int healamnt = 3;
-
-	public void use(Character caster, Character target) {
+	
+	public boolean use(Character caster, Character target) {
 		caster.heal(healamnt);
+		return true;
 	}
 
 	public String getFlavor() {
@@ -63,11 +66,26 @@ class med_heal_effect implements Effect{
 class weak_fire implements Effect {
 
 	int dmg = 2;
+	int chance = 50;
 	String targetName = "Target";
+	String flavor = "";
+	
+	boolean roll(){
+		double roll = Math.random();
+		if(roll <= chance/100.0){
+			return true;
+		}
+		flavor = "";
+		return false;
+	}
 
-	public void use(Character caster, Character target){
+	public boolean use(Character caster, Character target){
 		targetName = target.name;
-		target.damage(dmg);
+		if(roll()){
+			target.damage(dmg);
+			return true;
+		}
+		return false;
 	}
 	public String getFlavor(){
 		return " burns " + targetName + " for " + dmg + ".";
@@ -78,8 +96,10 @@ class weak_burn implements Effect {
 
 	String targetName = "Target";
 
-	public void use(Character caster, Character target){
+	
+	public boolean use(Character caster, Character target){
 		target.setStatus(Status.burning);
+		return true;
 	}
 	public String getFlavor(){
 		return targetName + " was burned." ;

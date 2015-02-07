@@ -123,14 +123,14 @@ class FightPanel extends GamePanel{
 	void executeActions(CombatAction c1Act, CombatAction c2Act){
 		c1.useCombatAction(c1Act, c2);
 		setText("You use " + c1Act.getFlavorText());
-		if(c1.jewelry != Jewelry.none){
-			c1.jewelry.effect.use(c1, c2);
+		
+		if(c1.jewelry.effect.use(c1,c2)){
 			addText(" \n Your jewelry " + c1.jewelry.effect.getFlavor());
 		}
 
 		c2.useCombatAction(c2Act, c1);
 		addText(" \n The enemy retaliated with " + c2Act.getFlavorText());
-		
+
 		//tickStatus();
 	}
 
@@ -140,13 +140,13 @@ class FightPanel extends GamePanel{
 			addText(c1.status.effect.getFlavor());
 			c1.tickStatus();
 		}
-		
+
 		if(c2.statusTurns > 0){
 			c2.status.effect.use(c1, c2);
 			addText(c2.status.effect.getFlavor());
 			c2.tickStatus();
 		}
-		
+
 	}
 
 	void giveRewards(){
