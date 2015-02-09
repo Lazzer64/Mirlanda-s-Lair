@@ -2,9 +2,27 @@ import java.io.File;
 
 public interface Item {
 
+	final static Item none = new NoItem();
+	
 	void use(Character target);
 	File getIcon();
 
+}
+
+class NoItem implements Item {
+
+	public void use(Character target) {
+		
+	}
+
+	public File getIcon() {
+		return new File("img/unknown_icon.png");
+	}
+	
+	public String toString(){
+		return "";
+	}
+	
 }
 
 enum Consumable implements Item{
@@ -183,10 +201,10 @@ enum Legs implements Item{
 }
 
 enum Jewelry implements Item{
-	none("None", Effects.none),
-	copper("Copper Ring", Effects.none),
-	heal_ring("Lesser Ring of Life", Effects.weak_heal),
-	fire_ring("Lesser Ring of Fire", Effects.weak_fire);
+	none("None", Effect.none),
+	copper("Copper Ring", Effect.none),
+	heal_ring("Lesser Ring of Life", Effect.weak_heal),
+	fire_ring("Lesser Ring of Fire", Effect.weak_fire);
 	
 	String name;
 	Effect effect;

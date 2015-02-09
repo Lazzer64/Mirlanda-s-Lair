@@ -130,7 +130,7 @@ class FightPanel extends GamePanel{
 		}
 
 		c2.useCombatAction(c2Act, c1);
-		addText(" \n The enemy retaliated with " + c2Act.getFlavorText());
+		addText(" \n " + c2.name + " retaliated with " + c2Act.getFlavorText());
 
 		//tickStatus();
 		

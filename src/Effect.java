@@ -1,19 +1,16 @@
 public interface Effect {
 
-	boolean use(Character caster, Character target);
-	String getFlavor();
-
-}
-
-class Effects {
 	static Effect
 	none = new no_effect(),
 	weak_heal = new weak_heal_effect(),
 	medium_heal = new med_heal_effect(),
 	weak_fire = new weak_fire(),
 	weak_burn = new weak_burn();
-}
+	
+	boolean use(Character caster, Character target);
+	String getFlavor();
 
+}
 
 class no_effect implements Effect {
 

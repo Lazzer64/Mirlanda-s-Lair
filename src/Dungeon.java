@@ -416,8 +416,8 @@ class DungeonPanel extends GamePanel{
 
 	void drawFog(Graphics g){
 		int fogSize = 200;
-		int center_x = Main.c.x * cell_size - (fogSize/2);
-		int center_y = Main.c.y * cell_size - (fogSize/2);
+		int center_x = Main.c.x * cell_size + cell_size/2 - (fogSize/2);
+		int center_y = Main.c.y * cell_size + cell_size/2 - (fogSize/2);
 		g.setColor(Color.BLACK);
 		g.fillRect(0, 0, center_x, GameWindow.height); // left black out
 		g.fillRect(0, 0, GameWindow.width, center_y); // top black out
