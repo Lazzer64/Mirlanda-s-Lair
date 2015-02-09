@@ -98,7 +98,7 @@ enum Magic_Ability implements CombatAction{
 		int use_damage = damage;
 
 		if(targeted){target = caster;}
-		
+
 		use_damage += (int) (caster.intelligence/5); // Intelligence addition to hit
 
 		if(damage > 0 && heal <= 0){ // If damage ability
@@ -161,7 +161,46 @@ class BagAction implements CombatAction {
 
 }
 
+class RunAction implements CombatAction {
+
+	String flavor;
+
+	public void use(Character caster,Character enemy) {
+		double chance = (caster.dexterity - enemy.dexterity);
+		double roll =  Math.random() * 50;
+		if(roll <= chance){
+			flavor = "You *b escape! * ";
+			Main.openScreen(Main.dp);
+			Main.dp.setPopText(" \n You escaped the " + enemy.name + "!");
+			Main.dp.openPopup();
+		} else {
+			flavor = " *b Flee. * You *cRED *b fail * *c to escape.";
+		}
+	}
+
+	public int getCost(){
+		return 0;
+	}
+
+	public String getFlavorText(){
+		return flavor;
+	}
+
+	public String toString(){
+		return "Flee";
+	}
+
+	public boolean targeted(){
+		return false;
+	}
+}
+
 interface CombatAction{
+
+	CombatAction 
+	bag = new BagAction(),
+	run = new RunAction();
+
 	public void use(Character caster, Character enemy);
 	public int getCost();
 	public String getFlavorText();
