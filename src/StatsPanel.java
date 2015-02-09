@@ -38,7 +38,7 @@ public class StatsPanel extends GamePanel {
 				+ "Weapon: " + Main.c.weapon + " \n "
 				;
 
-		wrapedText(xBuffer, 0, lineSize, 300, text, g);
+		wrapedText(text, xBuffer, 0, lineSize, 300, g);
 
 		g.setColor(divColor);
 		g.drawLine(0, (int)(lineSize * 1.7), getWidth() - xBuffer, (int)(lineSize * 1.7));

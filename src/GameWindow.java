@@ -120,11 +120,11 @@ abstract class GamePanel extends JPanel implements KeyListener{
 		repaint();
 	}
 
-	void wrapedText(int x, int y, int width, String text, Graphics g){
-		wrapedText(x,y,14,width,text,g);
+	void wrapedText(String text, int x, int y, int width, Graphics g){
+		wrapedText(text,x,y,14,width,g);
 	}
 	
-	void wrapedText(int x, int y, int spacing, int width, String text, Graphics g){
+	void wrapedText(String text, int x, int y, int spacing, int width, Graphics g){
 		int y_move = y + spacing;
 		int x_buffer = x;
 		int curr_x = x_buffer;

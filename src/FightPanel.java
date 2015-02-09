@@ -64,7 +64,7 @@ class FightPanel extends GamePanel{
 		g.setColor(Color.black);
 		g.drawRect(x, y, GameWindow.width - x * 2, size);
 		g.setColor(textColor);
-		wrapedText(x+3, y, GameWindow.width - x - 3, text, g);
+		wrapedText(text, x+3, y, GameWindow.width - x - 3, g);
 	}
 
 	void drawCombatActions(CombatAction[] a, int x, int y, Graphics g){
@@ -85,19 +85,21 @@ class FightPanel extends GamePanel{
 		g.drawRect(x-2, y + selected*yChange + yChange -2, GameWindow.width - x - 12, yChange - 2);
 
 		for(int i = 0; i < a.length; i++){
-			abilityName += a[i];
-			if(a[i].getCost() > 0){
-				abilityName += " - " + a[i].getCost();
-			}
-			y += yChange;
-
-			// draw ability name
-			g.setColor(Color.black);
-			g.drawString(abilityName, x, y + yChange - 6);
-			abilityName = "";
-
-
+		abilityName += a[i];
+		if(a[i].getCost() > 0){
+			abilityName += " - *cBLUE " + a[i].getCost() + " *c ";
 		}
+		y += yChange;
+
+		// draw ability name
+		g.setColor(Color.black);
+		wrapedText(abilityName, x, y - 4, GameWindow.width - x, g);
+		abilityName = "";
+
+
+	}
+		
+		
 	}
 
 	public void turn(){

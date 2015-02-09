@@ -101,8 +101,8 @@ class InventoryPanel extends GamePanel{
 
 				// draw item name
 				g.setColor(Color.black);
-				g.drawString(itemName, img_size + 5 + x, y + yChange - 6);
-				g.drawString(itemValue, img_size + 5 + x + 220, y + yChange - 6);
+				wrapedText(itemName, img_size + 5 + x, y - 4, GameWindow.width - x, g);
+				wrapedText(itemValue, img_size + 5 + x + 220, y - 4, GameWindow.width - x, g);
 				itemName = "";
 				itemValue = "";
 
