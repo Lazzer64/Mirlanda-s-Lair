@@ -12,7 +12,12 @@ public class StatsPanel extends GamePanel {
 
 	final static Color divColor = new Color(180,180,180);
 
+	int currentChar = 0;
+	
 	public void paint(Graphics g){
+
+		Hero character = Main.p.get(currentChar);
+		
 		int lineSize = 15;
 		int xBuffer = 20;
 		int xImageBuffer = 5;
@@ -20,23 +25,24 @@ public class StatsPanel extends GamePanel {
 		g.setFont(new Font(null, Font.PLAIN, 12));
 
 		g.setColor(Color.black);
-		g.drawString(Main.c.title() + ":", xImageBuffer, lineSize + 3);
+		g.drawString(character.title() + ":", xImageBuffer, lineSize + 3);
 
 		text = " \n "
 				+ " \n "
-				+ " *cHEALTH Hit Points: " + Main.c.health + " / " + Main.c.max_health + " \n "
-				+ " *cMANA Mana: " + Main.c.mana + " / " + Main.c.max_mana + " \n "
+				+ " *cHEALTH Hit Points: " + character.health + " / " + Main.c.max_health + " \n "
+				+ " *cMANA Mana: " + character.mana + " / " + Main.c.max_mana + " \n "
 				+ " \n "
-				+ " *cSTR Strength: " + Main.c.strength + " \n "
-				+ " *cDEX Dexterity: " + Main.c.dexterity + " \n "
-				+ " *cINT Intelligence: " + Main.c.intelligence + " \n "
+				+ " *cSTR Strength: " + character.strength + " \n "
+				+ " *cDEX Dexterity: " + character.dexterity + " \n "
+				+ " *cINT Intelligence: " + character.intelligence + " \n "
 				+ " \n "
-				+ " *c Head: " + Main.c.head + " \n "
-				+ "Torso: " + Main.c.torso + " \n "
-				+ "Jewelry: " + Main.c.jewelry + " \n "
-				+ "Legs: " + Main.c.legs + " \n "
-				+ "Weapon: " + Main.c.weapon + " \n "
+				+ " *c Head: " + character.head + " \n "
+				+ "Torso: " + character.torso + " \n "
+				+ "Jewelry: " + character.jewelry + " \n "
+				+ "Legs: " + character.legs + " \n "
+				+ "Weapon: " + character.weapon + " \n "
 				;
+
 
 		wrapedText(text, xBuffer, 0, lineSize, 300, g);
 
@@ -62,7 +68,24 @@ public class StatsPanel extends GamePanel {
 		}
 
 	}
+	
+	void next(){
+		currentChar++;
+		if(currentChar >= Main.p.size){
+			currentChar = 0;
+		}
+		Main.gw.repaint();
+	}
 
+	void previous(){
+		currentChar--;
+		if(currentChar < 0){
+			currentChar = Main.p.size - 1;
+		}
+		Main.gw.repaint();
+	}
+
+	
 	public void keyPressed(KeyEvent arg0) {
 
 	}
@@ -71,6 +94,12 @@ public class StatsPanel extends GamePanel {
 		switch(arg0.getKeyCode()){
 		case KeyEvent.VK_C:
 			Main.openScreen(Main.dp);
+			break;
+		case KeyEvent.VK_RIGHT:
+			next();
+			break;
+		case KeyEvent.VK_LEFT:
+			previous();
 			break;
 		}
 	}

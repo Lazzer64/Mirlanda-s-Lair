@@ -9,6 +9,7 @@ public class Main {
 	static final String level_extension = ".dngflr";
 	static final String[] level_list = {"dungeon","dungeon2","dungeon3","dungeon4","dungeon5","dungeon6"};
 	static Hero c = new Hero("Kirito",999,999,999);
+	static Party p;
 	static int current_level = 0;
 	static Dungeon d = Dungeon.parse(new File(level_dir + level_list[current_level] + level_extension));
 	static DungeonPanel dp = new DungeonPanel(d);
@@ -36,10 +37,14 @@ public class Main {
 		c.give(new Item[]{Consumable.red_potion,Consumable.blue_potion,Consumable.red_potion});
 		c.give(Map.full_map);
 		
-		Party p = new Party(c);
-		p.add(new Hero("Alvin", Race.elf, Profession.Ninja));
-		p.add(new Hero("Meepo", Race.goblin, Profession.Gladiator));
-		p.add(new Hero("Mallow", Race.troll, Profession.Mage));
+		Hero alvin = new Hero("Alvin", Race.elf, Profession.Ninja);
+		alvin.setWeapon(Equipment.weak_dagger);
+		Hero meepo = new Hero("Meepo", Race.goblin, Profession.Sorcerer);
+		meepo.setWeapon(Equipment.weak_staff);
+		
+		p = new Party(c);
+		p.add(alvin);
+		p.add(meepo);
 		System.out.println(p);
 	}
 
