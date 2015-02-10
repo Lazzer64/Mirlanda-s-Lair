@@ -35,6 +35,12 @@ public class Main {
 		c.revealRooms();
 		c.give(new Item[]{Consumable.red_potion,Consumable.blue_potion,Consumable.red_potion});
 		c.give(Map.full_map);
+		
+		Party p = new Party(c);
+		p.add(new Hero("Alvin", Race.elf, Profession.Ninja));
+		p.add(new Hero("Meepo", Race.goblin, Profession.Gladiator));
+		p.add(new Hero("Mallow", Race.troll, Profession.Mage));
+		System.out.println(p);
 	}
 
 	public static void openScreen(JPanel p){
