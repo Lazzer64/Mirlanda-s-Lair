@@ -124,8 +124,8 @@ class FightPanel extends GamePanel{
 	}
 
 	void executeActions(CombatAction c1Act, CombatAction c2Act){
-		c1.useCombatAction(c1Act, c2);
-		setText("You use " + c1Act.getFlavorText());
+
+		setText("You use " + c1.useCombatAction(c1Act, c2));
 
 		if(c1.jewelry.effect.use(c1,c2)){
 			addText(" \n Your jewelry " + c1.jewelry.effect.getFlavor());

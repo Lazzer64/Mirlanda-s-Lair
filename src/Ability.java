@@ -28,7 +28,7 @@ public enum Ability implements CombatAction {
 		boolean crit = false;
 		double roll = Math.random();
 		double chance = (caster.dexterity/50.0);
-		double crit_mult = 2 + (caster.dexterity/5);
+		double crit_mult = 2 + (caster.dexterity/10);
 
 		crit = (roll <= chance);
 

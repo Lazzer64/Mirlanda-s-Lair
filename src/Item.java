@@ -3,7 +3,7 @@ import java.io.File;
 public interface Item {
 
 	final static Item none = new NoItem();
-	
+
 	void use(Character target);
 	File getIcon();
 	// TODO getFlavorName()
@@ -13,17 +13,17 @@ public interface Item {
 class NoItem implements Item {
 
 	public void use(Character target) {
-		
+
 	}
 
 	public File getIcon() {
 		return new File("img/unknown_icon.png");
 	}
-	
+
 	public String toString(){
 		return "";
 	}
-	
+
 }
 
 enum Consumable implements Item{
@@ -59,25 +59,29 @@ enum Consumable implements Item{
 
 }
 
-enum Equipment implements Item{
-	stick("Stick", new CombatAction[]{Ability.hit}),
-	bone("Bone", new CombatAction[]{Ability.whack}),
-	weak_sword("Feeble sword", new CombatAction[]{Ability.slash,Ability.smash}),
-	weak_bow("Flimsy bow", new CombatAction[]{Ability.pierce, Ability.snipe}),
-	weak_staff("Frail staff", new CombatAction[]{Ability.hit, Magic_Ability.spark, Magic_Ability.lightning}),
-	weak_dagger("Paltry Dagger", new CombatAction[]{Ability.slash, Ability.backstab}),
-	weak_tome("Fragile Tome", new CombatAction[]{Ability.hit, Magic_Ability.flare, Magic_Ability.fireball});
+class Equipment implements Item {
+	static Equipment
+	stick = new Equipment("Stick", new CombatAction[]{Ability.hit}),
+	bone = new Equipment("Bone", new CombatAction[]{Ability.whack}),
+	weak_sword = new Equipment("Feeble sword", new CombatAction[]{Ability.slash,Ability.smash}),
+	weak_bow = new Equipment("Flimsy bow", new CombatAction[]{Ability.pierce, Ability.snipe}),
+	weak_staff = new Equipment("Frail staff", new CombatAction[]{Ability.hit, Magic_Ability.spark, Magic_Ability.lightning}),
+	weak_dagger = new Equipment("Paltry Dagger", new CombatAction[]{Ability.slash, Ability.backstab}),
+	weak_tome = new Equipment("Fragile Tome", new CombatAction[]{Ability.hit, Magic_Ability.flare, Magic_Ability.fireball}),
+	legendary_staff = new LegendaryStaff()
+	;
 
 	String name;
 	CombatAction[] abilities;
-	static File icon = new File("img/weapon_icon.png");	
+	static File icon = new File("img/weapon_icon.png");
 
-	private Equipment(String name, CombatAction[] abilities){
+	String flavor = "";
+
+	public Equipment(String name, CombatAction[] abilities){
 		this.name = name;
 		this.abilities = abilities;
 	}
 
-	@Override
 	public void use(Character target) {
 		if(target.getClass().equals(Hero.class)){
 			((Hero) target).give(((Hero) target).weapon);
@@ -86,15 +90,46 @@ enum Equipment implements Item{
 		}
 	}
 
+	public void cast(CombatAction action, Character caster, Character target){
+		action.use(caster, target);
+		flavor = action.getFlavorText();
+	}
 
-	@Override
+	public String getActionFlavor(){
+		return flavor;
+	}
+
 	public File getIcon() {
-
 		return icon;
 	}
 
 	public String toString(){
 		return name;
+	}
+}
+
+class LegendaryStaff extends Equipment {
+
+	String actFlavor = "";
+	
+	public LegendaryStaff(){
+		super("Legendary Staff",new CombatAction[]{Ability.hit,Magic_Ability.spark, Magic_Ability.fireball});
+	}
+
+	public void cast(CombatAction action, Character caster, Character target){
+		if(action.getClass() != Magic_Ability.class){
+			action.use(caster, target); 
+			actFlavor = action.getFlavorText();
+		}else{
+			action.use(caster, target);
+			actFlavor = action.getFlavorText();
+			action.use(caster, target);
+			actFlavor += " \n *b Staff *  recasts " + action.getFlavorText();
+		}
+	}
+
+	public String getActionFlavor(){
+		return actFlavor;
 	}
 
 }
@@ -203,10 +238,11 @@ enum Legs implements Item{
 
 enum Jewelry implements Item{
 	none("None", Effect.none),
-	copper("Copper Ring", Effect.none),
-	heal_ring("Lesser Ring of Life", Effect.weak_heal),
-	fire_ring("Lesser Ring of Fire", Effect.weak_fire);
-	
+	copper_ring("Copper Ring", Effect.none),
+	heal_ring("Lesser Ring of Rejuvenation", Effect.weak_heal),
+	fire_ring("Lesser Ring of Flame", Effect.weak_fire),
+	mana_amulet("Lesser Amulet of Spirit", Effect.weak_mana);
+
 	String name;
 	Effect effect;
 	static File icon = new File("img/ring2_icon.png");	
