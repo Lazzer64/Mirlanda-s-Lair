@@ -36,6 +36,7 @@ public class Main {
 		c.revealRooms();
 		c.give(new Item[]{Consumable.red_potion,Consumable.blue_potion,Consumable.red_potion});
 		c.give(Map.full_map);
+<<<<<<< HEAD
 		
 		Hero alvin = new Hero("Alvin", Race.elf, Profession.Ninja);
 		alvin.setWeapon(Equipment.weak_dagger);
@@ -46,6 +47,10 @@ public class Main {
 		p.add(alvin);
 		p.add(meepo);
 //		System.out.println(p);
+=======
+		c.give(Jewelry.mana_amulet);
+		c.give(Equipment.legendary_staff);
+>>>>>>> master
 	}
 
 	public static void openScreen(JPanel p){

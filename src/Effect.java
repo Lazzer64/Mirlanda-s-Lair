@@ -5,7 +5,9 @@ public interface Effect {
 	weak_heal = new weak_heal_effect(),
 	medium_heal = new med_heal_effect(),
 	weak_fire = new weak_fire(),
-	weak_burn = new weak_burn();
+	weak_burn = new weak_burn(),
+	weak_mana = new weak_mana_heal();
+	//TODO Fear - Lower opponents health the more likely to make enemy flee. Grant rewards.
 	
 	boolean use(Character caster, Character target);
 	String getFlavor();
@@ -101,4 +103,19 @@ class weak_burn implements Effect {
 	public String getFlavor(){
 		return targetName + " was burned." ;
 	}
+}
+
+class weak_mana_heal implements Effect {
+
+	int healAmnt = 1;
+	
+	public boolean use(Character caster, Character target) {
+		caster.manaHeal(healAmnt);
+		return true;
+	}
+
+	public String getFlavor() {
+		return "You heal " + healAmnt + " *cBLUE mana. *c ";
+	}
+	
 }

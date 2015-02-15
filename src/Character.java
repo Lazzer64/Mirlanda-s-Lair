@@ -131,11 +131,13 @@ public class Character {
 		return new CombatAction[]{Ability.hit};
 	}
 
-	public void useCombatAction(CombatAction ability, Character target){
+	public String useCombatAction(CombatAction ability, Character target){
 		if(mana >= ability.getCost()){
 			manaBurn(ability.getCost());
 			ability.use(this,target);
+			return ability.getFlavorText();
 		}
+		return "No mana";
 	}
 
 	public int calculateHp(){
@@ -249,6 +251,15 @@ class Hero extends Character{
 
 	public Hero(String name, Race race, Profession profession) {
 		super(name,race,profession);
+	}
+	
+	public String useCombatAction(CombatAction ability, Character target){
+		if(mana >= ability.getCost()){
+			manaBurn(ability.getCost());
+			weapon.cast(ability,this,target);
+			return weapon.getActionFlavor();
+		}
+		return "No mana";
 	}
 
 	public void move(int x, int y){
