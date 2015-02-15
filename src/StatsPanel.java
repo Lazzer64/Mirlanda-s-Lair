@@ -1,6 +1,7 @@
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics;
+import java.awt.Image;
 import java.awt.event.KeyEvent;
 import java.io.File;
 import java.io.IOException;
@@ -13,19 +14,20 @@ public class StatsPanel extends GamePanel {
 	final static Color divColor = new Color(180,180,180);
 
 	int currentChar = 0;
-	
+
 	public void paint(Graphics g){
 
 		Hero character = Main.p.get(currentChar);
-		
+
 		int lineSize = 15;
 		int xBuffer = 20;
 		int xImageBuffer = 5;
+		int imageSize = 10;
 
 		g.setFont(new Font(null, Font.PLAIN, 12));
 
 		g.setColor(Color.black);
-		g.drawString(character.title() + ":", xImageBuffer, lineSize + 3);
+		g.drawString(character.title() + ":", xImageBuffer + imageSize * (Main.p.size) + 5, lineSize + 3);
 
 		text = " \n "
 				+ " \n "
@@ -52,23 +54,50 @@ public class StatsPanel extends GamePanel {
 		g.drawLine(0, (int)(lineSize * 8.7), getWidth() - xBuffer, (int)(lineSize * 8.7));
 
 		try {
-			g.drawImage(ImageIO.read(new File("img/heart_icon.png")), xImageBuffer, lineSize * 3 - 10, 10, 10, null);
-			g.drawImage(ImageIO.read(new File("img/mana_icon.png")), xImageBuffer, lineSize * 4 - 10, 10, 10, null);
-			g.drawImage(ImageIO.read(new File("img/strength_icon.png")), xImageBuffer, lineSize * 6 - 10, 10, 10, null);
-			g.drawImage(ImageIO.read(new File("img/dexterity_icon.png")), xImageBuffer, lineSize * 7 - 10, 10, 10, null);
-			g.drawImage(ImageIO.read(new File("img/inteligence_icon.png")), xImageBuffer, lineSize * 8 - 10, 10, 10, null);
-			g.drawImage(ImageIO.read(Head.icon), xImageBuffer, lineSize * 10 - 10, 10, 10, null);
-			g.drawImage(ImageIO.read(Torso.icon), xImageBuffer, lineSize * 11 - 10, 10, 10, null);
-			g.drawImage(ImageIO.read(Jewelry.icon), xImageBuffer, lineSize * 12 - 10, 10, 10, null);
-			g.drawImage(ImageIO.read(Legs.icon), xImageBuffer, lineSize * 13 - 10, 10, 10, null);
-			g.drawImage(ImageIO.read(Equipment.icon), xImageBuffer, lineSize * 14 - 10, 10, 10, null);
+			drawPartyIcons(xImageBuffer, lineSize, g);
+			g.drawImage(ImageIO.read(new File("img/heart_icon.png")), xImageBuffer, lineSize * 3 - imageSize, imageSize, imageSize, null);
+			g.drawImage(ImageIO.read(new File("img/mana_icon.png")), xImageBuffer, lineSize * 4 - imageSize, imageSize, imageSize, null);
+			g.drawImage(ImageIO.read(new File("img/strength_icon.png")), xImageBuffer, lineSize * 6 - imageSize, imageSize, imageSize, null);
+			g.drawImage(ImageIO.read(new File("img/dexterity_icon.png")), xImageBuffer, lineSize * 7 - imageSize, imageSize, imageSize, null);
+			g.drawImage(ImageIO.read(new File("img/inteligence_icon.png")), xImageBuffer, lineSize * 8 - imageSize, imageSize, imageSize, null);
+			g.drawImage(ImageIO.read(Head.icon), xImageBuffer, lineSize * 10 - imageSize, imageSize, imageSize, null);
+			g.drawImage(ImageIO.read(Torso.icon), xImageBuffer, lineSize * 11 - imageSize, imageSize, imageSize, null);
+			g.drawImage(ImageIO.read(Jewelry.icon), xImageBuffer, lineSize * 12 - imageSize, imageSize, imageSize, null);
+			g.drawImage(ImageIO.read(Legs.icon), xImageBuffer, lineSize * 13 - imageSize, imageSize, imageSize, null);
+			g.drawImage(ImageIO.read(Equipment.icon), xImageBuffer, lineSize * 14 - imageSize, imageSize, imageSize, null);
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 
 	}
+
+	Image getCharacterIcon(Character c) throws IOException {
+		switch(c.getPrimaryStat()){
+		case 1: // Strength
+			return ImageIO.read(new File("img/str_character_icon.png"));
+		case 2: // Dexterity
+			return ImageIO.read(new File("img/dex_character_icon.png"));
+		case 3: // Intelligence
+			return ImageIO.read(new File("img/int_character_icon.png"));
+		default: // Balanced
+			return ImageIO.read(new File("img/bal_character_icon.png"));	
+		}
+	}
 	
+	void drawPartyIcons(int xImageBuffer, int lineSize, Graphics g) throws IOException {
+		g.drawImage(getCharacterIcon(Main.p.get(0)), xImageBuffer, lineSize - 7, 10, 10, null);
+		if(Main.p.size > 1)g.drawImage(getCharacterIcon(Main.p.get(1)), xImageBuffer + 10, lineSize - 7, 10, 10, null);
+		if(Main.p.size > 2)g.drawImage(getCharacterIcon(Main.p.get(2)), xImageBuffer + 20, lineSize - 7, 10, 10, null);
+		g.setColor(Color.WHITE);
+		for(int i = 0; i < Main.p.size; i++){
+			g.drawRect(xImageBuffer * 2 * (i + 1) - 5, lineSize - 7, 9, 9);
+		}
+		
+		g.setColor(Color.BLACK);
+		g.drawRect(xImageBuffer * 2 * (currentChar + 1) - 5, lineSize - 7, 9, 9);
+	}
+
 	void next(){
 		currentChar++;
 		if(currentChar >= Main.p.size){
@@ -85,7 +114,7 @@ public class StatsPanel extends GamePanel {
 		Main.gw.repaint();
 	}
 
-	
+
 	public void keyPressed(KeyEvent arg0) {
 
 	}

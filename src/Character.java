@@ -196,6 +196,18 @@ public class Character {
 	public String title(){
 		return name + " the " + race + " " + profession + " (" + level + ")";
 	}
+	
+	/**
+	 * Finds the primary stat of the Character based on the profession.
+	 * @return 
+	 * 0: Balanced, 
+	 * 1: Strength, 
+	 * 2: Dexterity, 
+	 * 3: Intelligence.
+	 */
+	public int getPrimaryStat(){
+		return this.profession.primaryStat;
+	}
 
 	public String toString(){
 		String ret = "";

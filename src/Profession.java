@@ -9,6 +9,7 @@ public enum Profession {
 	Ranger(5,10,3,Equipment.weak_bow,new CombatAction[]{});
 	
 	int strength,dexterity,intelligence;
+	int primaryStat;
 	CombatAction[] abilities;
 	Equipment weapon;
 	
@@ -18,6 +19,18 @@ public enum Profession {
 		this.intelligence = intel;
 		this.weapon = weapon;
 		this.abilities = abilities;
+		
+		int maxStat = Math.max(Math.max(str, dex), intel);
+		if(maxStat == str && maxStat == dex && maxStat == intel){
+			primaryStat = 0;
+		} else if(maxStat == str) {
+			primaryStat = 1;
+		} else if(maxStat == dex) {
+			primaryStat = 2;
+		} else if(maxStat == intel){
+			primaryStat = 3;
+		}
+		
 	}
 	
 }

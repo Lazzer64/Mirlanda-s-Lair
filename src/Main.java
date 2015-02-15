@@ -45,7 +45,7 @@ public class Main {
 		p = new Party(c);
 		p.add(alvin);
 		p.add(meepo);
-		System.out.println(p);
+//		System.out.println(p);
 	}
 
 	public static void openScreen(JPanel p){
