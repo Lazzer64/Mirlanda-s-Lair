@@ -46,14 +46,14 @@ class InventoryPanel extends GamePanel{
 		g.setColor(Color.black);
 
 		// draw title
-		int centered_text_x = (Main.gw.width/2) - (Main.c.title().length() * 12)/4;
+		int centered_text_x = (GameWindow.width/2) - (Main.c.title().length() * 12)/4;
 		g.drawString(Main.c.title(), centered_text_x, 20);
 
 		drawStats(g, centered_text_x, 34);
 
 		// draw items
 		drawItems(Main.c.inventory,g,12,40);
-		
+		if(showTarget)drawTargetSelect(Main.p.members, null, g);
 		drawPopup(g);
 
 	}
@@ -125,6 +125,28 @@ class InventoryPanel extends GamePanel{
 
 	@Override
 	public void keyPressed(KeyEvent e) {
+		
+		Character[] na = null;
+		
+		if(showTarget){
+			switch(e.getKeyCode()){
+			case KeyEvent.VK_UP:
+				targetPrev(Main.p.members, na);
+				Main.gw.repaint();
+				break;
+			case KeyEvent.VK_DOWN:
+				targetNext(Main.p.members, na);
+				Main.gw.repaint();
+				break;
+			case KeyEvent.VK_RIGHT:
+				this.getTarget(Main.p.members, na).use(getSelected());
+				this.showTarget = false;
+				Main.gw.repaint();
+				break;
+			}
+			return;
+		}
+		
 		switch(e.getKeyCode()){
 		case KeyEvent.VK_UP:
 			previous();
@@ -136,7 +158,7 @@ class InventoryPanel extends GamePanel{
 			break;
 		case KeyEvent.VK_RIGHT:
 			if(Main.c.inventory.size() > 0){
-				Main.c.use(getSelected());
+				this.showTarget = true;
 			} else {
 				Main.openScreen(Main.dp);
 			}

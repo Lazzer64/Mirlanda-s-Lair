@@ -44,28 +44,29 @@ class FightPanel extends GamePanel{
 		if(this.showTarget) this.drawTargetSelect(allies, enemies, g);
 	}
 
-	private void drawAllyStats(Character c, int x, int y, Graphics g){
+	void drawAllyStats(Character c, int x, int y, Graphics g){
 		g.drawString(c.name, x, y);
 		g.drawString("Health: " + c.health + "/" + c.max_health, x, y + 12);
 		g.drawString("Mana: " + c.mana + "/" + c.max_mana, x, y + (12 * 2));
 	}
 
-	private void drawEnemyStats(Character c, int x, int y, Graphics g){
+	void drawEnemyStats(Character c, int x, int y, Graphics g){
 
 		String t = "";
 		int x_space = 0;		
+		if(c != null){
+			t = c.name;
+			x_space = this.getFontMetrics(this.getFont()).stringWidth(t);
+			g.drawString(t, GameWindow.width - x_space - x, y);
 
-		t = c.name;
-		x_space = this.getFontMetrics(this.getFont()).stringWidth(t);
-		g.drawString(t, GameWindow.width - x_space - x, y);
+			t = "Health: " + c.health + "/" + c.max_health;
+			x_space = this.getFontMetrics(this.getFont()).stringWidth(t);
+			g.drawString(t, GameWindow.width - x_space - x, y + 12);
 
-		t = "Health: " + c.health + "/" + c.max_health;
-		x_space = this.getFontMetrics(this.getFont()).stringWidth(t);
-		g.drawString(t, GameWindow.width - x_space - x, y + 12);
-
-		t = "Mana: " + c.mana + "/" + c.max_mana;
-		x_space = this.getFontMetrics(this.getFont()).stringWidth(t);
-		g.drawString(t, GameWindow.width - x_space - x, y + (12 * 2));
+			t = "Mana: " + c.mana + "/" + c.max_mana;
+			x_space = this.getFontMetrics(this.getFont()).stringWidth(t);
+			g.drawString(t, GameWindow.width - x_space - x, y + (12 * 2));
+		}
 	}
 
 	void drawCombatText(int x, int y, int size, Graphics g){
@@ -116,9 +117,8 @@ class FightPanel extends GamePanel{
 
 		CombatAction c1Act = getSelected();
 
-
 		if(currentChar.mana >= c1Act.getCost()){
-
+			// TODO if you don't have enough mana do not skip turn
 			setText(currentChar.name + " uses " + currentChar.useCombatAction(c1Act, target));
 
 			if(((Hero)currentChar).jewelry.effect.use(currentChar,c2)){
@@ -129,29 +129,45 @@ class FightPanel extends GamePanel{
 			setText("You do not have enough *cBLUE mana *c to use that!");
 		}
 
+		if(deadGroup(enemies)){
+			setText("You have defated the hostiles.");
+		}
+
 		nextTurn();
-		if(currentChar.getClass().equals(Monster.class)){ // If not player turn
+		while(currentChar.getClass().equals(Monster.class)){ // If not player turn
 			CombatAction c2Act = ((Monster) currentChar).action();
-			Character enemyTarget = allies[0];
+			Character enemyTarget = this.getNextLivingAlly();
 			c2.useCombatAction(c2Act, enemyTarget);
 			addText(" \n " + c2.name + " retaliated, hitting " + enemyTarget.name + " with " + c2Act.getFlavorText());
 			nextTurn();
-		}
-
-		if(currentChar.health <= 0){
-			setText("You have been *b *cRED Slain");
-		} else if(c2.health <= 0){
-			setText("You have *b *cRED defeated * *c " + c2.name + ".");
+			if(enemyTarget.health <= 0){
+				addText(" *b " + enemyTarget.name + " * has been *b *cRED Slain * *c ");
+			}
+			if(deadGroup(allies)){
+				setText("You have been defeated.");
+				break;
+			}
 		}
 
 	}
 
 	void checkHealths(){
-		if(currentChar.health <= 0){
+
+		if(deadGroup(allies)){
 			Main.restartGame();
-		} else if(c2.health <= 0){
+		}
+
+		if(deadGroup(enemies)){
 			giveRewards();
 		}
+
+	}
+
+	boolean deadGroup(Character[] chars){
+		for(Character c: chars){
+			if(c.health > 0) return false;
+		}
+		return true;
 	}
 
 	void tickStatus(){
@@ -173,15 +189,14 @@ class FightPanel extends GamePanel{
 		Main.openScreen(Main.dp);
 		int initLevel = currentChar.level;
 		// Rewards for killing enemy
-		Item[] loot = c2.getLoot();
-		int exp_reward = c2.level;
+		Item[] loot = enemies[0].getLoot();
+		int exp_reward = enemies[0].level;
 		Main.c.grantExp(exp_reward);
 		Main.c.give(loot);
 		//
 		GamePanel panel = ((GamePanel)Main.gw.getContentPane());
 		panel.openPopup(
-				" \n You have defeated " + c2.name + "!"
-						+" \n  \n -  -  -  Reward  -  -  -"
+						"  \n -  -  -  Reward  -  -  -"
 						+" \n " + exp_reward + " exp."
 						+" \n " + Main.itemsToText(loot));
 		if(currentChar.level > initLevel){
@@ -204,26 +219,51 @@ class FightPanel extends GamePanel{
 	}
 
 	Character[] getTurnOrder(){
-		Character[] order = new Character[allies.length + enemies.length];
 
 		PriorityQueue<Character> pq = new PriorityQueue<Character>(new Comparator<Character>() {
 			public int compare(Character a, Character b) {
 				return -(a.dexterity - b.dexterity);
 			}});
 
-		for(Character c: allies) pq.add(c);
-		for(Character c: enemies) pq.add(c);
+		for(Character c: allies) if(c.health > 0) pq.add(c);
+		for(Character c: enemies) if(c.health > 0)pq.add(c);
+
+		Character[] order = new Character[pq.size()];
 		for(int i = 0; i < order.length; i++)order[i] = pq.poll();
+
 		return order;
 	}
 
 	void nextTurn(){
+
 		currentTurn++;
 		if(currentTurn >= order.length){
 			currentTurn = 0;
 			order = getTurnOrder();
 		}
 		currentChar = order[currentTurn];
+		if(currentChar.health <= 0){
+			if(currentChar == c2)c2 = getNextLivingEnemy();
+			nextTurn();
+		}
+	}
+
+	Monster getNextLivingEnemy(){
+		for(Monster m: enemies){
+			if(m.health > 0){
+				return m;
+			}
+		}
+		return null;
+	}
+
+	Hero getNextLivingAlly(){
+		for(Hero h: allies){
+			if(h.health > 0){
+				return h;
+			}
+		}
+		return null;
 	}
 
 	@Override

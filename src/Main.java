@@ -43,9 +43,7 @@ public class Main {
 		meepo.setWeapon(Equipment.weak_staff);
 		
 		p = new Party(c);
-		p.add(alvin);
-		p.add(meepo);
-		p.leader.give(Equipment.legendary_staff);
+
 
 	}
 

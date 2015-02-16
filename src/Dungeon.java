@@ -263,7 +263,9 @@ class Room {
 		switch(type){
 		case altar:
 			// Reward for entering altar
-			Main.c.manaHeal(Main.c.max_mana);
+			for(Hero c: Main.p){
+				c.manaHeal(c.max_mana);
+			}
 			//
 			panel.openPopup(" \n You encounter an altar! \n  \n Your mana was restored.");
 			replaceRoom = new Room(RoomType.room);
@@ -313,7 +315,6 @@ class Room {
 		case stair:
 			panel.closePopup();
 			Main.nextLevel();
-
 			break;
 		case start:
 			panel.closePopup();
@@ -465,7 +466,7 @@ class DungeonPanel extends GamePanel{
 			break;
 		case KeyEvent.VK_K:
 			// TESTING PURPOSES
-			Main.openScreen(new FightPanel(Main.p.members,new Monster[] {Monsters.skeleton()}));
+			Main.openScreen(new FightPanel(Main.p.members,new Monster[] {Monsters.skeleton(),Monsters.skeleton()}));
 			Main.gw.repaint();
 			break;
 		case KeyEvent.VK_C:

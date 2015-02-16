@@ -19,6 +19,7 @@ public class Party implements Iterable<Hero>{
 
 	public boolean add(Hero h){
 		if(size < max_party_size){
+			h.inventory = leader.inventory;
 			Hero[] temp = members;
 			members = new Hero[temp.length + 1];
 			for(int i = 0; i < temp.length; i++){
