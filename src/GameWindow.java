@@ -56,6 +56,7 @@ public class GameWindow extends JFrame{
 abstract class GamePanel extends JPanel implements KeyListener{
 
 	boolean showPop = false;
+	boolean showTarget = false;
 	String popText = "";
 	String text = "";
 	Color textColor = Color.BLACK;
@@ -104,6 +105,43 @@ abstract class GamePanel extends JPanel implements KeyListener{
 			g.drawRect(x, y, GameWindow.width - x * 2, size);
 			centeredText(y,size,popText,g);
 		}
+	}
+	
+	int currentTarget = 0;
+	
+	public void drawTargetSelect(Hero[] allies, Character[] enemies, Graphics g){
+		int x = 20;
+		int y = 75;
+		int size = 150;
+		int width = GameWindow.width - x * 2;
+		int lineSize = 14;
+		
+		g.setColor(Color.white);
+		g.fillRect(x, y, width, size);
+		g.setColor(Color.black);
+		g.drawRect(x, y, width, size);
+		
+		String s = "*cDEX *b Allies: * *c \n ";
+		for(int i = 0; i < allies.length; i++){
+			s += allies[i].name + " \n ";
+		}
+		s += "*cHEALTH *b Enemies: * *c \n ";
+		for(int i = 0; i < enemies.length; i++){
+			s += enemies[i].name + " \n ";
+		}
+		if(currentTarget == allies.length) currentTarget ++;
+		if(currentTarget > allies.length + enemies.length) currentTarget = 0;
+		
+		wrapedText(s,x + 7,y, lineSize, width,g);
+		g.setColor(Color.BLACK);
+		g.drawRect(x + 5, y + 2 + lineSize + lineSize*currentTarget, width - 10, lineSize);
+	}
+	
+	public Character getTarget(Hero[] allies, Character[] enemies){
+		Character target;
+		if(currentTarget < allies.length) target = allies[currentTarget];
+		else target = enemies[currentTarget - allies.length - 1];
+		return target;
 	}
 
 	public void setText(String text){

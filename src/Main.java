@@ -45,7 +45,8 @@ public class Main {
 		p = new Party(c);
 		p.add(alvin);
 		p.add(meepo);
-//		System.out.println(p);
+		System.out.println(p);
+		p.leader.give(Equipment.legendary_staff);
 
 	}
 

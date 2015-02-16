@@ -1,5 +1,7 @@
+import java.util.Iterator;
 
-public class Party {
+
+public class Party implements Iterable<Hero>{
 
 	static final int max_party_size = 3;
 
@@ -35,12 +37,41 @@ public class Party {
 		}
 		return null;
 	}
-	
+
 	public String toString(){
-		String text = "";
-		for(int i = 0; i < size; i++){
-			text += "|" + members[i].title();
+		String text = "\nParty-------------------------";
+		for(Hero i: this){
+			text += "\n" + i.title();
 		}
+		text += "\n------------------------------";
 		return text;
 	}
+
+	public Iterator<Hero> iterator() {
+		return new PartyIterator(this);
+	}
+
 }
+
+class PartyIterator implements Iterator<Hero> {
+
+	Party party;
+	int current;
+
+	public PartyIterator(Party party){
+		this.party = party;
+		this.current = -1;
+	}
+
+	public boolean hasNext() {
+		return (current < party.size - 1);
+	}
+
+	public Hero next() {
+		current ++;
+		return party.get(current);
+	}
+
+
+}
+
