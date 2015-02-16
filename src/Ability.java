@@ -97,8 +97,6 @@ enum Magic_Ability implements CombatAction{
 		flavor = "";
 		int use_damage = damage;
 
-		if(targeted){target = caster;}
-
 		use_damage += (int) (caster.intelligence/5); // Intelligence addition to hit
 
 		if(damage > 0 && heal <= 0){ // If damage ability

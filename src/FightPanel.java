@@ -2,20 +2,29 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.event.KeyEvent;
+import java.util.Comparator;
+import java.util.PriorityQueue;
 
 class FightPanel extends GamePanel{
 
 	Dungeon dungeon;
-	Hero c1;
+	Character currentChar;
 	Monster c2;
 	Character target = c2;
+	Hero[] allies;
+	Monster[] enemies;
+	Character[] order;
 	int selected = 0;
+	int currentTurn = 0;
 	boolean target_select = false;
 
-	public FightPanel(Hero c1, Monster c2){
+	public FightPanel(Hero[] allies, Monster[] enemies){
 		super();
-		this.c1 = c1;
-		this.c2 = c2;
+		this.allies = allies;
+		this.enemies = enemies;
+		c2 = enemies[0];
+		order = getTurnOrder();
+		currentChar = order[0];
 		setPreferredSize(new Dimension(GameWindow.width,GameWindow.height));
 		setBounds(0, 0, GameWindow.width, GameWindow.height);
 		setLayout(null);
@@ -24,18 +33,19 @@ class FightPanel extends GamePanel{
 
 	public void paint(Graphics g){
 		g.setColor(Color.BLACK);
-		drawAllyStats(c1,5,15,g);
+		drawAllyStats(currentChar,5,15,g);
 		drawEnemyStats(c2,5,15,g);
 		g.drawString("vs.", (GameWindow.width - 24)/2, 27);
 		drawCombatText(5,50,75,g);
-		drawCombatActions(Main.c.getCombatActions(),15,125,g);
+		drawCombatActions(currentChar.getCombatActions(),15,125,g);
 		g.setColor(Color.BLACK);
 		drawPopup(g);
 		textColor = Color.black;
+		if(this.showTarget) this.drawTargetSelect(allies, enemies, g);
 	}
 
 	private void drawAllyStats(Character c, int x, int y, Graphics g){
-		g.drawString(Main.c.name, x, y);
+		g.drawString(c.name, x, y);
 		g.drawString("Health: " + c.health + "/" + c.max_health, x, y + 12);
 		g.drawString("Mana: " + c.mana + "/" + c.max_mana, x, y + (12 * 2));
 	}
@@ -85,74 +95,74 @@ class FightPanel extends GamePanel{
 		g.drawRect(x-2, y + selected*yChange + yChange -2, GameWindow.width - x - 12, yChange - 2);
 
 		for(int i = 0; i < a.length; i++){
-		abilityName += a[i];
-		if(a[i].getCost() > 0){
-			abilityName += " - *cBLUE " + a[i].getCost() + " *c ";
+			abilityName += a[i];
+			if(a[i].getCost() > 0){
+				abilityName += " - *cBLUE " + a[i].getCost() + " *c ";
+			}
+			y += yChange;
+
+			// draw ability name
+			g.setColor(Color.black);
+			wrapedText(abilityName, x, y - 4, GameWindow.width - x, g);
+			abilityName = "";
+
+
 		}
-		y += yChange;
-
-		// draw ability name
-		g.setColor(Color.black);
-		wrapedText(abilityName, x, y - 4, GameWindow.width - x, g);
-		abilityName = "";
 
 
-	}
-		
-		
 	}
 
 	public void turn(){
 
 		CombatAction c1Act = getSelected();
-		CombatAction c2Act = c2.action();
 
-		if(c1.mana >= c1Act.getCost()){
-			executeActions(c1Act,c2Act);
+
+		if(currentChar.mana >= c1Act.getCost()){
+
+			setText(currentChar.name + " uses " + currentChar.useCombatAction(c1Act, target));
+
+			if(((Hero)currentChar).jewelry.effect.use(currentChar,c2)){
+				addText(" \n Your jewelry " + ((Hero)currentChar).jewelry.effect.getFlavor());
+			}
+
 		} else {
 			setText("You do not have enough *cBLUE mana *c to use that!");
+		}
+
+		nextTurn();
+		if(currentChar.getClass().equals(Monster.class)){ // If not player turn
+			CombatAction c2Act = ((Monster) currentChar).action();
+			Character enemyTarget = allies[0];
+			c2.useCombatAction(c2Act, enemyTarget);
+			addText(" \n " + c2.name + " retaliated, hitting " + enemyTarget.name + " with " + c2Act.getFlavorText());
+			nextTurn();
+		}
+
+		if(currentChar.health <= 0){
+			setText("You have been *b *cRED Slain");
+		} else if(c2.health <= 0){
+			setText("You have *b *cRED defeated * *c " + c2.name + ".");
 		}
 
 	}
 
 	void checkHealths(){
-		if(c1.health <= 0){
+		if(currentChar.health <= 0){
 			Main.restartGame();
 		} else if(c2.health <= 0){
 			giveRewards();
 		}
 	}
 
-	void executeActions(CombatAction c1Act, CombatAction c2Act){
-
-		setText("You use " + c1.useCombatAction(c1Act, c2));
-
-		if(c1.jewelry.effect.use(c1,c2)){
-			addText(" \n Your jewelry " + c1.jewelry.effect.getFlavor());
-		}
-
-		c2.useCombatAction(c2Act, c1);
-		addText(" \n " + c2.name + " retaliated with " + c2Act.getFlavorText());
-
-		//tickStatus();
-		
-		if(c1.health <= 0){
-			setText("You have been *b *cRED Slain");
-		} else if(c2.health <= 0){
-			setText("You have *b *cRED defeated * *c " + c2.name + ".");
-		}
-		
-	}
-
 	void tickStatus(){
-		if(c1.statusTurns > 0){
-			c1.status.effect.use(c2, c1);
-			addText(c1.status.effect.getFlavor());
-			c1.tickStatus();
+		if(currentChar.statusTurns > 0){
+			currentChar.status.effect.use(c2, currentChar);
+			addText(currentChar.status.effect.getFlavor());
+			currentChar.tickStatus();
 		}
 
 		if(c2.statusTurns > 0){
-			c2.status.effect.use(c1, c2);
+			c2.status.effect.use(currentChar, c2);
 			addText(c2.status.effect.getFlavor());
 			c2.tickStatus();
 		}
@@ -161,7 +171,7 @@ class FightPanel extends GamePanel{
 
 	void giveRewards(){
 		Main.openScreen(Main.dp);
-		int initLevel = c1.level;
+		int initLevel = currentChar.level;
 		// Rewards for killing enemy
 		Item[] loot = c2.getLoot();
 		int exp_reward = c2.level;
@@ -174,41 +184,71 @@ class FightPanel extends GamePanel{
 						+" \n  \n -  -  -  Reward  -  -  -"
 						+" \n " + exp_reward + " exp."
 						+" \n " + Main.itemsToText(loot));
-		if(c1.level > initLevel){
+		if(currentChar.level > initLevel){
 			((GamePanel)Main.gw.getContentPane()).openPopup(((GamePanel)Main.gw.getContentPane()).popText 
 					+ " \n  \n LEVEL UP!"
-					+ " \n You are now level " + c1.level);
+					+ " \n You are now level " + currentChar.level);
 		}
 	}
 
-	public CombatAction getSelected(){
-		return Main.c.getCombatActions()[selected];
+	CombatAction getSelected(){
+		return currentChar.getCombatActions()[selected];
 	}
 
-	public void next(){
+	void next(){
 		this.selected++;
 	}
 
-	public void previous(){
+	void previous(){
 		this.selected--;
 	}
 
-	public void openTargetSelect(){
-		this.setPopText(" \n Choose a target: \n \n \n \n \n \n 1. " + c1.name + " \t \t \t \t 2. " + c2.name);
-		this.target_select = true;
-		this.openPopup();
-		Main.gw.repaint();
+	Character[] getTurnOrder(){
+		Character[] order = new Character[allies.length + enemies.length];
+
+		PriorityQueue<Character> pq = new PriorityQueue<Character>(new Comparator<Character>() {
+			public int compare(Character a, Character b) {
+				return -(a.dexterity - b.dexterity);
+			}});
+
+		for(Character c: allies) pq.add(c);
+		for(Character c: enemies) pq.add(c);
+		for(int i = 0; i < order.length; i++)order[i] = pq.poll();
+		return order;
 	}
 
-	public void closeTargetSelect(){
-		this.setPopText("");
-		this.target_select = false;
-		this.closePopup();
-		Main.gw.repaint();
+	void nextTurn(){
+		currentTurn++;
+		if(currentTurn >= order.length){
+			currentTurn = 0;
+			order = getTurnOrder();
+		}
+		currentChar = order[currentTurn];
 	}
 
 	@Override
 	public void keyPressed(KeyEvent e) {
+
+		if(showTarget){
+			switch(e.getKeyCode()){
+			case KeyEvent.VK_UP:
+				targetPrev(allies, enemies);
+				Main.gw.repaint();
+				break;
+			case KeyEvent.VK_DOWN:
+				targetNext(allies, enemies);
+				Main.gw.repaint();
+				break;
+			case KeyEvent.VK_RIGHT:
+				target = getTarget(allies, enemies);
+				showTarget = false;
+				turn();
+				Main.gw.repaint();
+				break;
+			}
+			return;
+		}
+
 		checkHealths();
 		switch(e.getKeyCode()){
 		case KeyEvent.VK_UP:
@@ -224,8 +264,15 @@ class FightPanel extends GamePanel{
 			Main.gw.repaint();
 			break;
 		case KeyEvent.VK_RIGHT:
+			if(getSelected().targeted()){
+				showTarget = true;
+				Main.gw.repaint();
+				break;
+			}
+			target = c2;
 			turn();
 			Main.gw.repaint();
+			break;
 		}
 	}
 
@@ -235,20 +282,6 @@ class FightPanel extends GamePanel{
 		case KeyEvent.VK_K:
 			Main.openScreen(Main.dp);
 			Main.gw.repaint();
-			break;
-		case KeyEvent.VK_1:
-			if(target_select){
-				target = c1;
-				closeTargetSelect();
-				turn();
-			}
-			break;
-		case KeyEvent.VK_2:
-			if(target_select){
-				target = c2;
-				closeTargetSelect();
-				turn();
-			}
 			break;
 		}
 	}

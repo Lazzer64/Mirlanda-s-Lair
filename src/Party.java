@@ -12,14 +12,19 @@ public class Party implements Iterable<Hero>{
 
 	public Party(Hero leader){
 		this.leader = leader;
-		members = new Hero[max_party_size];
+		members = new Hero[1];
 		members[0] = leader;
 		size = 1;
 	}
 
 	public boolean add(Hero h){
 		if(size < max_party_size){
-			members[size] = h;
+			Hero[] temp = members;
+			members = new Hero[temp.length + 1];
+			for(int i = 0; i < temp.length; i++){
+				members[i] = temp[i];
+			}
+			members[members.length - 1] = h;
 			size++;
 			return true;
 		}

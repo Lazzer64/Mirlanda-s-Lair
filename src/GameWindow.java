@@ -121,28 +121,40 @@ abstract class GamePanel extends JPanel implements KeyListener{
 		g.setColor(Color.black);
 		g.drawRect(x, y, width, size);
 		
-		String s = "*cDEX *b Allies: * *c \n ";
-		for(int i = 0; i < allies.length; i++){
-			s += allies[i].name + " \n ";
-		}
-		s += "*cHEALTH *b Enemies: * *c \n ";
+		String s = "*cHEALTH *b Enemies: * *c \n ";
 		for(int i = 0; i < enemies.length; i++){
 			s += enemies[i].name + " \n ";
 		}
-		if(currentTarget == allies.length) currentTarget ++;
-		if(currentTarget > allies.length + enemies.length) currentTarget = 0;
+		
+		s += "*cDEX *b Allies: * *c \n ";
+		for(int i = 0; i < allies.length; i++){
+			s += allies[i].name + " \n ";
+		}
 		
 		wrapedText(s,x + 7,y, lineSize, width,g);
 		g.setColor(Color.BLACK);
 		g.drawRect(x + 5, y + 2 + lineSize + lineSize*currentTarget, width - 10, lineSize);
 	}
 	
+	public void targetNext(Hero[] allies, Character[] enemies){
+		currentTarget++;
+		if(currentTarget == enemies.length) currentTarget ++;
+		if(currentTarget > enemies.length + allies.length) currentTarget = 0;
+	}
+	
+	public void targetPrev(Hero[] allies, Character[] enemies){
+		currentTarget--;
+		if(currentTarget == enemies.length) currentTarget --;
+		if(currentTarget < 0) currentTarget = allies.length + enemies.length;
+	}
+	
 	public Character getTarget(Hero[] allies, Character[] enemies){
 		Character target;
-		if(currentTarget < allies.length) target = allies[currentTarget];
-		else target = enemies[currentTarget - allies.length - 1];
+		if(currentTarget < enemies.length) target = enemies[currentTarget];
+		else target = allies[currentTarget - enemies.length - 1];
 		return target;
 	}
+	
 
 	public void setText(String text){
 		this.text = text;
