@@ -118,35 +118,35 @@ class FightPanel extends GamePanel{
 		CombatAction c1Act = getSelected();
 
 		if(currentChar.mana >= c1Act.getCost()){
-			// TODO if you don't have enough mana do not skip turn
 			setText(currentChar.name + " uses " + currentChar.useCombatAction(c1Act, target));
 
 			if(((Hero)currentChar).jewelry.effect.use(currentChar,c2)){
 				addText(" \n Your jewelry " + ((Hero)currentChar).jewelry.effect.getFlavor());
 			}
 
+
+
+			if(deadGroup(enemies)){
+				setText("You have defated the hostiles.");
+			}
+
+			nextTurn();
+			while(currentChar.getClass().equals(Monster.class)){ // If not player turn
+				CombatAction c2Act = ((Monster) currentChar).action();
+				Character enemyTarget = this.getNextLivingAlly();
+				c2.useCombatAction(c2Act, enemyTarget);
+				addText(" \n " + c2.name + " retaliated, hitting " + enemyTarget.name + " with " + c2Act.getFlavorText());
+				nextTurn();
+				if(enemyTarget.health <= 0){
+					addText(" *b " + enemyTarget.name + " * has been *b *cRED Slain * *c ");
+				}
+				if(deadGroup(allies)){
+					setText("You have been defeated.");
+					break;
+				}
+			}
 		} else {
 			setText("You do not have enough *cBLUE mana *c to use that!");
-		}
-
-		if(deadGroup(enemies)){
-			setText("You have defated the hostiles.");
-		}
-
-		nextTurn();
-		while(currentChar.getClass().equals(Monster.class)){ // If not player turn
-			CombatAction c2Act = ((Monster) currentChar).action();
-			Character enemyTarget = this.getNextLivingAlly();
-			c2.useCombatAction(c2Act, enemyTarget);
-			addText(" \n " + c2.name + " retaliated, hitting " + enemyTarget.name + " with " + c2Act.getFlavorText());
-			nextTurn();
-			if(enemyTarget.health <= 0){
-				addText(" *b " + enemyTarget.name + " * has been *b *cRED Slain * *c ");
-			}
-			if(deadGroup(allies)){
-				setText("You have been defeated.");
-				break;
-			}
 		}
 
 	}
@@ -196,7 +196,7 @@ class FightPanel extends GamePanel{
 		//
 		GamePanel panel = ((GamePanel)Main.gw.getContentPane());
 		panel.openPopup(
-						"  \n -  -  -  Reward  -  -  -"
+				"  \n -  -  -  Reward  -  -  -"
 						+" \n " + exp_reward + " exp."
 						+" \n " + Main.itemsToText(loot));
 		if(currentChar.level > initLevel){
