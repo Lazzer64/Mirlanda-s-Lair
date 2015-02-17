@@ -43,7 +43,10 @@ public class Main {
 		meepo.setWeapon(Equipment.weak_staff);
 		
 		p = new Party(c);
-
+		p.add(meepo);
+		p.add(alvin);
+		meepo.death();
+		alvin.death();
 
 	}
 

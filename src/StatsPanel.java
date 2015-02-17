@@ -87,8 +87,11 @@ public class StatsPanel extends GamePanel {
 	
 	void drawPartyIcons(int xImageBuffer, int lineSize, Graphics g) throws IOException {
 		g.drawImage(getCharacterIcon(Main.p.get(0)), xImageBuffer, lineSize - 7, 10, 10, null);
-		if(Main.p.size > 1)g.drawImage(getCharacterIcon(Main.p.get(1)), xImageBuffer + 10, lineSize - 7, 10, 10, null);
-		if(Main.p.size > 2)g.drawImage(getCharacterIcon(Main.p.get(2)), xImageBuffer + 20, lineSize - 7, 10, 10, null);
+		for(int i = 0; i < Main.p.size; i++){
+			g.drawImage(getCharacterIcon(Main.p.get(i)), xImageBuffer + 10*i, lineSize - 7, 10, 10, null);
+			if(Main.p.get(i).dead) g.drawImage(ImageIO.read(new File("img/cross.png")), xImageBuffer + 10*i, lineSize - 7, 10, 10, null);
+		}
+
 		g.setColor(Color.WHITE);
 		for(int i = 0; i < Main.p.size; i++){
 			g.drawRect(xImageBuffer * 2 * (i + 1) - 5, lineSize - 7, 9, 9);
@@ -96,6 +99,7 @@ public class StatsPanel extends GamePanel {
 		
 		g.setColor(Color.BLACK);
 		g.drawRect(xImageBuffer * 2 * (currentChar + 1) - 5, lineSize - 7, 9, 9);
+		
 	}
 
 	void next(){

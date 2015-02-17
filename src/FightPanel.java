@@ -137,7 +137,7 @@ class FightPanel extends GamePanel{
 				c2.useCombatAction(c2Act, enemyTarget);
 				addText(" \n " + c2.name + " retaliated, hitting " + enemyTarget.name + " with " + c2Act.getFlavorText());
 				nextTurn();
-				if(enemyTarget.health <= 0){
+				if(!enemyTarget.dead){
 					addText(" *b " + enemyTarget.name + " * has been *b *cRED Slain * *c ");
 				}
 				if(deadGroup(allies)){
@@ -165,7 +165,7 @@ class FightPanel extends GamePanel{
 
 	boolean deadGroup(Character[] chars){
 		for(Character c: chars){
-			if(c.health > 0) return false;
+			if(!c.dead) return false;
 		}
 		return true;
 	}
@@ -225,8 +225,8 @@ class FightPanel extends GamePanel{
 				return -(a.dexterity - b.dexterity);
 			}});
 
-		for(Character c: allies) if(c.health > 0) pq.add(c);
-		for(Character c: enemies) if(c.health > 0)pq.add(c);
+		for(Character c: allies) if(!c.dead) pq.add(c);
+		for(Character c: enemies) if(!c.dead)pq.add(c);
 
 		Character[] order = new Character[pq.size()];
 		for(int i = 0; i < order.length; i++)order[i] = pq.poll();
@@ -242,7 +242,7 @@ class FightPanel extends GamePanel{
 			order = getTurnOrder();
 		}
 		currentChar = order[currentTurn];
-		if(currentChar.health <= 0){
+		if(currentChar.dead){
 			if(currentChar == c2)c2 = getNextLivingEnemy();
 			nextTurn();
 		}
@@ -250,7 +250,7 @@ class FightPanel extends GamePanel{
 
 	Monster getNextLivingEnemy(){
 		for(Monster m: enemies){
-			if(m.health > 0){
+			if(!m.dead){
 				return m;
 			}
 		}
@@ -259,7 +259,7 @@ class FightPanel extends GamePanel{
 
 	Hero getNextLivingAlly(){
 		for(Hero h: allies){
-			if(h.health > 0){
+			if(!h.dead){
 				return h;
 			}
 		}

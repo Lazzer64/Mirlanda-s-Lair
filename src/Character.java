@@ -12,7 +12,7 @@ public class Character {
 	Inventory inventory;
 	Status status = Status.none;
 	int statusTurns = 0;
-
+	boolean dead = false;
 
 	/**
 	 * Create a character with given Name, Strength, Dexterity, and Intelligence.
@@ -192,7 +192,17 @@ public class Character {
 	}
 
 	public void death(){
-		//System.out.println("RIP in peace " + name + ".");
+		dead = true;
+	}
+	
+	public void revive(double percentHealth){
+		dead = false;
+		health = (int)(max_health/percentHealth);
+	}
+	
+public void revive(int amntHealth){
+	dead = false;
+	health = amntHealth;
 	}
 
 	public String title(){
