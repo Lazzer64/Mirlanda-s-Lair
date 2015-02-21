@@ -178,7 +178,7 @@ public class Character {
 		this.status = status;
 		this.statusTurns = status.turns;
 	}
-	
+
 	public void tickStatus(){
 		if(statusTurns > 0){
 			statusTurns--;
@@ -186,29 +186,37 @@ public class Character {
 			status = Status.none;
 		}
 	}
-	
+
 	public void use(Item i){
 		i.use(this);
 	}
 
 	public void death(){
 		dead = true;
+		health = 0;
 	}
-	
+
 	public void revive(double percentHealth){
 		dead = false;
-		health = (int)(max_health/percentHealth);
+		heal((int)(max_health*percentHealth));
 	}
-	
-public void revive(int amntHealth){
-	dead = false;
-	health = amntHealth;
+
+	public void revive(int amntHealth){
+		dead = false;
+		heal(amntHealth);
+	}
+
+	public String getHpText() {
+		if(!dead){
+			return health + "/" + max_health;
+		}
+		return "DEAD";
 	}
 
 	public String title(){
 		return name + " the " + race + " " + profession + " (" + level + ")";
 	}
-	
+
 	/**
 	 * Finds the primary stat of the Character based on the profession.
 	 * @return 
@@ -262,7 +270,7 @@ class Hero extends Character{
 	public Hero(String name, Race race, Profession profession) {
 		super(name,race,profession);
 	}
-	
+
 	public String useCombatAction(CombatAction ability, Character target){
 		if(mana >= ability.getCost()){
 			manaBurn(ability.getCost());

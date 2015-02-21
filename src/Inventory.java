@@ -75,9 +75,7 @@ class InventoryPanel extends GamePanel{
 		if(items.size() <= 0){
 			openPopup("Your bag is empty!");
 		} else {
-			
-			closePopup();
-			
+
 			// select box
 			if(selected > items.size() - 1){
 				selected = 0;
@@ -125,9 +123,10 @@ class InventoryPanel extends GamePanel{
 
 	@Override
 	public void keyPressed(KeyEvent e) {
-		
+
 		Character[] na = null;
-		
+		if(this.showPop) showPop = !showPop;
+
 		if(showTarget){
 			switch(e.getKeyCode()){
 			case KeyEvent.VK_UP:
@@ -146,7 +145,7 @@ class InventoryPanel extends GamePanel{
 			}
 			return;
 		}
-		
+
 		switch(e.getKeyCode()){
 		case KeyEvent.VK_UP:
 			previous();
@@ -163,6 +162,11 @@ class InventoryPanel extends GamePanel{
 				Main.openScreen(Main.dp);
 			}
 			Main.gw.repaint();
+			break;
+		case KeyEvent.VK_1:
+			openPopup(getSelected().getDescription());
+			Main.gw.repaint();
+			break;
 		}
 	}
 

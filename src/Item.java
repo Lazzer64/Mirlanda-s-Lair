@@ -6,6 +6,7 @@ public interface Item {
 
 	void use(Character target);
 	File getIcon();
+	String getDescription();
 	// TODO getFlavorName()
 
 }
@@ -24,6 +25,10 @@ class NoItem implements Item {
 		return "";
 	}
 
+	public String getDescription(){
+		return "Nothing";
+	}
+
 }
 
 enum Consumable implements Item{
@@ -31,7 +36,11 @@ enum Consumable implements Item{
 	red_potion("Red flask",7,0),
 	blue_potion("Blue flask",0,6),
 	green_potion("Green flask",5,4),
-	orange_potion("Orange flask",7,6);
+	orange_potion("Orange flask",7,6)
+	;
+
+	static Item
+	revive_potion = new RevivePotion();
 
 	String name;
 	int hp_heal,mp_heal;
@@ -55,6 +64,40 @@ enum Consumable implements Item{
 
 	public String toString(){
 		return name;
+	}
+
+	public String getDescription(){
+		if(hp_heal > 0 && mp_heal > 0){
+			return "Heals target's health and mana.";
+		} else if(hp_heal > 0){
+			return "Heals target's health";
+		} else {
+			return "Heals target's mana";
+		}
+
+	}
+
+}
+
+class RevivePotion implements Item {
+
+	double percentHealth = .20;
+
+	public void use(Character target) {
+		target.revive(percentHealth);
+		target.remove(this);
+	}
+
+	public File getIcon() {
+		return new File("img/consumable_icon.png");
+	}
+
+	public String toString(){
+		return "Talisman of the Immortal";
+	}
+
+	public String getDescription(){
+		return "Revives dead target in a weakend state.";
 	}
 
 }
@@ -91,6 +134,11 @@ enum Head implements Item{
 		return name;
 	}
 
+	public String getDescription(){
+		return name;
+		//TODO
+	}
+
 }
 
 enum Torso implements Item{
@@ -123,6 +171,11 @@ enum Torso implements Item{
 
 	public String toString(){
 		return name;
+	}
+
+	public String getDescription(){
+		return name;
+		//TODO
 	}
 
 }
@@ -159,6 +212,10 @@ enum Legs implements Item{
 		return name;
 	}
 
+	public String getDescription(){
+		return name;
+		//TODO
+	}
 }
 
 enum Jewelry implements Item{
@@ -198,6 +255,11 @@ enum Jewelry implements Item{
 		return name;
 	}
 
+	public String getDescription(){
+	return name;
+	//TODO
+	}
+	
 }
 
 enum Map implements Item{
@@ -226,6 +288,10 @@ enum Map implements Item{
 
 	public String toString(){
 		return name;
+	}
+	
+	public String getDescription(){
+		return "Reveals a portion of the map";
 	}
 
 }

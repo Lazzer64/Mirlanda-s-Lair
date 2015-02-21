@@ -2,6 +2,7 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.event.KeyEvent;
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.PriorityQueue;
 
@@ -46,7 +47,7 @@ class FightPanel extends GamePanel{
 
 	void drawAllyStats(Character c, int x, int y, Graphics g){
 		g.drawString(c.name, x, y);
-		g.drawString("Health: " + c.health + "/" + c.max_health, x, y + 12);
+		g.drawString("Health: " + c.getHpText(), x, y + 12);
 		g.drawString("Mana: " + c.mana + "/" + c.max_mana, x, y + (12 * 2));
 	}
 
@@ -59,7 +60,7 @@ class FightPanel extends GamePanel{
 			x_space = this.getFontMetrics(this.getFont()).stringWidth(t);
 			g.drawString(t, GameWindow.width - x_space - x, y);
 
-			t = "Health: " + c.health + "/" + c.max_health;
+			t = "Health: " + c.getHpText();
 			x_space = this.getFontMetrics(this.getFont()).stringWidth(t);
 			g.drawString(t, GameWindow.width - x_space - x, y + 12);
 
@@ -137,7 +138,7 @@ class FightPanel extends GamePanel{
 				c2.useCombatAction(c2Act, enemyTarget);
 				addText(" \n " + c2.name + " retaliated, hitting " + enemyTarget.name + " with " + c2Act.getFlavorText());
 				nextTurn();
-				if(!enemyTarget.dead){
+				if(enemyTarget.dead){
 					addText(" *b " + enemyTarget.name + " * has been *b *cRED Slain * *c ");
 				}
 				if(deadGroup(allies)){
@@ -186,23 +187,33 @@ class FightPanel extends GamePanel{
 	}
 
 	void giveRewards(){
+		String s = "";
+		int exp_reward = 0;
 		Main.openScreen(Main.dp);
-		int initLevel = currentChar.level;
-		// Rewards for killing enemy
-		Item[] loot = enemies[0].getLoot();
-		int exp_reward = enemies[0].level;
-		Main.c.grantExp(exp_reward);
-		Main.c.give(loot);
-		//
-		GamePanel panel = ((GamePanel)Main.gw.getContentPane());
-		panel.openPopup(
-				"  \n -  -  -  Reward  -  -  -"
-						+" \n " + exp_reward + " exp."
-						+" \n " + Main.itemsToText(loot));
-		if(currentChar.level > initLevel){
-			((GamePanel)Main.gw.getContentPane()).openPopup(((GamePanel)Main.gw.getContentPane()).popText 
-					+ " \n  \n LEVEL UP!"
-					+ " \n You are now level " + currentChar.level);
+
+		ArrayList<Item> sumLoot = new ArrayList<Item>();
+		for(Monster m: enemies){
+			for(Item i: m.getLoot()){
+				if(i != Item.none){
+					sumLoot.add(i);
+				}
+			}
+		}
+		
+		Item[] loot = new Item[sumLoot.size()];
+		sumLoot.toArray(loot);
+		for(Monster m: enemies)exp_reward += m.exp();
+
+		Main.p.give(loot);
+		s = "Reward: \n " + Main.itemsToText(loot);
+		for(Hero c: allies){
+			int initLevel = c.level;
+			GamePanel panel = ((GamePanel)Main.gw.getContentPane());
+			if(!c.dead)c.grantExp(exp_reward);
+			if(c.level > initLevel){
+				s += " \n " + c.name + " is now level " + c.level;
+			}
+			panel.openPopup(s);
 		}
 	}
 

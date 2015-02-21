@@ -16,6 +16,14 @@ public class Party implements Iterable<Hero>{
 		members[0] = leader;
 		size = 1;
 	}
+	
+	public void give(Item i){
+		leader.give(i);
+	}
+	
+	public void give(Item[] i){
+		leader.give(i);
+	}
 
 	public boolean add(Hero h){
 		if(size < max_party_size){
@@ -30,6 +38,10 @@ public class Party implements Iterable<Hero>{
 			return true;
 		}
 		return false;
+	}
+	
+	public void set(Hero h, int index){
+		members[index] = h;
 	}
 
 	public boolean remove(Hero h){

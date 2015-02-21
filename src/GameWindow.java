@@ -126,13 +126,13 @@ abstract class GamePanel extends JPanel implements KeyListener{
 		if(enemies != null){
 			s += "*cHEALTH *b Enemies: * *c \n ";
 			for(int i = 0; i < enemies.length; i++){
-				s += enemies[i].name + " *cHEALTH " + enemies[i].health + "/" + enemies[i].max_health + " *c \n ";
+				s += enemies[i].name + " *cHEALTH " + enemies[i].getHpText() + " *c \n ";
 			}
 		}
 
 		s += "*cDEX *b Allies: * *c \n ";
 		for(int i = 0; i < allies.length; i++){
-			s += allies[i].name + " *cHEALTH " + allies[i].health + "/" + allies[i].max_health + " *c \n ";
+			s += allies[i].name + " *cHEALTH " + allies[i].getHpText() + " *c \n ";
 		}
 
 		wrapedText(s,x + 7,y, lineSize, width,g);

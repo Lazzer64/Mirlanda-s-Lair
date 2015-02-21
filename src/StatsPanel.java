@@ -31,8 +31,8 @@ public class StatsPanel extends GamePanel {
 
 		text = " \n "
 				+ " \n "
-				+ " *cHEALTH Hit Points: " + character.health + " / " + Main.c.max_health + " \n "
-				+ " *cMANA Mana: " + character.mana + " / " + Main.c.max_mana + " \n "
+				+ " *cHEALTH Hit Points: " + character.getHpText() + " \n "
+				+ " *cMANA Mana: " + character.mana + "/" + character.max_mana + " \n "
 				+ " \n "
 				+ " *cSTR Strength: " + character.strength + " \n "
 				+ " *cDEX Dexterity: " + character.dexterity + " \n "

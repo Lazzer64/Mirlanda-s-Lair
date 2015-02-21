@@ -47,6 +47,12 @@ class Equipment implements Item {
 	public String toString(){
 		return name;
 	}
+	
+	public String getDescription(){
+		return name;
+		//TODO
+	}
+	
 }
 
 class DoubleCastStaff extends Equipment {
@@ -71,6 +77,9 @@ class DoubleCastStaff extends Equipment {
 
 	public String getActionFlavor(){
 		return actFlavor;
+	}
+	public String getDescription(){
+		return "A staff that allows the user to cast spells twice";
 	}
 
 }
