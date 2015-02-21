@@ -37,14 +37,16 @@ public class Main {
 		c.give(new Item[]{Consumable.red_potion,Consumable.blue_potion,Consumable.red_potion});
 		c.give(Map.full_map);
 		
-		Hero alvin = new Hero("Alvin", Race.elf, Profession.Ninja);
+		Hero alvin = new Hero("Alvin", Race.elf, Profession.ninja);
 		alvin.setWeapon(Equipment.weak_dagger);
-		Hero meepo = new Hero("Meepo", Race.goblin, Profession.Sorcerer);
+		Hero meepo = new Hero("Meepo", Race.goblin, new Cleric());
 		meepo.setWeapon(Equipment.weak_staff);
 		
 		p = new Party(c);
 		p.add(meepo);
 		p.add(alvin);
+		
+		p.leader.death();
 
 	}
 

@@ -1,19 +1,24 @@
-public enum Profession {
+public class Profession {
 	// points add up to 18
-	Explorer(6,6,6,Equipment.weak_sword,new CombatAction[]{}),
-	Gladiator(10,5,3,Equipment.weak_sword,new CombatAction[]{}),
-	Ninja(4,11,3,Equipment.weak_dagger,new CombatAction[]{}),
-	Sorcerer(3,3,12,Equipment.weak_staff,new CombatAction[]{}),
-	Enchanter(5,3,10,Equipment.weak_tome,new CombatAction[]{}),
-	Mage(2,2,14,Equipment.weak_staff,new CombatAction[]{}),
-	Ranger(5,10,3,Equipment.weak_bow,new CombatAction[]{});
+	static Profession
+	explorer = new Profession("Explorer",6,6,6,Equipment.weak_sword,new CombatAction[]{}),
+	gladiator = new Profession("Gladiator",10,5,3,Equipment.weak_sword,new CombatAction[]{}),
+	ninja = new Profession("Ninja",4,11,3,Equipment.weak_dagger,new CombatAction[]{}),
+	sorcerer = new Profession("Sorcerer",3,3,12,Equipment.weak_staff,new CombatAction[]{}),
+	enchanter = new Profession("Enchanter",5,3,10,Equipment.weak_tome,new CombatAction[]{}),
+	mage = new Profession("Mage",2,2,14,Equipment.weak_staff,new CombatAction[]{}),
+	ranger = new Profession("Ranger",5,10,3,Equipment.weak_bow,new CombatAction[]{});
 	
+	static Profession[] default_professions = {explorer,gladiator,ninja,sorcerer,enchanter,mage,ranger};
+	
+	String name;
 	int strength,dexterity,intelligence;
 	int primaryStat;
 	CombatAction[] abilities;
 	Equipment weapon;
 	
-	private Profession(int str, int dex, int intel, Equipment weapon, CombatAction[] abilities){
+	public Profession(String name, int str, int dex, int intel, Equipment weapon, CombatAction[] abilities){
+		this.name = name;
 		this.strength = str;
 		this.dexterity = dex;
 		this.intelligence = intel;
@@ -32,5 +37,20 @@ public enum Profession {
 		}
 		
 	}
+	
+
+	public String toString(){
+		return name;
+	}
+	
+}
+
+class Cleric extends Profession {
+
+	public Cleric() {
+		super("Cleric", 2, 2, 14, Equipment.weak_staff, new CombatAction[]{new ReviveAction()});
+	}
+	
+	
 	
 }

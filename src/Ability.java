@@ -133,9 +133,40 @@ enum Magic_Ability implements CombatAction{
 	}
 }
 
+class ReviveAction implements CombatAction {
+
+	String flav = "";
+
+	public void use(Character caster, Character target) {
+		if(target.dead){
+			target.revive(.30);
+			flav = " *b resurrect *  on " + target.name + "!";
+		} else {
+			flav = " resurrect on " + target.name + " but it *cRED failed. *c";
+		}
+	}
+
+	public int getCost() {
+		return 20;
+	}
+
+	public String getFlavorText() {
+		return flav;
+	}
+
+	public boolean targeted() {
+		return true;
+	}
+	
+	public String toString(){
+		return "Resurrect";
+	}
+
+}
+
 class BagAction implements CombatAction {
 
-	public void use(Character caster,Character enemy) {
+	public void use(Character caster,Character target) {
 		if(Main.c.inventory.size() > 0){
 			Main.openScreen(new CombatInventoryPanel());
 		}
@@ -163,13 +194,13 @@ class RunAction implements CombatAction {
 
 	String flavor;
 
-	public void use(Character caster,Character enemy) {
-		double chance = (caster.dexterity - enemy.dexterity);
+	public void use(Character caster,Character target) {
+		double chance = (caster.dexterity - target.dexterity);
 		double roll =  Math.random() * 50;
 		if(roll <= chance){
 			flavor = "You *b escape! * ";
 			Main.openScreen(Main.dp);
-			Main.dp.setPopText(" \n You escaped the " + enemy.name + "!");
+			Main.dp.setPopText(" \n You escaped the " + target.name + "!");
 			Main.dp.openPopup();
 		} else {
 			flavor = " *b Flee. * You *cRED *b fail * *c to escape.";
@@ -199,7 +230,7 @@ interface CombatAction{
 	bag = new BagAction(),
 	run = new RunAction();
 
-	public void use(Character caster, Character enemy);
+	public void use(Character caster, Character target);
 	public int getCost();
 	public String getFlavorText();
 	public boolean targeted();

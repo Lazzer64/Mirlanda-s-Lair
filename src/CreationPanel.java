@@ -130,7 +130,7 @@ public class CreationPanel extends JPanel implements KeyListener{
 
 		final JComboBox classBox = new JComboBox();
 		classBox.setEditable(true);
-		classBox.setModel(new DefaultComboBoxModel(Profession.values()));
+		classBox.setModel(new DefaultComboBoxModel(Profession.default_professions));
 		GridBagConstraints gbc_classBox = new GridBagConstraints();
 		gbc_classBox.insets = new Insets(0, 0, 5, 5);
 		gbc_classBox.fill = GridBagConstraints.HORIZONTAL;
@@ -159,7 +159,7 @@ public class CreationPanel extends JPanel implements KeyListener{
 				// END CREATION EVENT
 				CreationPanel.name = nameField.getText();
 				race = Race.values()[raceBox.getSelectedIndex()];
-				profession = Profession.values()[classBox.getSelectedIndex()];
+				profession = Profession.default_professions[classBox.getSelectedIndex()];
 				Main.c = new Hero(name,race,profession);
 				Main.c.setWeapon(profession.weapon);
 				Main.endCreation();

@@ -53,9 +53,11 @@ enum Consumable implements Item{
 	}
 
 	public void use(Character target) {
-		target.heal(this.hp_heal);
-		target.manaHeal(this.mp_heal);
-		target.remove(this);
+		if(!target.dead){
+			target.heal(this.hp_heal);
+			target.manaHeal(this.mp_heal);
+			target.remove(this);
+		}
 	}
 
 	public File getIcon(){
@@ -81,7 +83,7 @@ enum Consumable implements Item{
 
 class RevivePotion implements Item {
 
-	double percentHealth = .20;
+	double percentHealth = .50;
 
 	public void use(Character target) {
 		target.revive(percentHealth);
@@ -256,10 +258,10 @@ enum Jewelry implements Item{
 	}
 
 	public String getDescription(){
-	return name;
-	//TODO
+		return name;
+		//TODO
 	}
-	
+
 }
 
 enum Map implements Item{
@@ -289,7 +291,7 @@ enum Map implements Item{
 	public String toString(){
 		return name;
 	}
-	
+
 	public String getDescription(){
 		return "Reveals a portion of the map";
 	}
