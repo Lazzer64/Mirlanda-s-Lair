@@ -8,7 +8,6 @@ public class Main {
 	static final String level_dir = ("levels/");
 	static final String level_extension = ".dngflr";
 	static final String[] level_list = {"dungeon","dungeon2","dungeon3","dungeon4","dungeon5","dungeon6"};
-	static Hero c;
 	static Party p;
 	static int current_level = 0;
 	static Dungeon d = Dungeon.parse(new File(level_dir + level_list[current_level] + level_extension));
@@ -32,17 +31,16 @@ public class Main {
 		d.addEncounter(Room.RoomType.mini_boss, 3);
 
 		openScreen(dp);
-		c.setLocation(d.getStart().x, d.getStart().y);
-		c.revealRooms();
-		c.give(new Item[]{Consumable.red_potion,Consumable.blue_potion,Consumable.red_potion});
-		c.give(Map.full_map);
+		p.leader.setLocation(d.getStart().x, d.getStart().y);
+		p.leader.revealRooms();
+		p.leader.give(new Item[]{Consumable.red_potion,Consumable.blue_potion,Consumable.red_potion});
+		p.leader.give(Map.full_map);
 		
 		Hero alvin = new Hero("Alvin", Race.elf, Profession.ninja);
 		alvin.setWeapon(Equipment.weak_dagger);
 		Hero meepo = new Hero("Meepo", Race.goblin, new Cleric());
 		meepo.setWeapon(Equipment.weak_staff);
 		
-		p = new Party(c);
 		p.add(meepo);
 		p.add(alvin);
 
@@ -78,13 +76,13 @@ public class Main {
 		current_level = level_number;
 		d = Dungeon.parse(new File(level_dir + level_list[current_level] + level_extension));
 		dp = new DungeonPanel(d);
-		c.setLocation(d.getStart().x, d.getStart().y);
+		p.leader.setLocation(d.getStart().x, d.getStart().y);
 		openScreen(dp);
 	}
 
 	public static void nextLevel(){
 		loadLevel(current_level+1);
-		c.revealRooms();
+		p.leader.revealRooms();
 	}
 
 }

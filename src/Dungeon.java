@@ -270,7 +270,7 @@ class Room {
 			panel.openPopup(" \n You encounter an altar! \n  \n Your mana was restored.");
 			replaceRoom = new Room(RoomType.room);
 			replaceRoom.color = faded_pink;
-			Main.d.rooms[Main.c.y][Main.c.x] = replaceRoom;
+			Main.d.rooms[Main.p.leader.y][Main.p.leader.x] = replaceRoom;
 			break;
 		case boss:
 			Monster Boss = Monsters.dragon();
@@ -279,7 +279,7 @@ class Room {
 			//
 			replaceRoom = new Room(RoomType.room);
 			replaceRoom.color = faded_pink; // change to faded red?
-			Main.d.rooms[Main.c.y][Main.c.x] = replaceRoom;
+			Main.d.rooms[Main.p.leader.y][Main.p.leader.x] = replaceRoom;
 			Main.gw.repaint();
 			panel.closePopup();
 			break;
@@ -294,7 +294,7 @@ class Room {
 			//
 			replaceRoom = new Room(RoomType.room);
 			replaceRoom.color = faded_orange;
-			Main.d.rooms[Main.c.y][Main.c.x] = replaceRoom;
+			Main.d.rooms[Main.p.leader.y][Main.p.leader.x] = replaceRoom;
 			Main.gw.repaint();
 			break;
 		case monster:
@@ -305,7 +305,7 @@ class Room {
 			Main.gw.repaint();
 			replaceRoom = new Room(RoomType.room);
 			replaceRoom.color = faded_purple;
-			Main.d.rooms[Main.c.y][Main.c.x] = replaceRoom;
+			Main.d.rooms[Main.p.leader.y][Main.p.leader.x] = replaceRoom;
 			break;
 		case no_room:
 			break;
@@ -322,12 +322,12 @@ class Room {
 		case treasure:
 			// Loot from treasure room
 			Item[] loot = {LootTable.treasure.rollLoot()};
-			Main.c.give(loot);
+			Main.p.leader.give(loot);
 			//
 			panel.openPopup(" \n You find treasure! \n  \n " + Main.itemsToText(loot) + " added to your inventory.");
 			replaceRoom = new Room(RoomType.room);
 			replaceRoom.color = faded_yellow;
-			Main.d.rooms[Main.c.y][Main.c.x] = replaceRoom;
+			Main.d.rooms[Main.p.leader.y][Main.p.leader.x] = replaceRoom;
 			Main.gw.repaint();
 			break;
 		case vertical_hidden:
@@ -403,9 +403,9 @@ class DungeonPanel extends GamePanel{
 
 		// Draw player
 		g.setColor(Room.blue);
-		g.fillRect(Main.c.x * cell_size, Main.c.y * cell_size, cell_size, cell_size);
+		g.fillRect(Main.p.leader.x * cell_size, Main.p.leader.y * cell_size, cell_size, cell_size);
 		g.setColor(Room.black);
-		g.drawRect(Main.c.x * cell_size, Main.c.y * cell_size, cell_size, cell_size);
+		g.drawRect(Main.p.leader.x * cell_size, Main.p.leader.y * cell_size, cell_size, cell_size);
 
 		if(fogEnabled){
 			drawFog(g);
@@ -417,8 +417,8 @@ class DungeonPanel extends GamePanel{
 
 	void drawFog(Graphics g){
 		int fogSize = 200;
-		int center_x = Main.c.x * cell_size + cell_size/2 - (fogSize/2);
-		int center_y = Main.c.y * cell_size + cell_size/2 - (fogSize/2);
+		int center_x = Main.p.leader.x * cell_size + cell_size/2 - (fogSize/2);
+		int center_y = Main.p.leader.y * cell_size + cell_size/2 - (fogSize/2);
 		g.setColor(Color.BLACK);
 		g.fillRect(0, 0, center_x, GameWindow.height); // left black out
 		g.fillRect(0, 0, GameWindow.width, center_y); // top black out
@@ -435,19 +435,19 @@ class DungeonPanel extends GamePanel{
 	public void keyPressed(KeyEvent e) {
 		switch(e.getKeyCode()){
 		case KeyEvent.VK_UP:
-			Main.c.move(0, -1);
+			Main.p.leader.move(0, -1);
 			Main.gw.repaint();
 			break;
 		case KeyEvent.VK_DOWN:
-			Main.c.move(0, 1);
+			Main.p.leader.move(0, 1);
 			Main.gw.repaint();
 			break;
 		case KeyEvent.VK_LEFT:
-			Main.c.move(-1, 0);
+			Main.p.leader.move(-1, 0);
 			Main.gw.repaint();
 			break;
 		case KeyEvent.VK_RIGHT:
-			Main.c.move(1, 0);
+			Main.p.leader.move(1, 0);
 			Main.gw.repaint();
 			break;
 		}

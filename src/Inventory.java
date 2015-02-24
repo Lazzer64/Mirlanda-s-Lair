@@ -53,12 +53,6 @@ class InventoryPanel extends GamePanel{
 
 	}
 
-	void drawStats(Graphics g, int x, int y){
-		g.drawString("Health: " + Main.c.health + "/" + Main.c.max_health, x, y);
-		g.drawString("Mana: " + Main.c.mana + "/" + Main.c.max_mana, x, y + 14);
-
-	}
-
 	void drawItems(Inventory items, Graphics g, int x, int y){
 		String itemName = "";
 		String itemValue = "";
@@ -105,7 +99,7 @@ class InventoryPanel extends GamePanel{
 	}
 
 	public Item getSelected(){
-		return (Item) Main.c.inventory.keySet().toArray()[selected];
+		return (Item) Main.p.inventory.keySet().toArray()[selected];
 	}
 
 	public void next(){
@@ -155,7 +149,7 @@ class InventoryPanel extends GamePanel{
 			Main.gw.repaint();
 			break;
 		case KeyEvent.VK_RIGHT:
-			if(Main.c.inventory.size() > 0){
+			if(Main.p.leader.inventory.size() > 0){
 				this.showTarget = true;
 			} else {
 				Main.openScreen(Main.dp);
@@ -202,7 +196,7 @@ class CombatInventoryPanel extends InventoryPanel {
 			Main.gw.repaint();
 			break;
 		case KeyEvent.VK_RIGHT:
-			Main.c.use(getSelected());
+			Main.p.leader.use(getSelected());
 			Main.openScreen(p);
 			Main.gw.repaint();
 		}

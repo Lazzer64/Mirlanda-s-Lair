@@ -7,6 +7,7 @@ public class Party implements Iterable<Hero>{
 
 	Hero leader;
 	Hero[] members;
+	Inventory inventory;
 
 	int size;
 
@@ -14,6 +15,7 @@ public class Party implements Iterable<Hero>{
 		this.leader = leader;
 		members = new Hero[1];
 		members[0] = leader;
+		inventory = leader.inventory;
 		size = 1;
 	}
 	

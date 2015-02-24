@@ -167,7 +167,7 @@ class ReviveAction implements CombatAction {
 class BagAction implements CombatAction {
 
 	public void use(Character caster,Character target) {
-		if(Main.c.inventory.size() > 0){
+		if(Main.p.inventory.size() > 0){
 			Main.openScreen(new CombatInventoryPanel());
 		}
 	}
