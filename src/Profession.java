@@ -7,7 +7,8 @@ public class Profession {
 	sorcerer = new Profession("Sorcerer",3,3,12,Equipment.weak_staff,new CombatAction[]{}),
 	enchanter = new Profession("Enchanter",5,3,10,Equipment.weak_tome,new CombatAction[]{}),
 	mage = new Profession("Mage",2,2,14,Equipment.weak_staff,new CombatAction[]{}),
-	ranger = new Profession("Ranger",5,10,3,Equipment.weak_bow,new CombatAction[]{});
+	ranger = new Profession("Ranger",5,10,3,Equipment.weak_bow,new CombatAction[]{}),
+	cleric = new Cleric();
 	
 	static Profession[] default_professions = {explorer,gladiator,ninja,sorcerer,enchanter,mage,ranger};
 	

@@ -277,6 +277,7 @@ class Hero extends Character{
 
 	public Hero(String name, Race race, Profession profession) {
 		super(name,race,profession);
+		this.setWeapon(profession.weapon);
 	}
 
 	public String useCombatAction(CombatAction ability, Character target){

@@ -2,11 +2,11 @@ public interface Effect {
 
 	static Effect
 	none = new no_effect(),
-	weak_heal = new weak_heal_effect(),
-	medium_heal = new med_heal_effect(),
-	weak_fire = new weak_fire(),
-	weak_burn = new weak_burn(),
-	weak_mana = new weak_mana_heal();
+	weak_heal = new HealEffect(1),
+	medium_heal = new HealEffect(3),
+	weak_fire = new FireEffect(2,.5),
+	weak_burn = new BurnEffect(),
+	weak_mana = new ManaHeal(1);
 	//TODO Fear - Lower opponents health the more likely to make enemy flee. Grant rewards.
 	
 	boolean use(Character caster, Character target);
@@ -24,10 +24,14 @@ class no_effect implements Effect {
 	}
 }
 
-class weak_heal_effect implements Effect {
+class HealEffect implements Effect {
 
 	String name = "heal";
-	int healamnt = 1;
+	int healamnt;
+	
+	public HealEffect(int healamnt){
+		this.healamnt = healamnt;
+	}
 	
 	public boolean use(Character caster, Character target) {
 		caster.heal(healamnt);
@@ -44,34 +48,21 @@ class weak_heal_effect implements Effect {
 
 }
 
-class med_heal_effect implements Effect{
-	String name = "heal";
-	int healamnt = 3;
-	
-	public boolean use(Character caster, Character target) {
-		caster.heal(healamnt);
-		return true;
-	}
+class FireEffect implements Effect {
 
-	public String getFlavor() {
-		return " healed for " + healamnt + ".";
-	}
-
-	public String toString(){
-		return name;
-	}
-}
-
-class weak_fire implements Effect {
-
-	int dmg = 2;
-	int chance = 50;
+	int dmg;
+	double chance;
 	String targetName = "Target";
 	String flavor = "";
 	
+	public FireEffect(int dmg, double chance){
+		this.dmg = dmg;
+		this.chance = chance;
+	}
+	
 	boolean roll(){
 		double roll = Math.random();
-		if(roll <= chance/100.0){
+		if(roll <= chance){
 			return true;
 		}
 		flavor = "";
@@ -91,11 +82,10 @@ class weak_fire implements Effect {
 	}
 }
 
-class weak_burn implements Effect {
+class BurnEffect implements Effect {
 
 	String targetName = "Target";
 
-	
 	public boolean use(Character caster, Character target){
 		target.setStatus(Status.burning);
 		return true;
@@ -105,9 +95,13 @@ class weak_burn implements Effect {
 	}
 }
 
-class weak_mana_heal implements Effect {
+class ManaHeal implements Effect {
 
-	int healAmnt = 1;
+	int healAmnt;
+	
+	public ManaHeal(int healAmnt){
+		this.healAmnt = healAmnt;
+	}
 	
 	public boolean use(Character caster, Character target) {
 		caster.manaHeal(healAmnt);

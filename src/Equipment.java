@@ -9,7 +9,8 @@ class Equipment implements Item {
 	weak_staff = new Equipment("Frail staff", new CombatAction[]{Ability.hit, Magic_Ability.spark, Magic_Ability.lightning}),
 	weak_dagger = new Equipment("Paltry Dagger", new CombatAction[]{Ability.slash, Ability.backstab}),
 	weak_tome = new Equipment("Fragile Tome", new CombatAction[]{Ability.hit, Magic_Ability.flare, Magic_Ability.fireball}),
-	legendary_staff = new DoubleCastStaff()
+	double_cast_staff = new DoubleCastStaff(),
+	fire_bow = new FireBow()
 	;
 
 	String name;
@@ -79,7 +80,33 @@ class DoubleCastStaff extends Equipment {
 		return actFlavor;
 	}
 	public String getDescription(){
-		return "A staff that allows the user to cast spells twice";
+		return "A Legendary Staff that mirrors spells the user casts.";
 	}
 
+}
+
+class FireBow extends Equipment {
+
+	String actFlavor = "";
+	int fireAmnt = 20;
+	
+	public FireBow() {
+		super("Phoenix Strike", new CombatAction[]{Ability.pierce, Ability.snipe});
+	}
+	
+	public void cast(CombatAction action, Character caster, Character target){
+		action.use(caster, target);
+		new FireEffect(fireAmnt,1).use(caster, target);
+		actFlavor = action.getFlavorText();
+		actFlavor = actFlavor.substring(0, actFlavor.length()-1); // remove period
+		actFlavor += " and *cRED *i scolding * *c the target for *cRED " + fireAmnt + ". *c ";
+	}
+
+	public String getActionFlavor(){
+		return actFlavor;
+	}
+	public String getDescription(){
+		return "A Legnedary Bow that ignites the arrows it launches.";
+	}
+	
 }

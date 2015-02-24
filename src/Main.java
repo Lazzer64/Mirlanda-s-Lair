@@ -17,7 +17,6 @@ public class Main {
 	static StatsPanel sp = new StatsPanel();
 	static GameWindow gw = new GameWindow();
 
-	static LootTable treasureTable = new LootTable();
 
 	public static void main(String[] args) {
 	}
@@ -37,13 +36,12 @@ public class Main {
 		p.leader.give(Map.full_map);
 		
 		Hero alvin = new Hero("Alvin", Race.elf, Profession.ninja);
-		alvin.setWeapon(Equipment.weak_dagger);
 		Hero meepo = new Hero("Meepo", Race.goblin, new Cleric());
-		meepo.setWeapon(Equipment.weak_staff);
 		
 		p.add(meepo);
 		p.add(alvin);
-
+		p.give(Equipment.fire_bow);
+		p.give(Equipment.double_cast_staff);
 	}
 
 	public static void openScreen(JPanel p){

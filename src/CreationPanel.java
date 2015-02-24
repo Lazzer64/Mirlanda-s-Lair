@@ -161,7 +161,7 @@ public class CreationPanel extends JPanel implements KeyListener{
 				race = Race.values()[raceBox.getSelectedIndex()];
 				profession = Profession.default_professions[classBox.getSelectedIndex()];
 				Main.p = new Party(new Hero(name,race,profession));
-				Main.p.leader.setWeapon(profession.weapon);
+				//Main.p.leader.setWeapon(profession.weapon);
 				Main.endCreation();
 			}
 		});
