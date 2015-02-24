@@ -115,7 +115,7 @@ class weak_mana_heal implements Effect {
 	}
 
 	public String getFlavor() {
-		return "You heal " + healAmnt + " *cBLUE mana. *c ";
+		return " heals for " + healAmnt + " *cBLUE mana. *c ";
 	}
 	
 }

@@ -137,6 +137,10 @@ class InventoryPanel extends GamePanel{
 				this.showTarget = false;
 				Main.gw.repaint();
 				break;
+			case KeyEvent.VK_LEFT:
+				showTarget = false;
+				Main.gw.repaint();
+				break;
 			}
 			return;
 		}

@@ -49,7 +49,7 @@ public enum Ability implements CombatAction {
 		else { // if damage and healing
 			target.damage(use_damage);
 			caster.heal(heal);
-			flavor += "You used *b " + name + " * , dealing " + use_damage + " damage, and healing for " + heal + ".";
+			flavor += " *b " + name + " * , dealing " + use_damage + " damage, and healing for " + heal + ".";
 		}
 
 	}
@@ -177,7 +177,7 @@ class BagAction implements CombatAction {
 	}
 
 	public String getFlavorText(){
-		return "opened your bag.";
+		return "opened bag.";
 	}
 
 	public String toString(){

@@ -194,6 +194,7 @@ public class Character {
 	public void death(){
 		dead = true;
 		health = 0;
+		mana = 0;
 	}
 
 	public void revive(double percentHealth){
@@ -211,6 +212,13 @@ public class Character {
 			return health + "/" + max_health;
 		}
 		return "DEAD";
+	}
+	
+	public String getMpText() {
+		if(mana > 0){
+			return mana + "/" + max_mana;
+		}
+		return "Empty";
 	}
 
 	public String title(){

@@ -45,9 +45,6 @@ public class Main {
 		p = new Party(c);
 		p.add(meepo);
 		p.add(alvin);
-		
-		c.give(Jewelry.mana_amulet);
-
 
 	}
 

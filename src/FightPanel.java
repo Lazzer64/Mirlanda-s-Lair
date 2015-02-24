@@ -37,13 +37,22 @@ class FightPanel extends GamePanel{
 	}
 
 	public void paint(Graphics g){
+
+		int 
+		statsY = 15,
+		vsY = statsY + 12,
+		combatTextY = statsY + 35,
+		combatTextSize = 100,
+		orderY = combatTextY + combatTextSize + 5,
+		combatActionsY = orderY + 5;
+
 		g.setColor(Color.BLACK);
-		drawAllyStats(currentChar,5,15,g);
-		drawEnemyStats(c2,5,15,g);
-		g.drawString("vs.", (GameWindow.width - 24)/2, 27);
-		drawCombatText(5,50,75,g);
-		drawCombatActions(currentChar.getCombatActions(),15,135,g);
-		drawOrder((GameWindow.width - ((order.length + 1) * 10))/2,130,g);
+		drawAllyStats(currentChar,5,statsY,g);
+		drawEnemyStats(c2,5,statsY,g);
+		g.drawString("vs.", (GameWindow.width - 24)/2, vsY);
+		drawCombatText(5,combatTextY,combatTextSize,g);
+		drawOrder((GameWindow.width - ((order.length + 1) * 10))/2,orderY,g);
+		drawCombatActions(currentChar.getCombatActions(),15,combatActionsY,g);
 		g.setColor(Color.BLACK);
 		drawPopup(g);
 		textColor = Color.black;
@@ -149,24 +158,25 @@ class FightPanel extends GamePanel{
 	}
 
 	void heroTurn(Hero c){
-		CombatAction c1Act = getSelected();
-		if(c.mana >= c1Act.getCost()){
-			setText(c.name + " uses " + c.useCombatAction(c1Act, target));
+		if(target != null){
+			CombatAction c1Act = getSelected();
+			if(c.mana >= c1Act.getCost()){
+				setText(c.name + " uses " + c.useCombatAction(c1Act, target));
 
-			if((c).jewelry.effect.use(c,c2)){
-				addText(" \n " + c.name + " jewelry " + (c).jewelry.effect.getFlavor());
-				// TODO fix flavor text in jewelry
+				if((c).jewelry.effect.use(c,c2)){
+					addText(" \n " + c.name + "'s jewelry" + (c).jewelry.effect.getFlavor());
+				}
+
+				if(c2.dead) c2 = getNextLivingEnemy();
+
+				nextTurn();
+			} else {
+				setText("You dont have enought *cMANA mana *c to do that.");
 			}
 
-			if(c2.dead) c2 = getNextLivingEnemy();
-
-			nextTurn();
-		} else {
-			setText("You dont have enought *cMANA mana *c to do that.");
-		}
-
-		if(deadGroup(enemies)){
-			setText("You have defated the hostiles.");
+			if(deadGroup(enemies)){
+				setText("You have defated the hostiles.");
+			}
 		}
 	}
 
@@ -327,6 +337,10 @@ class FightPanel extends GamePanel{
 				target = getTarget(allies, enemies);
 				showTarget = false;
 				turn();
+				Main.gw.repaint();
+				break;
+			case KeyEvent.VK_LEFT:
+				showTarget = false;
 				Main.gw.repaint();
 				break;
 			}

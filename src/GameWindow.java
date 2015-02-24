@@ -126,13 +126,13 @@ abstract class GamePanel extends JPanel implements KeyListener{
 		if(enemies != null){
 			s += "*cHEALTH *b Enemies: * *c \n ";
 			for(int i = 0; i < enemies.length; i++){
-				s += enemies[i].name + " *cHEALTH " + enemies[i].getHpText() + " *c \n ";
+				s += targetText(enemies[i]);
 			}
 		}
 
 		s += "*cDEX *b Allies: * *c \n ";
 		for(int i = 0; i < allies.length; i++){
-			s += allies[i].name + " *cHEALTH " + allies[i].getHpText() + " *c \n ";
+			s += targetText(allies[i]);
 		}
 
 		wrapedText(s,x + 7,y, lineSize, width,g);
@@ -140,6 +140,10 @@ abstract class GamePanel extends JPanel implements KeyListener{
 		g.drawRect(x + 5, y + 2 + lineSize + lineSize*currentTarget, width - 10, lineSize);
 	}
 
+	String targetText(Character c){
+		return c.name + " *cHEALTH " + c.getHpText() + " *cMANA " + c.getMpText() + " *c \n ";
+	}
+	
 	public void targetNext(Hero[] allies, Character[] enemies){
 		currentTarget++;
 		if(enemies != null){
