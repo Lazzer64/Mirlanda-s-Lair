@@ -72,7 +72,7 @@ public class StatsPanel extends GamePanel {
 
 	}
 
-	Image getCharacterIcon(Character c) throws IOException {
+	static Image getCharacterIcon(Character c) throws IOException {
 		switch(c.getPrimaryStat()){
 		case 1: // Strength
 			return ImageIO.read(new File("img/str_character_icon.png"));

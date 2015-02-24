@@ -12,7 +12,6 @@ import javax.swing.JPanel;
 
 public class Inventory extends LinkedHashMap<Item, Integer>{
 
-
 	public String toString(){
 		String ret = "";
 		for(int i = 0; i < this.size(); i++){
@@ -44,15 +43,11 @@ class InventoryPanel extends GamePanel{
 		g.setColor(Color.white);
 		g.fillRect(0, 0, GameWindow.height, GameWindow.width);
 		g.setColor(Color.black);
-
-		// draw title
-		int centered_text_x = (GameWindow.width/2) - (Main.c.title().length() * 12)/4;
-		g.drawString(Main.c.title(), centered_text_x, 20);
-
-		drawStats(g, centered_text_x, 34);
+		String t = "Inventory:";
+		g.drawString(t, 135 - getFontMetrics(getFont()).stringWidth(t)/2, 20);
 
 		// draw items
-		drawItems(Main.c.inventory,g,12,40);
+		drawItems(Main.p.leader.inventory,g,12,20);
 		if(showTarget)drawTargetSelect(Main.p.members, null, g);
 		drawPopup(g);
 
@@ -82,7 +77,7 @@ class InventoryPanel extends GamePanel{
 			} else if (selected < 0){
 				selected = items.size() - 1;
 			}
-			g.drawRect(x-2, y + selected*yChange + yChange -2, GameWindow.width - x - img_size, yChange - 2);
+			g.drawRect(x-2, y + selected*yChange + yChange -2, GameWindow.width - x - img_size, img_size + 3);
 
 			for(int i = 0; i < items.size(); i++){
 				itemName += items.keySet().toArray()[i];

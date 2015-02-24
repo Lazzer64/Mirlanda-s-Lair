@@ -46,7 +46,8 @@ public class Main {
 		p.add(meepo);
 		p.add(alvin);
 		
-		p.leader.death();
+		c.give(Jewelry.mana_amulet);
+
 
 	}
 

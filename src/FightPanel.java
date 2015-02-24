@@ -2,9 +2,13 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.event.KeyEvent;
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.PriorityQueue;
+
+import javax.imageio.ImageIO;
 
 class FightPanel extends GamePanel{
 
@@ -38,7 +42,8 @@ class FightPanel extends GamePanel{
 		drawEnemyStats(c2,5,15,g);
 		g.drawString("vs.", (GameWindow.width - 24)/2, 27);
 		drawCombatText(5,50,75,g);
-		drawCombatActions(currentChar.getCombatActions(),15,125,g);
+		drawCombatActions(currentChar.getCombatActions(),15,135,g);
+		drawOrder((GameWindow.width - ((order.length + 1) * 10))/2,130,g);
 		g.setColor(Color.BLACK);
 		drawPopup(g);
 		textColor = Color.black;
@@ -110,46 +115,74 @@ class FightPanel extends GamePanel{
 
 
 		}
+	}
 
-
+	void drawOrder(int x, int y, Graphics g){
+		int imageSize = 10;
+		int i = 0;
+		for(Character c: order){
+			try {
+				if(c.getClass().equals(Hero.class)){
+					g.drawImage(StatsPanel.getCharacterIcon(c),x,y,null);
+				}
+				if(c.getClass().equals(Monster.class)){
+					g.drawImage(ImageIO.read(new File("img/enemy_icon.png")),x,y,null);
+				}
+			} catch (IOException e) {e.printStackTrace();}
+			g.setColor(Color.white);
+			if(i == currentTurn) g.setColor(Color.BLACK);
+			g.drawRect(x, y, imageSize - 1, imageSize - 1);
+			x += imageSize;
+			i++;
+		}
 	}
 
 	public void turn(){
 
-		CombatAction c1Act = getSelected();
-
-		if(currentChar.mana >= c1Act.getCost()){
-			setText(currentChar.name + " uses " + currentChar.useCombatAction(c1Act, target));
-
-			if(((Hero)currentChar).jewelry.effect.use(currentChar,c2)){
-				addText(" \n Your jewelry " + ((Hero)currentChar).jewelry.effect.getFlavor());
-			}
-
-
-
-			if(deadGroup(enemies)){
-				setText("You have defated the hostiles.");
-			}
-
-			nextTurn();
-			while(currentChar.getClass().equals(Monster.class)){ // If not player turn
-				CombatAction c2Act = ((Monster) currentChar).action();
-				Character enemyTarget = this.getNextLivingAlly();
-				c2.useCombatAction(c2Act, enemyTarget);
-				addText(" \n " + c2.name + " retaliated, hitting " + enemyTarget.name + " with " + c2Act.getFlavorText());
-				nextTurn();
-				if(enemyTarget.dead){
-					addText(" *b " + enemyTarget.name + " * has been *b *cRED Slain * *c ");
-				}
-				if(deadGroup(allies)){
-					setText("You have been defeated.");
-					break;
-				}
-			}
-		} else {
-			setText("You do not have enough *cBLUE mana *c to use that!");
+		if(currentChar.getClass().equals(Hero.class)){
+			heroTurn((Hero)currentChar);
+		}
+		while(currentChar.getClass().equals(Monster.class)){
+			monsterTurn((Monster)currentChar);
 		}
 
+	}
+
+	void heroTurn(Hero c){
+		CombatAction c1Act = getSelected();
+		if(c.mana >= c1Act.getCost()){
+			setText(c.name + " uses " + c.useCombatAction(c1Act, target));
+
+			if((c).jewelry.effect.use(c,c2)){
+				addText(" \n " + c.name + " jewelry " + (c).jewelry.effect.getFlavor());
+				// TODO fix flavor text in jewelry
+			}
+
+			if(c2.dead) c2 = getNextLivingEnemy();
+
+			nextTurn();
+		} else {
+			setText("You dont have enought *cMANA mana *c to do that.");
+		}
+
+		if(deadGroup(enemies)){
+			setText("You have defated the hostiles.");
+		}
+	}
+
+	void monsterTurn(Monster c){
+
+		CombatAction c2Act = c.action();
+		Character enemyTarget = this.getNextLivingAlly();
+		c2.useCombatAction(c2Act, enemyTarget);
+		addText(" \n " + c2.name + " retaliated, hitting " + enemyTarget.name + " with " + c2Act.getFlavorText());
+		nextTurn();
+		if(enemyTarget.dead){
+			addText(" *b " + enemyTarget.name + " * has been *b *cRED Slain * *c ");
+		}
+		if(deadGroup(allies)){
+			setText("You have been defeated.");
+		}
 	}
 
 	void checkHealths(){
@@ -199,7 +232,7 @@ class FightPanel extends GamePanel{
 				}
 			}
 		}
-		
+
 		Item[] loot = new Item[sumLoot.size()];
 		sumLoot.toArray(loot);
 		for(Monster m: enemies)exp_reward += m.exp();
