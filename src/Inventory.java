@@ -44,7 +44,7 @@ class InventoryPanel extends GamePanel{
 		g.fillRect(0, 0, GameWindow.height, GameWindow.width);
 		g.setColor(Color.black);
 		String t = "Inventory:";
-		g.drawString(t, 135 - getFontMetrics(getFont()).stringWidth(t)/2, 20);
+		g.drawString(t, GameWindow.width/2 - getFontMetrics(getFont()).stringWidth(t)/2, 20);
 
 		// draw items
 		drawItems(Main.p.leader.inventory,g,12,20);
@@ -89,7 +89,7 @@ class InventoryPanel extends GamePanel{
 				// draw item name
 				g.setColor(Color.black);
 				wrapedText(itemName, img_size + 5 + x, y - 4, GameWindow.width - x, g);
-				wrapedText(itemValue, img_size + 5 + x + 220, y - 4, GameWindow.width - x, g);
+				wrapedText(itemValue, img_size + 5 + GameWindow.width - x - 50, y - 4, GameWindow.width - x, g);
 				itemName = "";
 				itemValue = "";
 

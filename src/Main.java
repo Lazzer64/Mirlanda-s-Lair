@@ -28,20 +28,22 @@ public class Main {
 		d.addEncounter(Room.RoomType.altar, 2);
 		d.addEncounter(Room.RoomType.monster, 7);
 		d.addEncounter(Room.RoomType.mini_boss, 3);
-
+		
 		openScreen(dp);
 		p.leader.setLocation(d.getStart().x, d.getStart().y);
 		p.leader.revealRooms();
 		p.leader.give(new Item[]{Consumable.red_potion,Consumable.blue_potion,Consumable.red_potion});
 		p.leader.give(Map.full_map);
 		
-		Hero alvin = new Hero("Alvin", Race.elf, Profession.ninja);
-		Hero meepo = new Hero("Meepo", Race.goblin, new Cleric());
+		Hero alvin = new Hero("Alvin", Race.elf, Profession.thief);
+		Hero meepo = new Hero("Meepo", Race.goblin, Profession.cleric);
 		
 		p.add(meepo);
 		p.add(alvin);
 		p.give(Equipment.fire_bow);
 		p.give(Equipment.double_cast_staff);
+		p.give(Equipment.crit_sword);
+		
 	}
 
 	public static void openScreen(JPanel p){

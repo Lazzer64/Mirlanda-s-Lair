@@ -358,19 +358,19 @@ class DungeonPanel extends GamePanel{
 	public DungeonPanel(Dungeon d){
 		super();
 		dungeon = d;
-		setPreferredSize(new Dimension(GameWindow.width,GameWindow.height));
-		setBounds(0, 0, GameWindow.width, GameWindow.height);
-		setLayout(null);
-	}
-
-	public void paint(Graphics g){
-
+		
 		// Calculate cell size, if the cells do not fit evenly adjust size
 		cell_size = (int) GameWindow.height/(dungeon.rooms.length);
 		if(cell_size % GameWindow.height != 0){
-			cell_size = (int) GameWindow.height/(dungeon.rooms.length - 1);
+			cell_size = (int) GameWindow.height/(dungeon.rooms.length + 1);
 		}
+	}
 
+	public void paint(Graphics g){
+		
+		g.setColor(Room.black);
+		g.fillRect(0, 0, GameWindow.width, GameWindow.height);
+		
 		// Draw rooms
 		for(int y = 0; y < dungeon.rooms.length; y++){
 			for(int x = 0; x < dungeon.rooms[0].length; x++){
@@ -467,6 +467,11 @@ class DungeonPanel extends GamePanel{
 		case KeyEvent.VK_K:
 			// TESTING PURPOSES
 			Main.openScreen(new FightPanel(Main.p.members,new Monster[] {Monsters.skeleton(),Monsters.skeleton()}));
+			Main.gw.repaint();
+			break;
+		case KeyEvent.VK_P:
+			// TESTING PURPOSES
+			Main.openScreen(new FightPanel(Main.p.members, new Monster[] {Monsters.spook()}));
 			Main.gw.repaint();
 			break;
 		case KeyEvent.VK_C:

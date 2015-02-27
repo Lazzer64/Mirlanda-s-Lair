@@ -1,16 +1,17 @@
 public class Profession {
 	// points add up to 18
-	static Profession
+	static public Profession
 	explorer = new Profession("Explorer",6,6,6,Equipment.weak_sword,new CombatAction[]{}),
 	gladiator = new Profession("Gladiator",10,5,3,Equipment.weak_sword,new CombatAction[]{}),
-	ninja = new Profession("Ninja",4,11,3,Equipment.weak_dagger,new CombatAction[]{}),
+	thief = new Profession("Thief",4,11,3,Equipment.weak_dagger,new CombatAction[]{}),
 	sorcerer = new Profession("Sorcerer",3,3,12,Equipment.weak_staff,new CombatAction[]{}),
 	enchanter = new Profession("Enchanter",5,3,10,Equipment.weak_tome,new CombatAction[]{}),
 	mage = new Profession("Mage",2,2,14,Equipment.weak_staff,new CombatAction[]{}),
 	ranger = new Profession("Ranger",5,10,3,Equipment.weak_bow,new CombatAction[]{}),
-	cleric = new Cleric();
+	cleric = new Profession("Cleric", 2, 2, 14, Equipment.weak_staff, new CombatAction[]{new ReviveAction()})
+	;
 	
-	static Profession[] default_professions = {explorer,gladiator,ninja,sorcerer,enchanter,mage,ranger};
+	static Profession[] default_professions = {explorer,gladiator,thief,sorcerer,enchanter,mage,ranger};
 	
 	String name;
 	int strength,dexterity,intelligence;
@@ -43,15 +44,5 @@ public class Profession {
 	public String toString(){
 		return name;
 	}
-	
-}
-
-class Cleric extends Profession {
-
-	public Cleric() {
-		super("Cleric", 2, 2, 14, Equipment.weak_staff, new CombatAction[]{new ReviveAction()});
-	}
-	
-	
 	
 }

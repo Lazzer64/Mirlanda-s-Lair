@@ -44,7 +44,7 @@ public class CreationPanel extends JPanel implements KeyListener{
 	 */
 	public CreationPanel() {
 
-		setPreferredSize(new Dimension(300, 300));
+		setPreferredSize(new Dimension(GameWindow.width, GameWindow.height));
 		setBounds(0, 0, GameWindow.width, GameWindow.height);
 
 		GridBagLayout gridBagLayout = new GridBagLayout();

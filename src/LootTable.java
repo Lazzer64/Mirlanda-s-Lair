@@ -22,8 +22,14 @@ public class LootTable extends Hashtable<Item, Double>{
 	dragon = new LootTable() {{
 		put(Jewelry.fire_ring, .50);
 		put(Jewelry.heal_ring, .50);
+	}},
+	spook = new LootTable() {{
+		put(Equipment.double_cast_staff, .2);
+		put(Equipment.crit_sword, .2);
+		put(Equipment.fire_bow, .2);
+		put(Consumable.revive_potion, .2);
+		put(Map.full_map, .2);
 	}};
-
 	
 	public Item rollLoot(){
 		double roll = Math.random();

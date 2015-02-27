@@ -31,6 +31,8 @@ class Monsters{
 	static Monster skeleton(){return new Monster("Skeleton",1,0,0,new CombatAction[]{Ability.whack},LootTable.skeleton);};
 	static Monster guard(){return new Monster("Guard",3,2,0,new CombatAction[]{Ability.slash},LootTable.gaurd);};
 	static Monster dragon(){return new Monster("Dragon",14,2,10,new CombatAction[]{Magic_Ability.flare,Ability.slash},LootTable.dragon);};
-	
+	static Monster spook(){
+		Monster m = new Monster("Sp00ky Ghost", 50,15,50,new CombatAction[]{Magic_Ability.fireball,Ability.snipe}, LootTable.spook);
+		return m;
+		};
 }
-

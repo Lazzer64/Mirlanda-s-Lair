@@ -33,7 +33,8 @@ class FightPanel extends GamePanel{
 		setPreferredSize(new Dimension(GameWindow.width,GameWindow.height));
 		setBounds(0, 0, GameWindow.width, GameWindow.height);
 		setLayout(null);
-		setText("You encounter a *cRED *b hostile! * ");
+		setText("You encounter a *cRED *b hostile! * *c ");
+		if(currentChar.getClass().equals(Monster.class)) turn();
 	}
 
 	public void paint(Graphics g){
@@ -151,7 +152,7 @@ class FightPanel extends GamePanel{
 		if(currentChar.getClass().equals(Hero.class)){
 			heroTurn((Hero)currentChar);
 		}
-		while(currentChar.getClass().equals(Monster.class)){
+		while(currentChar.getClass().equals(Monster.class) && !deadGroup(allies) && !deadGroup(enemies)){
 			monsterTurn((Monster)currentChar);
 		}
 
@@ -181,17 +182,19 @@ class FightPanel extends GamePanel{
 	}
 
 	void monsterTurn(Monster c){
-
 		CombatAction c2Act = c.action();
 		Character enemyTarget = this.getNextLivingAlly();
-		c2.useCombatAction(c2Act, enemyTarget);
-		addText(" \n " + c2.name + " retaliated, hitting " + enemyTarget.name + " with " + c2Act.getFlavorText());
-		nextTurn();
-		if(enemyTarget.dead){
-			addText(" *b " + enemyTarget.name + " * has been *b *cRED Slain * *c ");
+		if(enemyTarget != null){
+			c2.useCombatAction(c2Act, enemyTarget);
+			addText(" \n " + c2.name + " retaliated, hitting " + enemyTarget.name + " with " + c2Act.getFlavorText());
+			nextTurn();
+			if(enemyTarget.dead){
+				addText(" *b " + enemyTarget.name + " * has been *b *cRED Slain * *c ");
+			}
 		}
 		if(deadGroup(allies)){
 			setText("You have been defeated.");
+			Main.gw.repaint();
 		}
 	}
 
