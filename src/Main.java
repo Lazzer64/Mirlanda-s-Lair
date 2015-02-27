@@ -43,7 +43,6 @@ public class Main {
 		p.give(Equipment.fire_bow);
 		p.give(Equipment.double_cast_staff);
 		p.give(Equipment.crit_sword);
-		
 	}
 
 	public static void openScreen(JPanel p){

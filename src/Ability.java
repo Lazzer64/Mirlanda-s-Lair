@@ -12,11 +12,11 @@ public class Ability implements CombatAction {
 	snipe = new Ability("Snipe",false,10,0,8),
 	backstab = new Ability("Backstab",false,7,0,6),
 	// Medium abilities
-	doubleStrike = new MultiStrike("Double Strike",2,2),
+	doubleStrike = new MultiStrike("Double Strike",2,2,2),
 	// Advanced abilities
-	tripleStrike = new MultiStrike("Triple Strike",3,4),
+	tripleStrike = new MultiStrike("Triple Strike",2,3,4),
 	// Legendary abilities
-	bladeFlurry = new MultiStrike("Blade flurry",5,8)
+	bladeFlurry = new MultiStrike("Blade flurry",2,5,8)
 	;
 	
 	String name, flavor;
@@ -89,10 +89,16 @@ public class Ability implements CombatAction {
 class MultiStrike extends Ability {
 
 	int numStrikes;
-	static int damage = 2;
 	
-	MultiStrike(String name, int numStrikes, int cost) {
-		super(name, false, damage, 0, cost);
+	/**
+	 * Create an ability that hits multiple times at the cost of low base damage and lower crit chance.
+	 * @param name Name of the Ability
+	 * @param baseDmg Base damage that each hit does
+	 * @param numStrikes Number of times the ability hits
+	 * @param cost Amount of mana it takes to use this ability
+	 */
+	MultiStrike(String name, int baseDmg, int numStrikes, int cost) {
+		super(name, false, baseDmg, 0, cost);
 		this.numStrikes = numStrikes;
 	}
 	

@@ -129,7 +129,7 @@ class CritSword extends Equipment {
 	}
 	
 	public void cast(CombatAction action, Character caster, Character target){
-		action.use(1, caster.dexterity * multiplier, caster.intelligence, caster, target);
+		action.use(caster.strength, caster.dexterity * multiplier, caster.intelligence, caster, target);
 		actFlavor = action.getFlavorText();
 	}
 
