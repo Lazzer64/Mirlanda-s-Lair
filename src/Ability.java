@@ -139,7 +139,8 @@ class Magic_Ability implements CombatAction{
 	flare = new Magic_Ability("Flare",false,6,0,3),
 	fireball = new Magic_Ability("Fireball",false,12,0,9),
 	spark = new Magic_Ability("Spark",false,5,0,2),
-	lightning = new Magic_Ability("Lightning",false,10,0,7);
+	lightning = new Magic_Ability("Lightning",false,10,0,7),
+	firestorm = new RangeOfDamage("Fire Storm", 10, 10, 10);
 
 	String name, flavor;
 	boolean targeted;
@@ -197,6 +198,46 @@ class Magic_Ability implements CombatAction{
 	public boolean targeted(){
 		return targeted;
 	}
+}
+
+class Effect_Ability extends Magic_Ability {
+
+	Effect effect;
+	
+	Effect_Ability(String name, Effect effect, boolean targeted, int cost) {
+		super(name, targeted, 0, 0, cost);
+		this.effect = effect;
+	}
+	
+	public void use(int str, int dex, int intel, Character caster, Character target){
+		effect.use(caster, target);
+	}
+}
+
+class RangeOfDamage extends Magic_Ability {
+
+	int minDamage, damageRange;
+	
+	RangeOfDamage(String name, int minDamage, int damageRange, int cost) {
+		super(name, false, 0, 0, cost);
+		this.minDamage = minDamage;
+		this.damageRange = damageRange;
+	}
+	
+	public void use(int str, int dex, int intel, Character caster, Character target) {
+		if(target != null){
+			flavor = "";
+			
+			int use_damage = minDamage;
+			use_damage += (int) (intel/5); // Intelligence addition to hit
+			double roll = Math.random();
+			int percentPower = (int) (roll * 10);
+			use_damage += (percentPower * damageRange)/10;
+			flavor += " *b " + name + " * at *b " + percentPower + "0% * power hitting for *b *cINT " + use_damage + " * *c ";
+			target.damage(use_damage);
+		}
+	}
+	
 }
 
 class ReviveAction implements CombatAction {

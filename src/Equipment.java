@@ -2,6 +2,7 @@ import java.io.File;
 
 class Equipment implements Item {
 	static Equipment
+	testItem = new Equipment("Test Weapon", new CombatAction[]{Magic_Ability.firestorm}),
 	// Useless 
 	stick = new Equipment("Stick", new CombatAction[]{Ability.hit}),
 	bone = new Equipment("Bone", new CombatAction[]{Ability.whack}),
