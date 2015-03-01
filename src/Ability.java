@@ -30,7 +30,7 @@ public class Ability implements CombatAction {
 		this.heal = heal;
 		this.cost = cost;
 	}
-
+	
 	public void use(int str, int dex, int intel, Character caster, Character target){
 		if(target != null){
 			flavor = "";
@@ -133,14 +133,14 @@ class MultiStrike extends Ability {
 	
 }
 
-class Magic_Ability implements CombatAction{
+class Magic_Ability implements CombatAction {
 	static  Magic_Ability
 	weak_heal = new Magic_Ability("Attend Wounds",true,0,5,3),
 	flare = new Magic_Ability("Flare",false,6,0,3),
 	fireball = new Magic_Ability("Fireball",false,12,0,9),
 	spark = new Magic_Ability("Spark",false,5,0,2),
 	lightning = new Magic_Ability("Lightning",false,10,0,7),
-	firestorm = new RangeOfDamage("Fire Storm", 10, 10, 10);
+	inferno = new RangeOfDamage("Inferno", 10, 10, 10);
 
 	String name, flavor;
 	boolean targeted;

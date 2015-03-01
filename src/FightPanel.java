@@ -138,6 +138,9 @@ class FightPanel extends GamePanel{
 				if(c.getClass().equals(Monster.class)){
 					g.drawImage(ImageIO.read(new File("img/enemy_icon.png")),x,y,null);
 				}
+				if(c.dead){
+					g.drawImage(ImageIO.read(new File("img/cross.png")), x, y, null);
+				}
 			} catch (IOException e) {e.printStackTrace();}
 			g.setColor(Color.white);
 			if(i == currentTurn) g.setColor(Color.BLACK);

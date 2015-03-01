@@ -11,7 +11,7 @@ public interface Effect {
 	
 	boolean use(Character caster, Character target);
 	String getFlavor();
-
+	
 }
 
 class no_effect implements Effect {
@@ -111,5 +111,4 @@ class ManaHeal implements Effect {
 	public String getFlavor() {
 		return " heals for " + healAmnt + " *cBLUE mana. *c ";
 	}
-	
 }
