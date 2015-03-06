@@ -36,7 +36,7 @@ public class Hero extends Character{
 
 	public void move(int x, int y){
 
-		if(this.x + x > 0 && this.x + x < Main.d.rooms.length && this.y + y > 0 && this.y + y < Main.d.rooms.length){
+		if(this.x + x > 0 && this.x + x < Main.d.width && this.y + y > 0 && this.y + y < Main.d.height){
 			if(!Main.d.rooms[this.y + y][this.x + x].isType(Room.RoomType.no_room)){
 				this.x += x;
 				this.y += y;
