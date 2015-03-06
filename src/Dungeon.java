@@ -185,33 +185,33 @@ public class Dungeon {
 
 
 
-// Dungeon Panel
+//Dungeon Panel
 
 class DungeonPanel extends GamePanel{
 
 	Dungeon dungeon;
-	final int cell_size = 20;
-	int fogSize = 400;
-	boolean fogEnabled = true;
-	boolean miniMapEnabled = false;
+	int cell_size;
+	boolean fogEnabled = false;
 
 	public DungeonPanel(Dungeon d){
 		super();
 		dungeon = d;
+		
+		// Calculate cell size, if the cells do not fit evenly adjust size
+		cell_size = (int) GameWindow.height/(Math.max(dungeon.height,dungeon.width));
+//		if(cell_size % GameWindow.height != 0){
+//			cell_size = (int) GameWindow.height/(Math.max(dungeon.height,dungeon.width) + 1);
+//		}
 	}
 
 	public void paint(Graphics g){
-
+		
 		g.setColor(Room.black);
 		g.fillRect(0, 0, GameWindow.width, GameWindow.height);
-		int xCenter = (GameWindow.width - cell_size)/2;
-		int yCenter = (GameWindow.height - cell_size)/2;
-		int xOff = xCenter -(Main.p.leader.x * cell_size);
-		int yOff = yCenter -(Main.p.leader.y * cell_size);
-
+		
 		// Draw rooms
-		for(int y = 0; y < dungeon.height; y++){
-			for(int x = 0; x < dungeon.width; x++){
+		for(int y = 0; y < dungeon.rooms.length; y++){
+			for(int x = 0; x < dungeon.rooms[0].length; x++){
 				switch(dungeon.rooms[y][x].viewable){
 				case hidden:
 					g.setColor(Room.black);
@@ -233,63 +233,38 @@ class DungeonPanel extends GamePanel{
 					break;
 				}
 
-				g.fillRect(x * cell_size + xOff,y * cell_size + yOff, cell_size, cell_size);
+				g.fillRect(x * cell_size,y * cell_size, cell_size, cell_size);
 				g.setColor(Room.black);
-				g.drawRect(x * cell_size + xOff,y * cell_size + yOff, cell_size, cell_size);
+				g.drawRect(x * cell_size,y * cell_size, cell_size, cell_size);
 			}
 		}
 
 		// Draw player
 		g.setColor(Room.blue);
-		g.fillRect(Main.p.leader.x * cell_size + xOff, Main.p.leader.y * cell_size + yOff, cell_size, cell_size);
+		g.fillRect(Main.p.leader.x * cell_size, Main.p.leader.y * cell_size, cell_size, cell_size);
 		g.setColor(Room.black);
-		g.drawRect(Main.p.leader.x * cell_size + xOff, Main.p.leader.y * cell_size + yOff, cell_size, cell_size);
+		g.drawRect(Main.p.leader.x * cell_size, Main.p.leader.y * cell_size, cell_size, cell_size);
 
-		if(fogEnabled) drawFog(g);
-		if(miniMapEnabled) drawMiniMap(g);
+		if(fogEnabled){
+			drawFog(g);
+		}
 
 		drawPopup(g);
 
 	}
 
-	void drawMiniMap(Graphics g){
-		int xCenter = (GameWindow.width)/2;
-		int yCenter = (GameWindow.height)/2;
-		int cell_size = this.cell_size/4;
-		int xOff = xCenter -(cell_size/2 + Main.p.leader.x * cell_size);
-		int yOff = yCenter -(cell_size/2 + Main.p.leader.y * cell_size);
-		int alpha = 75; // 0 (transparent) - 255 (opaque)
-		g.setColor(new Color(0,0,0,100));
-		g.fillRect(0, 0, GameWindow.width, GameWindow.height);
-
-		for(int y = 0; y < dungeon.rooms.length; y++){
-			for(int x = 0; x < dungeon.rooms[0].length; x++){
-
-				if(dungeon.rooms[y][x].viewable != Room.Viewable.hidden){
-					g.setColor(new Color(255,255,255,alpha));
-					g.drawRect(x * cell_size + xOff,y * cell_size + yOff, cell_size, cell_size);
-				}
-			}
-
-		}
-
-		g.setColor(Room.blue);
-		g.fillRect(Main.p.leader.x * cell_size + xOff, Main.p.leader.y * cell_size + yOff, cell_size, cell_size);
-		g.setColor(Room.black);
-		g.drawRect(Main.p.leader.x * cell_size + xOff, Main.p.leader.y * cell_size + yOff, cell_size, cell_size);
-	}
-
 	void drawFog(Graphics g){
-		int xCenter = (GameWindow.width - fogSize)/2;
-		int yCenter = (GameWindow.height - fogSize)/2;
+		int fogSize = 200;
+		int center_x = Main.p.leader.x * cell_size + cell_size/2 - (fogSize/2);
+		int center_y = Main.p.leader.y * cell_size + cell_size/2 - (fogSize/2);
 		g.setColor(Color.BLACK);
-		g.fillRect(0, 0, xCenter, GameWindow.height); // left black out
-		g.fillRect(0, 0, GameWindow.width, yCenter); // top black out
-		g.fillRect(xCenter + fogSize, 0, GameWindow.height, GameWindow.width); // right black out
-		g.fillRect(0, yCenter + fogSize, GameWindow.width, GameWindow.height); // bottom black out
+		g.fillRect(0, 0, center_x, GameWindow.height); // left black out
+		g.fillRect(0, 0, GameWindow.width, center_y); // top black out
+		g.fillRect(center_x + fogSize, 0, GameWindow.height, GameWindow.width); // right black out
+		g.fillRect(0, center_y + fogSize, GameWindow.width, GameWindow.height); // bottom black out
 
 		try {
-			g.drawImage(ImageIO.read(new File("img/fog.png")), xCenter, yCenter, fogSize, fogSize, null);
+			g.drawImage(ImageIO.read(new File("img/fog.png")), center_x, center_y, fogSize, fogSize, null);
 		} catch (IOException e) {e.printStackTrace();}
 
 	}
@@ -343,10 +318,6 @@ class DungeonPanel extends GamePanel{
 			break;
 		case KeyEvent.VK_X:
 			Main.restartGame();
-			break;
-		case KeyEvent.VK_M:
-			miniMapEnabled = !miniMapEnabled;
-			Main.gw.repaint();
 			break;
 		}
 		this.closePopup();
