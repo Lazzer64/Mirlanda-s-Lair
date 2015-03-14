@@ -247,7 +247,7 @@ class DungeonPanel extends GamePanel{
 
 		if(fogEnabled) drawFog(g);
 		if(miniMapEnabled) drawMiniMap(g);
-
+		
 		drawPopup(g);
 
 	}

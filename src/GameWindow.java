@@ -356,22 +356,56 @@ class Selector<Type> {
 	public Type getSelected(){
 		return values[selection];
 	}
+
+	public void set(int index, Type obj){
+		values[index] = obj;
+		text[index] = obj.toString();
+	}
+	
+	public void set(int index, Type obj, String txt){
+		values[index] = obj;
+		text[index] = txt;
+	}
+	
+	public void add(Type obj){
+		add(obj,obj.toString());
+	}
+	
+	public void add(Type obj, String txt){
+		// Copy and add values
+		Type[] newValues = (Type[])new Object[values.length + 1];
+		for(int i = 0; i < values.length; i++){
+			newValues[i] = values[i];
+		}
+		newValues[values.length] = obj;
+		values = newValues;
+		
+		// Copy and add texts
+		String[] newText = new String[text.length + 1];
+		for(int i = 0; i < text.length; i++){
+			newText[i] = text[i];
+		}
+		newText[text.length] = txt;
+		text = newText;
+	}
 	
 	public void draw(int x, int y, int width, GamePanel pane, Graphics g){
 		final int lineHeight = 14;
-		String t = "";//" *cSTR";
+		final int textAdjust = -2;
+		final int xBuffer = 2;
+		String t = "";
 		for(String s: text){
 			t += " " + s + " \n ";
 		}
 		g.setColor(Color.WHITE);
-		g.fillRect(x, y, width, lineHeight * text.length);
+		g.fillRect(x, y, width + xBuffer*2, lineHeight * text.length); // White box behind
 		g.setColor(Color.BLACK);
-		pane.wrapedText(t, x, y, width, g);
+		pane.wrapedText(t, x + xBuffer, y + textAdjust, lineHeight, width, g); // Text
 		g.setColor(new Color(0, 0, 0, 50));
-		g.fillRect(x, y + lineHeight * selection + 2, width, lineHeight);
+		g.fillRect(x, y + lineHeight * selection, width + xBuffer*2, lineHeight); // Grey highlight
 		g.setColor(Color.BLACK);
-		g.drawRect(x, y + lineHeight * selection + 2, width, lineHeight);
-		g.drawRect(x, y + 2, width, lineHeight * text.length);
+		g.drawRect(x, y + lineHeight * selection, width + xBuffer*2, lineHeight); // Selection border
+		g.drawRect(x, y, width + xBuffer*2, lineHeight * text.length); // Border line
 	}
 
 }

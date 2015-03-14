@@ -35,6 +35,7 @@ class FightPanel extends GamePanel{
 		setLayout(null);
 		setText("You encounter a *cRED *b hostile! * *c ");
 		if(currentChar.getClass().equals(Monster.class)) turn();
+		
 	}
 
 	public void paint(Graphics g){

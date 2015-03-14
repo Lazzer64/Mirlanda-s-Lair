@@ -52,7 +52,7 @@ class InventoryPanel extends GamePanel{
 		// draw items
 		drawItems(Main.p.leader.inventory,g,12,20);
 		if(showTarget)drawTargetSelect(Main.p.members, null, g);
-		if(showItemOptions)itemOptions.draw(90, 32 + selected * 16, 100, this, g);
+		if(showItemOptions)itemOptions.draw(90, 34 + selected * 16, 100, this, g);
 		drawPopup(g);
 	}
 
@@ -189,10 +189,6 @@ class InventoryPanel extends GamePanel{
 			break;
 		case KeyEvent.VK_RIGHT:
 			showItemOptions = true;
-			Main.gw.repaint();
-			break;
-		case KeyEvent.VK_1:
-			openPopup(getSelected().getDescription());
 			Main.gw.repaint();
 			break;
 		}
