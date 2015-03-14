@@ -141,7 +141,7 @@ public class Character {
 	}
 
 	public int calculateHp(){
-		return 15 + (int)(this.strength * 2);
+		return 10 + (int)(this.strength * 2);
 	}
 
 	public int calculateMp(){

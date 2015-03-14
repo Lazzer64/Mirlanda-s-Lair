@@ -113,7 +113,7 @@ public class Room {
 			Main.d.rooms[Main.p.leader.y][Main.p.leader.x] = replaceRoom;
 			break;
 		case boss:
-			Monster Boss = Monsters.dragon();
+			Monster Boss = Monsters.dragon(Main.p.leader.level);
 			Boss.level = 8;
 			Main.openScreen(new FightPanel(Main.p.members,new Monster[] {Boss}));
 			//
@@ -128,7 +128,7 @@ public class Room {
 			break;
 		case mini_boss:
 			// Mini boss encounter
-			Monster miniB = Monsters.guard();
+			Monster miniB = Monsters.guard(Main.p.leader.level);
 			miniB.level = 3;
 			Main.openScreen(new FightPanel(Main.p.members,new Monster[] {miniB}));
 			//
@@ -139,7 +139,7 @@ public class Room {
 			break;
 		case monster:
 			// Monster encounter
-			Monster enemy = Monsters.skeleton();
+			Monster enemy = Monsters.skeleton(Main.p.leader.level);
 			Main.openScreen(new FightPanel(Main.p.members,new Monster[] {enemy}));
 			//
 			Main.gw.repaint();

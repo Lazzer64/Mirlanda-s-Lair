@@ -40,10 +40,10 @@ public class Main {
 		
 		p.add(meepo);
 		p.add(alvin);
-		p.give(Equipment.fire_bow);
-		p.give(Equipment.double_cast_staff);
-		p.give(Equipment.crit_sword);
-		p.give(Equipment.testItem);
+//		p.give(Equipment.fire_bow);
+//		p.give(Equipment.double_cast_staff);
+//		p.give(Equipment.crit_sword);
+//		p.give(Equipment.testItem);
 	}
 
 	public static void openScreen(JPanel p){

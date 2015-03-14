@@ -24,7 +24,7 @@ class NoItem implements Item {
 	public String toString(){
 		return "";
 	}
-
+	
 	public String getDescription(){
 		return "Nothing";
 	}

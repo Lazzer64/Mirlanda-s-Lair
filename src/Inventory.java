@@ -5,6 +5,7 @@ import java.awt.Graphics;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.io.IOException;
+import java.util.Iterator;
 import java.util.LinkedHashMap;
 
 import javax.imageio.ImageIO;
@@ -30,6 +31,8 @@ public class Inventory extends LinkedHashMap<Item, Integer>{
 class InventoryPanel extends GamePanel{
 
 	int selected = 0;
+	Selector<String> itemOptions = new Selector<String>(new String[]{"Use","Inspect","Discard"});
+	boolean showItemOptions = false;
 
 	public InventoryPanel(){
 		super();
@@ -49,8 +52,8 @@ class InventoryPanel extends GamePanel{
 		// draw items
 		drawItems(Main.p.leader.inventory,g,12,20);
 		if(showTarget)drawTargetSelect(Main.p.members, null, g);
+		if(showItemOptions)itemOptions.draw(90, 32 + selected * 16, 100, this, g);
 		drawPopup(g);
-
 	}
 
 	void drawItems(Inventory items, Graphics g, int x, int y){
@@ -116,6 +119,42 @@ class InventoryPanel extends GamePanel{
 		Character[] na = null;
 		if(this.showPop) showPop = !showPop;
 
+		if(showItemOptions){
+			switch(e.getKeyCode()){
+			case KeyEvent.VK_UP:
+				itemOptions.previous();
+				Main.gw.repaint();
+				return;
+			case KeyEvent.VK_DOWN:
+				itemOptions.next();
+				Main.gw.repaint();
+				return;
+			case KeyEvent.VK_LEFT:
+				showItemOptions = false;
+				Main.gw.repaint();
+				return;
+			case KeyEvent.VK_RIGHT:
+				showItemOptions = false;
+				switch(itemOptions.getIndex()){
+				case 0: // Use
+					if(Main.p.leader.inventory.size() > 0){
+						this.showTarget = true;
+					} else {
+						Main.openScreen(Main.dp);
+					}
+					break;
+				case 1: // Inspect
+					this.openPopup(this.getSelected().getDescription());
+					break;
+				case 2: // Discard
+					Main.p.inventory.remove(this.getSelected());
+					break;
+				}
+				Main.gw.repaint();
+				return;
+			}
+		}
+
 		if(showTarget){
 			switch(e.getKeyCode()){
 			case KeyEvent.VK_UP:
@@ -149,11 +188,7 @@ class InventoryPanel extends GamePanel{
 			Main.gw.repaint();
 			break;
 		case KeyEvent.VK_RIGHT:
-			if(Main.p.leader.inventory.size() > 0){
-				this.showTarget = true;
-			} else {
-				Main.openScreen(Main.dp);
-			}
+			showItemOptions = true;
 			Main.gw.repaint();
 			break;
 		case KeyEvent.VK_1:

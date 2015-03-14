@@ -143,7 +143,7 @@ abstract class GamePanel extends JPanel implements KeyListener{
 	String targetText(Character c){
 		return c.name + " *cHEALTH " + c.getHpText() + " *cMANA " + c.getMpText() + " *c \n ";
 	}
-	
+
 	public void targetNext(Hero[] allies, Character[] enemies){
 		currentTarget++;
 		if(enemies != null){
@@ -316,6 +316,64 @@ abstract class GamePanel extends JPanel implements KeyListener{
 
 	public void keyTyped(KeyEvent e) {
 	}
+}
+
+class Selector<Type> {
+	
+	Type[] values;
+	String[] text;
+	int selection;
+	
+	public Selector(Type[] values){
+		this.values = values;
+		this.selection = 0;
+		text = new String[values.length];
+		for(int i = 0; i < text.length; i++){
+			text[i] = values[i].toString();
+		}
+	}
+	
+	public Selector(Type[] values, String[] text){
+		this.values = values;
+		this.selection = 0;
+		this.text = text;
+	}
+	
+	public void next(){
+		selection++;
+		if(selection > values.length - 1) selection = 0;
+	}
+
+	public void previous(){
+		selection--;
+		if(selection < 0) selection = values.length - 1;
+	}
+	
+	public int getIndex(){
+		return selection;
+	}
+	
+	public Type getSelected(){
+		return values[selection];
+	}
+	
+	public void draw(int x, int y, int width, GamePanel pane, Graphics g){
+		final int lineHeight = 14;
+		String t = "";//" *cSTR";
+		for(String s: text){
+			t += " " + s + " \n ";
+		}
+		g.setColor(Color.WHITE);
+		g.fillRect(x, y, width, lineHeight * text.length);
+		g.setColor(Color.BLACK);
+		pane.wrapedText(t, x, y, width, g);
+		g.setColor(new Color(0, 0, 0, 50));
+		g.fillRect(x, y + lineHeight * selection + 2, width, lineHeight);
+		g.setColor(Color.BLACK);
+		g.drawRect(x, y + lineHeight * selection + 2, width, lineHeight);
+		g.drawRect(x, y + 2, width, lineHeight * text.length);
+	}
+
 }
 
 

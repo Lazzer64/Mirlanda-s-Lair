@@ -71,7 +71,7 @@ class FightPanel extends GamePanel{
 		String t = "";
 		int x_space = 0;		
 		if(c != null){
-			t = c.name;
+			t = "lvl " + c.level + " " + c.name;
 			x_space = this.getFontMetrics(this.getFont()).stringWidth(t);
 			g.drawString(t, GameWindow.width - x_space - x, y);
 
@@ -137,9 +137,6 @@ class FightPanel extends GamePanel{
 				}
 				if(c.getClass().equals(Monster.class)){
 					g.drawImage(ImageIO.read(new File("img/enemy_icon.png")),x,y,null);
-				}
-				if(c.dead){
-					g.drawImage(ImageIO.read(new File("img/cross.png")), x, y, null);
 				}
 			} catch (IOException e) {e.printStackTrace();}
 			g.setColor(Color.white);
