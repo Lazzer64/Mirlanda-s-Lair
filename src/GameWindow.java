@@ -324,6 +324,12 @@ class Selector<Type> {
 	String[] text;
 	int selection;
 	
+	Color
+	backColor = Color.white,
+	borderColor = Color.black,
+	selectColor = Color.black,
+	highlightColor = new Color(0, 0, 0, 50);
+	
 	public Selector(Type[] values){
 		this.values = values;
 		this.selection = 0;
@@ -397,15 +403,16 @@ class Selector<Type> {
 		for(String s: text){
 			t += " " + s + " \n ";
 		}
-		g.setColor(Color.WHITE);
-		g.fillRect(x, y, width + xBuffer*2, lineHeight * text.length); // White box behind
+		g.setColor(backColor);
+		g.fillRect(x, y, width, lineHeight * text.length); // White box behind
 		g.setColor(Color.BLACK);
 		pane.wrapedText(t, x + xBuffer, y + textAdjust, lineHeight, width, g); // Text
-		g.setColor(new Color(0, 0, 0, 50));
-		g.fillRect(x, y + lineHeight * selection, width + xBuffer*2, lineHeight); // Grey highlight
-		g.setColor(Color.BLACK);
-		g.drawRect(x, y + lineHeight * selection, width + xBuffer*2, lineHeight); // Selection border
-		g.drawRect(x, y, width + xBuffer*2, lineHeight * text.length); // Border line
+		g.setColor(highlightColor);
+		g.fillRect(x, y + lineHeight * selection, width, lineHeight); // Grey highlight
+		g.setColor(borderColor);
+		g.drawRect(x, y, width, lineHeight * text.length); // Border line
+		g.setColor(selectColor);
+		g.drawRect(x, y + lineHeight * selection, width, lineHeight); // Selection border
 	}
 
 }

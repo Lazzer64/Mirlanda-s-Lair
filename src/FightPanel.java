@@ -22,6 +22,8 @@ class FightPanel extends GamePanel{
 	int selected = 0;
 	int currentTurn = 0;
 	boolean target_select = false;
+	
+	Selector<CombatAction> actionSelect;
 
 	public FightPanel(Hero[] allies, Monster[] enemies){
 		super();
@@ -35,6 +37,7 @@ class FightPanel extends GamePanel{
 		setLayout(null);
 		setText("You encounter a *cRED *b hostile! * *c ");
 		if(currentChar.getClass().equals(Monster.class)) turn();
+		actionSelect  = getCombatActionSelector(currentChar);
 		
 	}
 
@@ -54,7 +57,10 @@ class FightPanel extends GamePanel{
 		g.drawString("vs.", (GameWindow.width - 24)/2, vsY);
 		drawCombatText(5,combatTextY,combatTextSize,g);
 		drawOrder((GameWindow.width - ((order.length + 1) * 10))/2,orderY,g);
-		drawCombatActions(currentChar.getCombatActions(),15,combatActionsY,g);
+		//drawCombatActions(currentChar.getCombatActions(),15,combatActionsY,g);
+		actionSelect.borderColor = Color.WHITE;
+		actionSelect.backColor = new Color(0,0,0,0);
+		actionSelect.draw(5, combatActionsY + 14, GameWindow.width - 5*2, this, g);
 		g.setColor(Color.BLACK);
 		drawPopup(g);
 		textColor = Color.black;
@@ -148,6 +154,15 @@ class FightPanel extends GamePanel{
 		}
 	}
 
+	Selector<CombatAction>  getCombatActionSelector(Character c){
+		CombatAction[] selecActions = c.getCombatActions();
+		String[] selectText = new String[selecActions.length];
+		for(int i = 0; i < selecActions.length; i++){
+			selectText[i] = selecActions[i].toString() + " - *cBLUE " + selecActions[i].getCost() + " *c ";
+		}
+		return new Selector<CombatAction>(selecActions,selectText);
+	}
+	
 	public void turn(){
 
 		if(currentChar.getClass().equals(Hero.class)){
@@ -156,7 +171,7 @@ class FightPanel extends GamePanel{
 		while(currentChar.getClass().equals(Monster.class) && !deadGroup(allies) && !deadGroup(enemies)){
 			monsterTurn((Monster)currentChar);
 		}
-
+		actionSelect = getCombatActionSelector(currentChar);
 	}
 
 	void heroTurn(Hero c){
@@ -265,7 +280,8 @@ class FightPanel extends GamePanel{
 	}
 
 	CombatAction getSelected(){
-		return currentChar.getCombatActions()[selected];
+		//return currentChar.getCombatActions()[selected];
+		return actionSelect.getSelected();
 	}
 
 	void next(){
@@ -355,13 +371,15 @@ class FightPanel extends GamePanel{
 		switch(e.getKeyCode()){
 		case KeyEvent.VK_UP:
 			if(!target_select){
-				previous();
+				//previous();
+				actionSelect.previous();
 			}
 			Main.gw.repaint();
 			break;
 		case KeyEvent.VK_DOWN:
 			if(!target_select){
-				next();
+				//next();
+				actionSelect.next();
 			}
 			Main.gw.repaint();
 			break;
