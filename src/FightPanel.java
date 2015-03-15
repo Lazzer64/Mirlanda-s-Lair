@@ -58,7 +58,7 @@ class FightPanel extends GamePanel{
 		drawCombatText(5,combatTextY,combatTextSize,g);
 		drawOrder((GameWindow.width - ((order.length + 1) * 10))/2,orderY,g);
 		//drawCombatActions(currentChar.getCombatActions(),15,combatActionsY,g);
-		actionSelect.borderColor = Color.WHITE;
+		actionSelect.borderColor = new Color(0,0,0,0);
 		actionSelect.backColor = new Color(0,0,0,0);
 		actionSelect.draw(5, combatActionsY + 14, GameWindow.width - 5*2, this, g);
 		g.setColor(Color.BLACK);

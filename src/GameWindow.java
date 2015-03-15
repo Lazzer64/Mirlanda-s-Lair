@@ -328,7 +328,7 @@ class Selector<Type> {
 	backColor = Color.white,
 	borderColor = Color.black,
 	selectColor = Color.black,
-	highlightColor = new Color(0, 0, 0, 50);
+	highlightColor = new Color(0, 0, 0, 35);
 	
 	public Selector(Type[] values){
 		this.values = values;
