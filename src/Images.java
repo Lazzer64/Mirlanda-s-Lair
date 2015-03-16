@@ -1,4 +1,3 @@
-import java.awt.Image;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -30,7 +29,10 @@ public class Images {
 	str_char = get("img/str_character_icon.png"),
 	str_icon = get("img/strength_icon.png"),
 	torso_icon = get("img/torso_icon.png"),
-	weapon_icon = get("img/weapon_icon.png")
+	weapon_icon = get("img/weapon_icon.png"),
+	fade_vert = get("img/fade_vert.png"),
+	fade_hor = get("img/fade_hor.png"),
+	fade_diag = get("img/fade_diag.png")
 	;
 
 	static BufferedImage get(String loc){

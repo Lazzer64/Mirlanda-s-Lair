@@ -18,7 +18,7 @@ public class Dungeon {
 
 	Room[][] rooms;
 	int width,height;
-	
+
 	private void setRoom(Room r, int x, int y){
 		rooms[y][x] = r;
 	}
@@ -131,7 +131,7 @@ public class Dungeon {
 			int width = 0;
 			int height = 0;
 			String line = reader.readLine();
-			
+
 			// Find Width
 			for(int i = 0; i < line.length(); i++){
 				if(line.charAt(i) != '\t' && line.charAt(i) != ' '){
@@ -141,14 +141,14 @@ public class Dungeon {
 			// Find Length
 			reader.skip(Long.MAX_VALUE);
 			height = reader.getLineNumber() + 1;
-			
+
 			d.width = width;
 			d.height =height;
-			
+
 			d.rooms = new Room[height][width];
 			d.initToEmpty();
 			reader.reset();
-			
+
 			while(line != null){
 				line = reader.readLine();
 				String s = line;
@@ -180,7 +180,7 @@ public class Dungeon {
 			}
 		}
 	}
-	
+
 }
 
 
@@ -194,7 +194,7 @@ class DungeonPanel extends GamePanel{
 	int fogSize = 400;
 	boolean fogEnabled = true;
 	boolean miniMapEnabled = false;
-	
+
 	public DungeonPanel(Dungeon d){
 		super();
 		dungeon = d;
@@ -209,7 +209,22 @@ class DungeonPanel extends GamePanel{
 		int xOff = xCenter -(Main.p.leader.x * cell_size);
 		int yOff = yCenter -(Main.p.leader.y * cell_size);
 
-		// Draw rooms
+		drawRooms(xOff,yOff,g);
+
+		// Draw player
+		g.setColor(Room.blue);
+		g.fillRect(Main.p.leader.x * cell_size + xOff, Main.p.leader.y * cell_size + yOff, cell_size, cell_size);
+		g.setColor(Room.black);
+		g.drawRect(Main.p.leader.x * cell_size + xOff, Main.p.leader.y * cell_size + yOff, cell_size, cell_size);
+
+		if(fogEnabled) drawFog(g);
+		if(miniMapEnabled) drawMiniMap(g);
+
+		drawPopup(g);
+
+	}
+
+	void drawRooms(int xOff, int yOff, Graphics g){
 		for(int y = 0; y < dungeon.height; y++){
 			for(int x = 0; x < dungeon.width; x++){
 				switch(dungeon.rooms[y][x].viewable){
@@ -233,23 +248,34 @@ class DungeonPanel extends GamePanel{
 					break;
 				}
 
-				g.fillRect(x * cell_size + xOff,y * cell_size + yOff, cell_size, cell_size);
+				int xPos = x * cell_size + xOff;
+				int yPos = y * cell_size + yOff;
+
+				g.fillRect(xPos,yPos, cell_size, cell_size);
 				g.setColor(Room.black);
-				g.drawRect(x * cell_size + xOff,y * cell_size + yOff, cell_size, cell_size);
+				g.drawRect(xPos,yPos, cell_size, cell_size);
+				if(dungeon.rooms[y][x].viewable != Room.Viewable.hidden){
+					drawFade(x,y,xPos,yPos,cell_size,g);
+				}
 			}
 		}
+	}
 
-		// Draw player
-		g.setColor(Room.blue);
-		g.fillRect(Main.p.leader.x * cell_size + xOff, Main.p.leader.y * cell_size + yOff, cell_size, cell_size);
-		g.setColor(Room.black);
-		g.drawRect(Main.p.leader.x * cell_size + xOff, Main.p.leader.y * cell_size + yOff, cell_size, cell_size);
+	void drawFade(int x, int y, int xPos, int yPos, int cell_size, Graphics g){
+		boolean
+		top = (y > 0 && dungeon.rooms[y-1][x].viewable == Room.Viewable.hidden && !dungeon.rooms[y-1][x].isType(Room.RoomType.no_room)),
+		bot = (y < dungeon.rooms.length - 1 && dungeon.rooms[y+1][x].viewable == Room.Viewable.hidden && !dungeon.rooms[y+1][x].isType(Room.RoomType.no_room)),
+		left = (x > 0 && dungeon.rooms[y][x - 1].viewable == Room.Viewable.hidden && !dungeon.rooms[y][x - 1].isType(Room.RoomType.no_room)),
+		right = (x < dungeon.rooms[0].length - 1 && dungeon.rooms[y][x + 1].viewable == Room.Viewable.hidden && !dungeon.rooms[y][x + 1].isType(Room.RoomType.no_room));
 
-		if(fogEnabled) drawFog(g);
-		if(miniMapEnabled) drawMiniMap(g);
-		
-		drawPopup(g);
-
+		if(top || bot){
+			if(y < dungeon.rooms.length - 1 && dungeon.rooms[y + 1][x].viewable == Room.Viewable.peeked) g.drawImage(Images.fade_vert, xPos, yPos, cell_size, cell_size, null);
+			if(y > 0 && dungeon.rooms[y - 1][x].viewable == Room.Viewable.peeked) g.drawImage(Images.fade_vert, xPos, yPos + cell_size, cell_size, -cell_size, null);
+		}
+		if(left || right){
+			if(y < dungeon.rooms[0].length  && dungeon.rooms[y][x + 1].viewable == Room.Viewable.peeked) g.drawImage(Images.fade_hor, xPos, yPos, cell_size, cell_size, null);
+			if(y > 0 && dungeon.rooms[y][x - 1].viewable == Room.Viewable.peeked) g.drawImage(Images.fade_hor, xPos + cell_size, yPos, -cell_size, cell_size, null);
+		}
 	}
 
 	void drawMiniMap(Graphics g){
