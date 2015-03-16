@@ -396,8 +396,8 @@ class Selector<Type> {
 	}
 	
 	public void draw(int x, int y, int width, GamePanel pane, Graphics g){
-		final int lineHeight = 14;
-		final int textAdjust = -2;
+		final int lineHeight = 15;
+		final int textAdjust = -3;
 		final int xBuffer = 2;
 		String t = "";
 		for(String s: text){

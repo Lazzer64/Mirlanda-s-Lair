@@ -3,6 +3,7 @@ import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.event.KeyEvent;
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 
@@ -53,43 +54,40 @@ public class StatsPanel extends GamePanel {
 		g.drawLine(0, (int)(lineSize * 4.7), getWidth() - xBuffer, (int)(lineSize * 4.7));
 		g.drawLine(0, (int)(lineSize * 8.7), getWidth() - xBuffer, (int)(lineSize * 8.7));
 
-		try {
+
 			drawPartyIcons(xImageBuffer, lineSize, g);
-			g.drawImage(ImageIO.read(new File("img/heart_icon.png")), xImageBuffer, lineSize * 3 - imageSize, imageSize, imageSize, null);
-			g.drawImage(ImageIO.read(new File("img/mana_icon.png")), xImageBuffer, lineSize * 4 - imageSize, imageSize, imageSize, null);
-			g.drawImage(ImageIO.read(new File("img/strength_icon.png")), xImageBuffer, lineSize * 6 - imageSize, imageSize, imageSize, null);
-			g.drawImage(ImageIO.read(new File("img/dexterity_icon.png")), xImageBuffer, lineSize * 7 - imageSize, imageSize, imageSize, null);
-			g.drawImage(ImageIO.read(new File("img/inteligence_icon.png")), xImageBuffer, lineSize * 8 - imageSize, imageSize, imageSize, null);
-			g.drawImage(ImageIO.read(Head.icon), xImageBuffer, lineSize * 10 - imageSize, imageSize, imageSize, null);
-			g.drawImage(ImageIO.read(Torso.icon), xImageBuffer, lineSize * 11 - imageSize, imageSize, imageSize, null);
-			g.drawImage(ImageIO.read(Jewelry.icon), xImageBuffer, lineSize * 12 - imageSize, imageSize, imageSize, null);
-			g.drawImage(ImageIO.read(Legs.icon), xImageBuffer, lineSize * 13 - imageSize, imageSize, imageSize, null);
-			g.drawImage(ImageIO.read(Equipment.icon), xImageBuffer, lineSize * 14 - imageSize, imageSize, imageSize, null);
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+			g.drawImage(Images.heart_icon, xImageBuffer, lineSize * 3 - imageSize, imageSize, imageSize, null);
+			g.drawImage(Images.mana_icon, xImageBuffer, lineSize * 4 - imageSize, imageSize, imageSize, null);
+			g.drawImage(Images.str_icon, xImageBuffer, lineSize * 6 - imageSize, imageSize, imageSize, null);
+			g.drawImage(Images.dex_icon, xImageBuffer, lineSize * 7 - imageSize, imageSize, imageSize, null);
+			g.drawImage(Images.int_icon, xImageBuffer, lineSize * 8 - imageSize, imageSize, imageSize, null);
+			g.drawImage(Images.head_icon, xImageBuffer, lineSize * 10 - imageSize, imageSize, imageSize, null);
+			g.drawImage(Images.torso_icon, xImageBuffer, lineSize * 11 - imageSize, imageSize, imageSize, null);
+			g.drawImage(Images.ring_icon, xImageBuffer, lineSize * 12 - imageSize, imageSize, imageSize, null);
+			g.drawImage(Images.legs_icon, xImageBuffer, lineSize * 13 - imageSize, imageSize, imageSize, null);
+			g.drawImage(Images.weapon_icon, xImageBuffer, lineSize * 14 - imageSize, imageSize, imageSize, null);
+
 
 	}
 
-	static Image getCharacterIcon(Character c) throws IOException {
+	static BufferedImage getCharacterIcon(Character c) {
 		switch(c.getPrimaryStat()){
 		case 1: // Strength
-			return ImageIO.read(new File("img/str_character_icon.png"));
+			return Images.str_char;
 		case 2: // Dexterity
-			return ImageIO.read(new File("img/dex_character_icon.png"));
+			return Images.dex_char;
 		case 3: // Intelligence
-			return ImageIO.read(new File("img/int_character_icon.png"));
+			return Images.int_char;
 		default: // Balanced
-			return ImageIO.read(new File("img/bal_character_icon.png"));	
+			return Images.bal_char;
 		}
 	}
 	
-	void drawPartyIcons(int xImageBuffer, int lineSize, Graphics g) throws IOException {
+	void drawPartyIcons(int xImageBuffer, int lineSize, Graphics g) {
 		g.drawImage(getCharacterIcon(Main.p.get(0)), xImageBuffer, lineSize - 7, 10, 10, null);
 		for(int i = 0; i < Main.p.size; i++){
 			g.drawImage(getCharacterIcon(Main.p.get(i)), xImageBuffer + 10*i, lineSize - 7, 10, 10, null);
-			if(Main.p.get(i).dead) g.drawImage(ImageIO.read(new File("img/cross.png")), xImageBuffer + 10*i, lineSize - 7, 10, 10, null);
+			if(Main.p.get(i).dead) g.drawImage(Images.cross, xImageBuffer + 10*i, lineSize - 7, 10, 10, null);
 		}
 
 		g.setColor(Color.WHITE);

@@ -83,11 +83,8 @@ class InventoryPanel extends GamePanel{
 				y += yChange;
 
 				//Draw image
-				try {
-					g.drawImage(ImageIO.read(((Item) (items.keySet().toArray()[i])).getIcon()),x,y, img_size, img_size, null);
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
+				g.drawImage(((Item) (items.keySet().toArray()[i])).getIcon(),x,y, img_size, img_size, null);
+
 
 				// draw item name
 				g.setColor(Color.black);
@@ -115,10 +112,10 @@ class InventoryPanel extends GamePanel{
 
 	@Override
 	public void keyPressed(KeyEvent e) {
-
+		
 		Character[] na = null;
 		if(this.showPop) showPop = !showPop;
-
+		
 		if(showItemOptions){
 			switch(e.getKeyCode()){
 			case KeyEvent.VK_UP:

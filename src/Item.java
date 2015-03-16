@@ -1,3 +1,4 @@
+import java.awt.image.BufferedImage;
 import java.io.File;
 
 public interface Item {
@@ -5,7 +6,7 @@ public interface Item {
 	final static Item none = new NoItem();
 
 	void use(Character target);
-	File getIcon();
+	BufferedImage getIcon();
 	String getDescription();
 	// TODO getFlavorName()
 
@@ -17,8 +18,8 @@ class NoItem implements Item {
 
 	}
 
-	public File getIcon() {
-		return new File("img/unknown_icon.png");
+	public BufferedImage getIcon() {
+		return Images.unknown;
 	}
 
 	public String toString(){
@@ -44,7 +45,7 @@ enum Consumable implements Item{
 
 	String name;
 	int hp_heal,mp_heal;
-	static File icon = new File("img/consumable_icon.png");
+	static BufferedImage icon = Images.consumable_icon;
 
 	Consumable(String name, int hp_heal, int mp_heal){
 		this.name = name;
@@ -60,7 +61,7 @@ enum Consumable implements Item{
 		}
 	}
 
-	public File getIcon(){
+	public BufferedImage getIcon(){
 		return icon;
 	}
 
@@ -90,8 +91,8 @@ class RevivePotion implements Item {
 		target.remove(this);
 	}
 
-	public File getIcon() {
-		return new File("img/consumable_icon.png");
+	public BufferedImage getIcon() {
+		return Images.consumable_icon;
 	}
 
 	public String toString(){
@@ -109,7 +110,7 @@ enum Head implements Item{
 	cloth("Cloth Helmet");
 
 	String name;
-	static File icon = new File("img/head_icon.png");	
+	static BufferedImage icon =Images.head_icon;	
 
 	private Head(String name){
 		this.name = name;
@@ -128,7 +129,7 @@ enum Head implements Item{
 
 
 	@Override
-	public File getIcon() {
+	public BufferedImage getIcon() {
 		return icon;
 	}
 
@@ -148,7 +149,7 @@ enum Torso implements Item{
 	cloth("Cloth Shirt");
 
 	String name;
-	static File icon = new File("img/torso_icon.png");	
+	static BufferedImage icon = Images.torso_icon;	
 
 	private Torso(String name){
 		this.name = name;
@@ -167,7 +168,7 @@ enum Torso implements Item{
 
 
 	@Override
-	public File getIcon() {
+	public BufferedImage getIcon() {
 		return icon;
 	}
 
@@ -187,7 +188,7 @@ enum Legs implements Item{
 	cloth("Cloth Pants");
 
 	String name;
-	static File icon = new File("img/legs_icon.png");	
+	static BufferedImage icon = Images.legs_icon;	
 
 	private Legs(String name){
 		this.name = name;
@@ -206,7 +207,7 @@ enum Legs implements Item{
 
 
 	@Override
-	public File getIcon() {
+	public BufferedImage getIcon() {
 		return icon;
 	}
 
@@ -229,7 +230,7 @@ enum Jewelry implements Item{
 
 	String name;
 	Effect effect;
-	static File icon = new File("img/ring2_icon.png");	
+	static BufferedImage icon = Images.ring_icon;	
 
 	private Jewelry(String name, Effect effect){
 		this.name = name;
@@ -249,7 +250,7 @@ enum Jewelry implements Item{
 
 
 	@Override
-	public File getIcon() {
+	public BufferedImage getIcon() {
 		return icon;
 	}
 
@@ -277,14 +278,14 @@ enum Map implements Item{
 		view = v;
 	}
 
-	File icon = new File("img/map_icon.png");
+	static BufferedImage icon = Images.map_icon;
 
 	public void use(Character target) {
 		Main.d.setNotSeenRoomsViewable(view);
 		target.remove(this);
 	}
 
-	public File getIcon() {
+	public BufferedImage getIcon() {
 		return icon;
 	}
 

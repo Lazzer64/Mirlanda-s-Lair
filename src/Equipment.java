@@ -1,3 +1,4 @@
+import java.awt.image.BufferedImage;
 import java.io.File;
 
 class Equipment implements Item {
@@ -22,7 +23,7 @@ class Equipment implements Item {
 
 	String name;
 	CombatAction[] abilities;
-	static File icon = new File("img/weapon_icon.png");
+	static BufferedImage icon = Images.weapon_icon;
 
 	String flavor = "";
 
@@ -48,7 +49,7 @@ class Equipment implements Item {
 		return flavor;
 	}
 
-	public File getIcon() {
+	public BufferedImage getIcon() {
 		return icon;
 	}
 
