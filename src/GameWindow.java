@@ -23,6 +23,7 @@ public class GameWindow extends JFrame{
 	final static int width = 300;
 	final static int height = 300;
 	final static ImageIcon icon = new ImageIcon("mirlandaIcon.png");
+	final static Color Back_Color = new Color(238,238,238);
 
 	public GameWindow(){
 		setTitle("Mirlanda's Lair");
@@ -37,6 +38,7 @@ public class GameWindow extends JFrame{
 		setResizable(false);
 		setFocusable(true);
 
+		setBackground(Back_Color);
 		setContentPane(Main.cp);
 		pack();
 		setLocationRelativeTo(null);
@@ -393,6 +395,13 @@ class Selector<Type> {
 		}
 		newText[text.length] = txt;
 		text = newText;
+	}
+	
+	public void hideBack(){
+		Color clear = new Color(0, 0, 0, 0);
+		backColor = clear;
+		borderColor = clear;
+		//highlightColor = clear;
 	}
 	
 	public void draw(int x, int y, int width, GamePanel pane, Graphics g){

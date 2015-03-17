@@ -15,6 +15,7 @@ public class StatsPanel extends GamePanel {
 	final static Color divColor = new Color(180,180,180);
 
 	int currentChar = 0;
+	Selector<String> charOptions = new Selector<String>(new String[]{"OPTION *cSTR A *c ","OPTION *cDEX B *c ","OPTION *cINT C *c "});
 
 	public void paint(Graphics g){
 
@@ -53,20 +54,23 @@ public class StatsPanel extends GamePanel {
 		g.drawLine(0, (int)(lineSize * 1.7), getWidth() - xBuffer, (int)(lineSize * 1.7));
 		g.drawLine(0, (int)(lineSize * 4.7), getWidth() - xBuffer, (int)(lineSize * 4.7));
 		g.drawLine(0, (int)(lineSize * 8.7), getWidth() - xBuffer, (int)(lineSize * 8.7));
+		g.drawLine(0, (int)(lineSize * 14.7), getWidth() - xBuffer, (int)(lineSize * 14.7));
 
 
-			drawPartyIcons(xImageBuffer, lineSize, g);
-			g.drawImage(Images.heart_icon, xImageBuffer, lineSize * 3 - imageSize, imageSize, imageSize, null);
-			g.drawImage(Images.mana_icon, xImageBuffer, lineSize * 4 - imageSize, imageSize, imageSize, null);
-			g.drawImage(Images.str_icon, xImageBuffer, lineSize * 6 - imageSize, imageSize, imageSize, null);
-			g.drawImage(Images.dex_icon, xImageBuffer, lineSize * 7 - imageSize, imageSize, imageSize, null);
-			g.drawImage(Images.int_icon, xImageBuffer, lineSize * 8 - imageSize, imageSize, imageSize, null);
-			g.drawImage(Images.head_icon, xImageBuffer, lineSize * 10 - imageSize, imageSize, imageSize, null);
-			g.drawImage(Images.torso_icon, xImageBuffer, lineSize * 11 - imageSize, imageSize, imageSize, null);
-			g.drawImage(Images.ring_icon, xImageBuffer, lineSize * 12 - imageSize, imageSize, imageSize, null);
-			g.drawImage(Images.legs_icon, xImageBuffer, lineSize * 13 - imageSize, imageSize, imageSize, null);
-			g.drawImage(Images.weapon_icon, xImageBuffer, lineSize * 14 - imageSize, imageSize, imageSize, null);
+		drawPartyIcons(xImageBuffer, lineSize, g);
+		g.drawImage(Images.heart_icon, xImageBuffer, lineSize * 3 - imageSize, imageSize, imageSize, null);
+		g.drawImage(Images.mana_icon, xImageBuffer, lineSize * 4 - imageSize, imageSize, imageSize, null);
+		g.drawImage(Images.str_icon, xImageBuffer, lineSize * 6 - imageSize, imageSize, imageSize, null);
+		g.drawImage(Images.dex_icon, xImageBuffer, lineSize * 7 - imageSize, imageSize, imageSize, null);
+		g.drawImage(Images.int_icon, xImageBuffer, lineSize * 8 - imageSize, imageSize, imageSize, null);
+		g.drawImage(Images.head_icon, xImageBuffer, lineSize * 10 - imageSize, imageSize, imageSize, null);
+		g.drawImage(Images.torso_icon, xImageBuffer, lineSize * 11 - imageSize, imageSize, imageSize, null);
+		g.drawImage(Images.ring_icon, xImageBuffer, lineSize * 12 - imageSize, imageSize, imageSize, null);
+		g.drawImage(Images.legs_icon, xImageBuffer, lineSize * 13 - imageSize, imageSize, imageSize, null);
+		g.drawImage(Images.weapon_icon, xImageBuffer, lineSize * 14 - imageSize, imageSize, imageSize, null);
 
+		charOptions.hideBack();
+		charOptions.draw(xImageBuffer, lineSize * 15, GameWindow.width - xImageBuffer*2, this, g);
 
 	}
 
@@ -82,7 +86,7 @@ public class StatsPanel extends GamePanel {
 			return Images.bal_char;
 		}
 	}
-	
+
 	void drawPartyIcons(int xImageBuffer, int lineSize, Graphics g) {
 		g.drawImage(getCharacterIcon(Main.p.get(0)), xImageBuffer, lineSize - 7, 10, 10, null);
 		for(int i = 0; i < Main.p.size; i++){
@@ -94,10 +98,10 @@ public class StatsPanel extends GamePanel {
 		for(int i = 0; i < Main.p.size; i++){
 			g.drawRect(xImageBuffer * 2 * (i + 1) - 5, lineSize - 7, 9, 9);
 		}
-		
+
 		g.setColor(Color.BLACK);
 		g.drawRect(xImageBuffer * 2 * (currentChar + 1) - 5, lineSize - 7, 9, 9);
-		
+
 	}
 
 	void next(){
@@ -118,7 +122,15 @@ public class StatsPanel extends GamePanel {
 
 
 	public void keyPressed(KeyEvent arg0) {
-
+		switch(arg0.getKeyCode()){
+		case KeyEvent.VK_UP:
+			charOptions.previous();
+			break;
+		case KeyEvent.VK_DOWN:
+			charOptions.next();
+			break;
+		}
+		Main.gw.repaint();
 	}
 
 	public void keyReleased(KeyEvent arg0) {
