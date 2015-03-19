@@ -323,15 +323,15 @@ class DungeonPanel extends GamePanel{
 
 	public void keyPressed(KeyEvent e) {
 		switch(e.getKeyCode()){
-		case KeyEvent.VK_UP:
+		case Hotkeys.UP:
 			Main.p.leader.move(0, -1);
 			Main.gw.repaint();
 			break;
-		case KeyEvent.VK_DOWN:
+		case Hotkeys.DOWN:
 			Main.p.leader.move(0, 1);
 			Main.gw.repaint();
 			break;
-		case KeyEvent.VK_LEFT:
+		case Hotkeys.LEFT:
 			Main.p.leader.move(-1, 0);
 			Main.gw.repaint();
 			break;
@@ -345,34 +345,33 @@ class DungeonPanel extends GamePanel{
 
 	public void keyReleased(KeyEvent e) {
 		switch(e.getKeyCode()){
-		case KeyEvent.VK_I:
+		case Hotkeys.INVENTORY:
 			Main.openScreen(Main.ip);
 			Main.gw.repaint();
 			break;
+		case Hotkeys.MINIMAP:
+			miniMapEnabled = !miniMapEnabled;
+			Main.gw.repaint();
+			break;
+		case Hotkeys.STATS:
+			Main.openScreen(Main.sp);
+			Main.gw.repaint();
+			break;
+			// TODO remove after testing
 		case KeyEvent.VK_L:
 			Main.nextLevel();
 			Main.gw.repaint();
 			break;
 		case KeyEvent.VK_K:
-			// TESTING PURPOSES
 			Main.openScreen(new FightPanel(Main.p.members,new Monster[] {Monsters.skeleton(1),Monsters.skeleton(2)}));
 			Main.gw.repaint();
 			break;
 		case KeyEvent.VK_P:
-			// TESTING PURPOSES
 			Main.openScreen(new FightPanel(Main.p.members, new Monster[] {Monsters.spook(1)}));
-			Main.gw.repaint();
-			break;
-		case KeyEvent.VK_C:
-			Main.openScreen(Main.sp);
 			Main.gw.repaint();
 			break;
 		case KeyEvent.VK_X:
 			Main.restartGame();
-			break;
-		case KeyEvent.VK_M:
-			miniMapEnabled = !miniMapEnabled;
-			Main.gw.repaint();
 			break;
 		}
 		this.closePopup();

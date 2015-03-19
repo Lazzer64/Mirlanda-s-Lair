@@ -112,25 +112,25 @@ class InventoryPanel extends GamePanel{
 
 	@Override
 	public void keyPressed(KeyEvent e) {
-		
+
 		Character[] na = null;
 		if(this.showPop) showPop = !showPop;
-		
+
 		if(showItemOptions){
 			switch(e.getKeyCode()){
-			case KeyEvent.VK_UP:
+			case Hotkeys.UP:
 				itemOptions.previous();
 				Main.gw.repaint();
 				return;
-			case KeyEvent.VK_DOWN:
+			case Hotkeys.DOWN:
 				itemOptions.next();
 				Main.gw.repaint();
 				return;
-			case KeyEvent.VK_LEFT:
+			case Hotkeys.CANCEL:
 				showItemOptions = false;
 				Main.gw.repaint();
 				return;
-			case KeyEvent.VK_RIGHT:
+			case Hotkeys.SELECT:
 				showItemOptions = false;
 				switch(itemOptions.getIndex()){
 				case 0: // Use
@@ -154,20 +154,20 @@ class InventoryPanel extends GamePanel{
 
 		if(showTarget){
 			switch(e.getKeyCode()){
-			case KeyEvent.VK_UP:
+			case Hotkeys.UP:
 				targetPrev(Main.p.members, na);
 				Main.gw.repaint();
 				break;
-			case KeyEvent.VK_DOWN:
+			case Hotkeys.DOWN:
 				targetNext(Main.p.members, na);
 				Main.gw.repaint();
 				break;
-			case KeyEvent.VK_RIGHT:
+			case Hotkeys.SELECT:
 				this.getTarget(Main.p.members, na).use(getSelected());
 				this.showTarget = false;
 				Main.gw.repaint();
 				break;
-			case KeyEvent.VK_LEFT:
+			case Hotkeys.CANCEL:
 				showTarget = false;
 				Main.gw.repaint();
 				break;
@@ -176,15 +176,15 @@ class InventoryPanel extends GamePanel{
 		}
 
 		switch(e.getKeyCode()){
-		case KeyEvent.VK_UP:
+		case Hotkeys.UP:
 			previous();
 			Main.gw.repaint();
 			break;
-		case KeyEvent.VK_DOWN:
+		case Hotkeys.DOWN:
 			next();
 			Main.gw.repaint();
 			break;
-		case KeyEvent.VK_RIGHT:
+		case Hotkeys.SELECT:
 			showItemOptions = true;
 			Main.gw.repaint();
 			break;
@@ -194,7 +194,7 @@ class InventoryPanel extends GamePanel{
 	@Override
 	public void keyReleased(KeyEvent e) {
 		switch(e.getKeyCode()){
-		case KeyEvent.VK_I:
+		case Hotkeys.INVENTORY:
 			Main.openScreen(Main.dp);
 			break;
 		}
@@ -215,15 +215,15 @@ class CombatInventoryPanel extends InventoryPanel {
 
 	public void keyPressed(KeyEvent e) {
 		switch(e.getKeyCode()){
-		case KeyEvent.VK_UP:
+		case Hotkeys.UP:
 			previous();
 			Main.gw.repaint();
 			break;
-		case KeyEvent.VK_DOWN:
+		case Hotkeys.DOWN:
 			next();
 			Main.gw.repaint();
 			break;
-		case KeyEvent.VK_RIGHT:
+		case Hotkeys.SELECT:
 			Main.p.leader.use(getSelected());
 			Main.openScreen(p);
 			Main.gw.repaint();

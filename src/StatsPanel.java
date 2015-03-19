@@ -123,10 +123,10 @@ public class StatsPanel extends GamePanel {
 
 	public void keyPressed(KeyEvent arg0) {
 		switch(arg0.getKeyCode()){
-		case KeyEvent.VK_UP:
+		case Hotkeys.UP:
 			charOptions.previous();
 			break;
-		case KeyEvent.VK_DOWN:
+		case Hotkeys.DOWN:
 			charOptions.next();
 			break;
 		}
@@ -135,13 +135,13 @@ public class StatsPanel extends GamePanel {
 
 	public void keyReleased(KeyEvent arg0) {
 		switch(arg0.getKeyCode()){
-		case KeyEvent.VK_C:
+		case Hotkeys.STATS:
 			Main.openScreen(Main.dp);
 			break;
-		case KeyEvent.VK_RIGHT:
+		case Hotkeys.RIGHT:
 			next();
 			break;
-		case KeyEvent.VK_LEFT:
+		case Hotkeys.LEFT:
 			previous();
 			break;
 		}

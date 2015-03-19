@@ -345,21 +345,21 @@ class FightPanel extends GamePanel{
 
 		if(showTarget){
 			switch(e.getKeyCode()){
-			case KeyEvent.VK_UP:
+			case Hotkeys.UP:
 				targetPrev(allies, enemies);
 				Main.gw.repaint();
 				break;
-			case KeyEvent.VK_DOWN:
+			case Hotkeys.DOWN:
 				targetNext(allies, enemies);
 				Main.gw.repaint();
 				break;
-			case KeyEvent.VK_RIGHT:
+			case Hotkeys.SELECT:
 				target = getTarget(allies, enemies);
 				showTarget = false;
 				turn();
 				Main.gw.repaint();
 				break;
-			case KeyEvent.VK_LEFT:
+			case Hotkeys.CANCEL:
 				showTarget = false;
 				Main.gw.repaint();
 				break;
@@ -369,21 +369,21 @@ class FightPanel extends GamePanel{
 
 		checkHealths();
 		switch(e.getKeyCode()){
-		case KeyEvent.VK_UP:
+		case Hotkeys.UP:
 			if(!target_select){
 				//previous();
 				actionSelect.previous();
 			}
 			Main.gw.repaint();
 			break;
-		case KeyEvent.VK_DOWN:
+		case Hotkeys.DOWN:
 			if(!target_select){
 				//next();
 				actionSelect.next();
 			}
 			Main.gw.repaint();
 			break;
-		case KeyEvent.VK_RIGHT:
+		case Hotkeys.SELECT:
 			if(getSelected().targeted()){
 				showTarget = true;
 				Main.gw.repaint();
@@ -399,6 +399,7 @@ class FightPanel extends GamePanel{
 	@Override
 	public void keyReleased(KeyEvent e) {
 		switch(e.getKeyCode()){
+		// TODO Remove after testing
 		case KeyEvent.VK_K:
 			Main.openScreen(Main.dp);
 			Main.gw.repaint();
