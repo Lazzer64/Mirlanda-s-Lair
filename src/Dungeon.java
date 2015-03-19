@@ -220,6 +220,8 @@ class DungeonPanel extends GamePanel{
 		if(fogEnabled) drawFog(g);
 		if(miniMapEnabled) drawMiniMap(g);
 
+		//g.drawImage(Images.hotkeys_default, 0, 0, null);
+		
 		drawPopup(g);
 
 	}
@@ -335,7 +337,7 @@ class DungeonPanel extends GamePanel{
 			Main.p.leader.move(-1, 0);
 			Main.gw.repaint();
 			break;
-		case KeyEvent.VK_RIGHT:
+		case Hotkeys.RIGHT:
 			Main.p.leader.move(1, 0);
 			Main.gw.repaint();
 			break;

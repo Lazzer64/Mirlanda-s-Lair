@@ -32,7 +32,8 @@ public class Images {
 	weapon_icon = get("img/weapon_icon.png"),
 	fade_vert = get("img/fade_vert2.png"),
 	fade_hor = get("img/fade_hor2.png"),
-	fade_diag = get("img/fade_diag.png")
+	fade_diag = get("img/fade_diag.png"),
+	hotkeys_default = get("img/default_hotkeys_info.png")
 	;
 
 	static BufferedImage get(String loc){
