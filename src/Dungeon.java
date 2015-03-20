@@ -217,13 +217,13 @@ class DungeonPanel extends GamePanel{
 		g.setColor(Room.black);
 		g.drawRect(Main.p.leader.x * cell_size + xOff, Main.p.leader.y * cell_size + yOff, cell_size, cell_size);
 
+		//g.drawImage(Images.dungeon_splash, 0, 0, null);
+		
 		if(fogEnabled) drawFog(g);
 		if(miniMapEnabled) drawMiniMap(g);
-
-		//g.drawImage(Images.hotkeys_default, 0, 0, null);
 		
 		drawPopup(g);
-
+		
 	}
 
 	void drawRooms(int xOff, int yOff, Graphics g){

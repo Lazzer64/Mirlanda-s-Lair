@@ -33,7 +33,8 @@ public class Images {
 	fade_vert = get("img/fade_vert2.png"),
 	fade_hor = get("img/fade_hor2.png"),
 	fade_diag = get("img/fade_diag.png"),
-	hotkeys_default = get("img/default_hotkeys_info.png")
+	hotkeys_default = get("img/default_hotkeys_info.png"),
+	dungeon_splash = get("img/dungeonSplash.png")
 	;
 
 	static BufferedImage get(String loc){

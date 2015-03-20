@@ -7,7 +7,7 @@ public class Main {
 	
 	static final String level_dir = ("levels/");
 	static final String level_extension = ".dngflr";
-	static final String[] level_list = {"dungeon","dungeon2","dungeon3","dungeon4","dungeon5","dungeon6"};
+	static final String[] level_list = {"dungeon","dungeon2","dungeon3","dungeon4","dungeon5","dungeon6","huge"};
 	static Party p;
 	static int current_level = 0;
 	static Dungeon d = Dungeon.parse(new File(level_dir + level_list[current_level] + level_extension));
