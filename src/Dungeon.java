@@ -327,19 +327,18 @@ class DungeonPanel extends GamePanel{
 		switch(e.getKeyCode()){
 		case Hotkeys.UP:
 			Main.p.leader.move(0, -1);
-			Main.gw.repaint();
 			break;
+			
 		case Hotkeys.DOWN:
 			Main.p.leader.move(0, 1);
-			Main.gw.repaint();
 			break;
+			
 		case Hotkeys.LEFT:
 			Main.p.leader.move(-1, 0);
-			Main.gw.repaint();
 			break;
+			
 		case Hotkeys.RIGHT:
 			Main.p.leader.move(1, 0);
-			Main.gw.repaint();
 			break;
 		}
 	}
@@ -349,34 +348,33 @@ class DungeonPanel extends GamePanel{
 		switch(e.getKeyCode()){
 		case Hotkeys.INVENTORY:
 			Main.openScreen(Main.ip);
-			Main.gw.repaint();
 			break;
+			
 		case Hotkeys.MINIMAP:
 			miniMapEnabled = !miniMapEnabled;
-			Main.gw.repaint();
 			break;
+			
 		case Hotkeys.STATS:
 			Main.openScreen(Main.sp);
-			Main.gw.repaint();
 			break;
+			
 			// TODO remove after testing
 		case KeyEvent.VK_L:
 			Main.nextLevel();
-			Main.gw.repaint();
 			break;
+			
 		case KeyEvent.VK_K:
 			Main.openScreen(new FightPanel(Main.p.members,new Monster[] {Monsters.skeleton(1),Monsters.skeleton(2)}));
-			Main.gw.repaint();
 			break;
+			
 		case KeyEvent.VK_P:
 			Main.openScreen(new FightPanel(Main.p.members, new Monster[] {Monsters.spook(1)}));
-			Main.gw.repaint();
 			break;
+			
 		case KeyEvent.VK_X:
 			Main.restartGame();
 			break;
 		}
-		this.closePopup();
 	}
 
 }

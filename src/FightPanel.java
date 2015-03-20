@@ -210,7 +210,7 @@ class FightPanel extends GamePanel{
 		}
 		if(deadGroup(allies)){
 			setText("You have been defeated.");
-			Main.gw.repaint();
+			
 		}
 	}
 
@@ -347,21 +347,21 @@ class FightPanel extends GamePanel{
 			switch(e.getKeyCode()){
 			case Hotkeys.UP:
 				targetPrev(allies, enemies);
-				Main.gw.repaint();
+				
 				break;
 			case Hotkeys.DOWN:
 				targetNext(allies, enemies);
-				Main.gw.repaint();
+				
 				break;
 			case Hotkeys.SELECT:
 				target = getTarget(allies, enemies);
 				showTarget = false;
 				turn();
-				Main.gw.repaint();
+				
 				break;
 			case Hotkeys.CANCEL:
 				showTarget = false;
-				Main.gw.repaint();
+				
 				break;
 			}
 			return;
@@ -374,24 +374,24 @@ class FightPanel extends GamePanel{
 				//previous();
 				actionSelect.previous();
 			}
-			Main.gw.repaint();
+			
 			break;
 		case Hotkeys.DOWN:
 			if(!target_select){
 				//next();
 				actionSelect.next();
 			}
-			Main.gw.repaint();
+			
 			break;
 		case Hotkeys.SELECT:
 			if(getSelected().targeted()){
 				showTarget = true;
-				Main.gw.repaint();
+				
 				break;
 			}
 			target = c2;
 			turn();
-			Main.gw.repaint();
+			
 			break;
 		}
 	}
@@ -402,7 +402,7 @@ class FightPanel extends GamePanel{
 		// TODO Remove after testing
 		case KeyEvent.VK_K:
 			Main.openScreen(Main.dp);
-			Main.gw.repaint();
+			
 			break;
 		}
 	}

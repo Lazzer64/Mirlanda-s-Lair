@@ -120,15 +120,15 @@ class InventoryPanel extends GamePanel{
 			switch(e.getKeyCode()){
 			case Hotkeys.UP:
 				itemOptions.previous();
-				Main.gw.repaint();
+				
 				return;
 			case Hotkeys.DOWN:
 				itemOptions.next();
-				Main.gw.repaint();
+				
 				return;
 			case Hotkeys.CANCEL:
 				showItemOptions = false;
-				Main.gw.repaint();
+				
 				return;
 			case Hotkeys.SELECT:
 				showItemOptions = false;
@@ -147,7 +147,7 @@ class InventoryPanel extends GamePanel{
 					Main.p.inventory.remove(this.getSelected());
 					break;
 				}
-				Main.gw.repaint();
+				
 				return;
 			}
 		}
@@ -156,20 +156,20 @@ class InventoryPanel extends GamePanel{
 			switch(e.getKeyCode()){
 			case Hotkeys.UP:
 				targetPrev(Main.p.members, na);
-				Main.gw.repaint();
+				
 				break;
 			case Hotkeys.DOWN:
 				targetNext(Main.p.members, na);
-				Main.gw.repaint();
+				
 				break;
 			case Hotkeys.SELECT:
 				this.getTarget(Main.p.members, na).use(getSelected());
 				this.showTarget = false;
-				Main.gw.repaint();
+				
 				break;
 			case Hotkeys.CANCEL:
 				showTarget = false;
-				Main.gw.repaint();
+				
 				break;
 			}
 			return;
@@ -178,15 +178,15 @@ class InventoryPanel extends GamePanel{
 		switch(e.getKeyCode()){
 		case Hotkeys.UP:
 			previous();
-			Main.gw.repaint();
+			
 			break;
 		case Hotkeys.DOWN:
 			next();
-			Main.gw.repaint();
+			
 			break;
 		case Hotkeys.SELECT:
 			showItemOptions = true;
-			Main.gw.repaint();
+			
 			break;
 		}
 	}
@@ -217,16 +217,16 @@ class CombatInventoryPanel extends InventoryPanel {
 		switch(e.getKeyCode()){
 		case Hotkeys.UP:
 			previous();
-			Main.gw.repaint();
+			
 			break;
 		case Hotkeys.DOWN:
 			next();
-			Main.gw.repaint();
+			
 			break;
 		case Hotkeys.SELECT:
 			Main.p.leader.use(getSelected());
 			Main.openScreen(p);
-			Main.gw.repaint();
+			
 		}
 	}
 

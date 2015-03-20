@@ -69,7 +69,12 @@ abstract class GamePanel extends JPanel implements KeyListener{
 		setBounds(0, 0, GameWindow.width, GameWindow.height);
 		setLayout(null);
 	}
-
+	
+	public void popCloseOnKey(int keyPressed, int keyNeeded){
+		if(keyPressed == keyNeeded){
+			closePopup();
+		}
+	}
 
 	public void togglePopup(){
 		showPop = !showPop;

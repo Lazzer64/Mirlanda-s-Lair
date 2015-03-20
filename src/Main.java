@@ -19,6 +19,14 @@ public class Main {
 
 
 	public static void main(String[] args) {
+		while(running()){
+			repaint();
+			try {
+				Thread.sleep(30);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+		}
 	}
 
 	public static void endCreation(){
@@ -44,6 +52,14 @@ public class Main {
 //		p.give(Equipment.double_cast_staff);
 //		p.give(Equipment.crit_sword);
 //		p.give(Equipment.testItem);
+	}
+	
+	static boolean running(){
+		return gw.isVisible();
+	}
+	
+	public static void repaint(){
+		gw.repaint();
 	}
 
 	public static void openScreen(JPanel p){

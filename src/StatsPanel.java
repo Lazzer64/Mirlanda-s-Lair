@@ -109,7 +109,7 @@ public class StatsPanel extends GamePanel {
 		if(currentChar >= Main.p.size){
 			currentChar = 0;
 		}
-		Main.gw.repaint();
+		
 	}
 
 	void previous(){
@@ -117,7 +117,7 @@ public class StatsPanel extends GamePanel {
 		if(currentChar < 0){
 			currentChar = Main.p.size - 1;
 		}
-		Main.gw.repaint();
+		
 	}
 
 
@@ -130,7 +130,7 @@ public class StatsPanel extends GamePanel {
 			charOptions.next();
 			break;
 		}
-		Main.gw.repaint();
+		
 	}
 
 	public void keyReleased(KeyEvent arg0) {
