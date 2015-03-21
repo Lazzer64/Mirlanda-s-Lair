@@ -32,9 +32,9 @@ public class Main {
 	}
 	
 	public static void endCreation() {
-		String name = CreationPanel.nameField.getText();
-		Race race = (Race) CreationPanel.raceSelect.getSelectedItem();
-		Profession profession = (Profession) CreationPanel.professionSelect.getSelectedItem();
+		String name = cp.nameField.getText();
+		Race race = (Race) cp.raceSelect.getSelectedItem();
+		Profession profession = (Profession) cp.professionSelect.getSelectedItem();
 		Main.p = new Party(new Hero(name,race,profession));
 		
 		d.removeEncounter(Room.RoomType.mini_boss);

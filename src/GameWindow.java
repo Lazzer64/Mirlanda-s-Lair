@@ -66,7 +66,8 @@ abstract class GamePanel extends JPanel implements KeyListener{
 	String popText = "";
 	String text = "";
 	Color textColor = Color.BLACK;
-
+	int fogSize = (int) (GameWindow.width * 1.25);
+	
 	public GamePanel(){
 		super();
 		setPreferredSize(new Dimension(GameWindow.width,GameWindow.height));
@@ -117,16 +118,31 @@ abstract class GamePanel extends JPanel implements KeyListener{
 			centeredText(y,size,popText,g);
 		}
 	}
+	
+	void drawFog(Graphics g){
+		int xCenter = (GameWindow.width - fogSize)/2;
+		int yCenter = (GameWindow.height - fogSize)/2;
+		g.setColor(Color.BLACK);
+		g.fillRect(0, 0, xCenter, GameWindow.height); // left black out
+		g.fillRect(0, 0, GameWindow.width, yCenter); // top black out
+		g.fillRect(xCenter + fogSize, 0, GameWindow.height, GameWindow.width); // right black out
+		g.fillRect(0, yCenter + fogSize, GameWindow.width, GameWindow.height); // bottom black out
+
+		g.drawImage(Images.fog, xCenter, yCenter, fogSize, fogSize, null);
+
+	}
 
 	int splashX = 0, splashY = 0, splashSpeedX = -1, splashSpeedY = -1;
+	final int splashScale = 2, splashWidth = Images.dungeon_splash.getWidth() * splashScale, splashHeight = Images.dungeon_splash.getHeight() * splashScale;
+	
 	void drawSplash(Graphics g){
-		g.drawImage(Images.dungeon_splash, splashX, splashY, null);
+		g.drawImage(Images.dungeon_splash, splashX, splashY, splashWidth, splashHeight, null);
 		splashX += splashSpeedX;
 		splashY += splashSpeedY;
-		if(splashX - GameWindow.width <= -Images.dungeon_splash.getWidth() || splashX >= 0){
+		if(splashX <= -splashWidth + GameWindow.width || splashX >= 0){
 			splashSpeedX = -splashSpeedX;
 		}
-		if(splashY - GameWindow.height <= -Images.dungeon_splash.getHeight() || splashY >= 0){
+		if(splashY <= -splashHeight + GameWindow.height || splashY >= 0){
 			splashSpeedY = -splashSpeedY;
 		}
 	}

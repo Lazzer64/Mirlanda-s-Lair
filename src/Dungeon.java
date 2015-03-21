@@ -191,7 +191,6 @@ class DungeonPanel extends GamePanel{
 
 	Dungeon dungeon;
 	final int cell_size = 30;
-	int fogSize = 400;
 	boolean fogEnabled = true;
 	boolean miniMapEnabled = false;
 
@@ -305,19 +304,6 @@ class DungeonPanel extends GamePanel{
 		g.fillRect(Main.p.leader.x * cell_size + xOff, Main.p.leader.y * cell_size + yOff, cell_size, cell_size);
 		g.setColor(Room.black);
 		g.drawRect(Main.p.leader.x * cell_size + xOff, Main.p.leader.y * cell_size + yOff, cell_size, cell_size);
-	}
-
-	void drawFog(Graphics g){
-		int xCenter = (GameWindow.width - fogSize)/2;
-		int yCenter = (GameWindow.height - fogSize)/2;
-		g.setColor(Color.BLACK);
-		g.fillRect(0, 0, xCenter, GameWindow.height); // left black out
-		g.fillRect(0, 0, GameWindow.width, yCenter); // top black out
-		g.fillRect(xCenter + fogSize, 0, GameWindow.height, GameWindow.width); // right black out
-		g.fillRect(0, yCenter + fogSize, GameWindow.width, GameWindow.height); // bottom black out
-
-		g.drawImage(Images.fog, xCenter, yCenter, fogSize, fogSize, null);
-
 	}
 
 
