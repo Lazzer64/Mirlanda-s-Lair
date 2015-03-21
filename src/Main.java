@@ -1,3 +1,4 @@
+import java.awt.event.ActionEvent;
 import java.awt.event.KeyListener;
 import java.io.File;
 
@@ -5,6 +6,7 @@ import javax.swing.JPanel;
 
 public class Main {
 	
+	static GameWindow gw = new GameWindow();
 	static final String level_dir = ("levels/");
 	static final String level_extension = ".dngflr";
 	static final String[] level_list = {"dungeon","dungeon2","dungeon3","dungeon4","dungeon5","dungeon6","huge"};
@@ -15,10 +17,10 @@ public class Main {
 	static CreationPanel cp = new CreationPanel();
 	static InventoryPanel ip = new InventoryPanel();
 	static StatsPanel sp = new StatsPanel();
-	static GameWindow gw = new GameWindow();
 
 
 	public static void main(String[] args) {
+		openScreen(cp);
 		while(running()){
 			repaint();
 			try {
@@ -28,9 +30,13 @@ public class Main {
 			}
 		}
 	}
-
-	public static void endCreation(){
-
+	
+	public static void endCreation() {
+		String name = CreationPanel.nameField.getText();
+		Race race = (Race) CreationPanel.raceSelect.getSelectedItem();
+		Profession profession = (Profession) CreationPanel.professionSelect.getSelectedItem();
+		Main.p = new Party(new Hero(name,race,profession));
+		
 		d.removeEncounter(Room.RoomType.mini_boss);
 		d.removeEncounter(Room.RoomType.altar);
 		d.addEncounter(Room.RoomType.altar, 2);
@@ -48,10 +54,6 @@ public class Main {
 		
 		p.add(meepo);
 		p.add(alvin);
-//		p.give(Equipment.fire_bow);
-//		p.give(Equipment.double_cast_staff);
-//		p.give(Equipment.crit_sword);
-//		p.give(Equipment.testItem);
 	}
 	
 	static boolean running(){
@@ -65,6 +67,7 @@ public class Main {
 	public static void openScreen(JPanel p){
 		gw.setContentPane(p);
 		gw.setKeyListener((KeyListener) p);
+		gw.pack();
 		gw.repaint();
 	}
 

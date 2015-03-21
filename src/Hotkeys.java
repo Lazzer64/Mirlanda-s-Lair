@@ -12,7 +12,8 @@ public class Hotkeys {
 	INVENTORY = KeyEvent.VK_I,
 	MINIMAP = KeyEvent.VK_M,
 	SELECT = KeyEvent.VK_RIGHT,
-	CANCEL = KeyEvent.VK_LEFT
+	CANCEL = KeyEvent.VK_LEFT,
+	ENTER = KeyEvent.VK_ENTER
 	;
 
 	// TODO change switch statements so changing Hotkeys is allowed
@@ -26,6 +27,7 @@ public class Hotkeys {
 	//	MINIMAP = KeyEvent.VK_M;
 	//	SELECT = KeyEvent.VK_D;
 	//	CANCEL = KeyEvent.VK_LEFT;
+	//  ENTER = KeyEvent.VK_ENTER;
 	//	}
 
 }

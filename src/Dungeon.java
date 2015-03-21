@@ -200,6 +200,8 @@ class DungeonPanel extends GamePanel{
 		dungeon = d;
 	}
 
+
+	
 	public void paint(Graphics g){
 
 		g.setColor(Room.black);
@@ -216,8 +218,6 @@ class DungeonPanel extends GamePanel{
 		g.fillRect(Main.p.leader.x * cell_size + xOff, Main.p.leader.y * cell_size + yOff, cell_size, cell_size);
 		g.setColor(Room.black);
 		g.drawRect(Main.p.leader.x * cell_size + xOff, Main.p.leader.y * cell_size + yOff, cell_size, cell_size);
-
-		//g.drawImage(Images.dungeon_splash, 0, 0, null);
 		
 		if(fogEnabled) drawFog(g);
 		if(miniMapEnabled) drawMiniMap(g);
@@ -316,9 +316,7 @@ class DungeonPanel extends GamePanel{
 		g.fillRect(xCenter + fogSize, 0, GameWindow.height, GameWindow.width); // right black out
 		g.fillRect(0, yCenter + fogSize, GameWindow.width, GameWindow.height); // bottom black out
 
-		try {
-			g.drawImage(ImageIO.read(new File("img/fog.png")), xCenter, yCenter, fogSize, fogSize, null);
-		} catch (IOException e) {e.printStackTrace();}
+		g.drawImage(Images.fog, xCenter, yCenter, fogSize, fogSize, null);
 
 	}
 

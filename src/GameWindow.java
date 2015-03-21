@@ -39,7 +39,11 @@ public class GameWindow extends JFrame{
 		setFocusable(true);
 
 		setBackground(Back_Color);
-		setContentPane(Main.cp);
+		JPanel blank = new JPanel();
+		blank.setPreferredSize(new Dimension(GameWindow.width,GameWindow.height));
+		blank.setBounds(0, 0, GameWindow.width, GameWindow.height);
+		blank.setLayout(null);
+		setContentPane(blank);
 		pack();
 		setLocationRelativeTo(null);
 
@@ -114,6 +118,19 @@ abstract class GamePanel extends JPanel implements KeyListener{
 		}
 	}
 
+	int splashX = 0, splashY = 0, splashSpeedX = -1, splashSpeedY = -1;
+	void drawSplash(Graphics g){
+		g.drawImage(Images.dungeon_splash, splashX, splashY, null);
+		splashX += splashSpeedX;
+		splashY += splashSpeedY;
+		if(splashX - GameWindow.width <= -Images.dungeon_splash.getWidth() || splashX >= 0){
+			splashSpeedX = -splashSpeedX;
+		}
+		if(splashY - GameWindow.height <= -Images.dungeon_splash.getHeight() || splashY >= 0){
+			splashSpeedY = -splashSpeedY;
+		}
+	}
+	
 	int currentTarget = 0;
 
 	public void drawTargetSelect(Hero[] allies, Character[] enemies, Graphics g){

@@ -1,6 +1,8 @@
+import javax.imageio.ImageIO;
 import javax.swing.JPanel;
 import javax.swing.JLabel;
 
+import java.awt.Graphics;
 import java.awt.GridBagLayout;
 import java.awt.GridBagConstraints;
 import java.awt.Insets;
@@ -29,168 +31,128 @@ import javax.swing.Box;
 import java.awt.Dimension;
 import java.awt.Canvas;
 import java.awt.Color;
+import java.io.File;
+import java.io.IOException;
 
 
-public class CreationPanel extends JPanel implements KeyListener{
-	private JTextField nameField;
+public class CreationPanel extends GamePanel implements KeyListener{
 
-	static String name;
-	static Profession profession;
-	static Race race;
+	static JLabel title = new JLabel("Mirlanda's Lair");
+	static JTextField nameField = new JTextField("Draven");
+	static JComboBox<Race> raceSelect = new JComboBox<Race>(Race.values());
+	static JComboBox<Profession> professionSelect = new JComboBox<Profession>(Profession.default_professions);
+	static JButton startButton = new JButton("Start");
+	
+	ActionListener end = new ActionListener(){
 
-
-	/**
-	 * Create the panel.
-	 */
+		@Override
+		public void actionPerformed(ActionEvent arg0) {
+			Main.endCreation();
+		}
+		
+	};
+	
 	public CreationPanel() {
 
-		setPreferredSize(new Dimension(GameWindow.width, GameWindow.height));
-		setBounds(0, 0, GameWindow.width, GameWindow.height);
-
-		GridBagLayout gridBagLayout = new GridBagLayout();
-		gridBagLayout.columnWidths = new int[]{52, 247, 0, 0, 0};
-		gridBagLayout.rowHeights = new int[]{63, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
-		gridBagLayout.columnWeights = new double[]{0.0, 1.0, 0.0, 0.0, Double.MIN_VALUE};
-		gridBagLayout.rowWeights = new double[]{0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE};
-		setLayout(gridBagLayout);
-
-		JLabel lblNewJgoodiesTitle = DefaultComponentFactory.getInstance().createTitle("Mirlanda's Lair");
-		lblNewJgoodiesTitle.setFont(new Font("Tahoma", Font.BOLD, 24));
-		GridBagConstraints gbc_lblNewJgoodiesTitle = new GridBagConstraints();
-		gbc_lblNewJgoodiesTitle.gridwidth = 4;
-		gbc_lblNewJgoodiesTitle.insets = new Insets(0, 0, 5, 0);
-		gbc_lblNewJgoodiesTitle.gridx = 0;
-		gbc_lblNewJgoodiesTitle.gridy = 0;
-		add(lblNewJgoodiesTitle, gbc_lblNewJgoodiesTitle);
-
-		JSeparator separator_2 = new JSeparator();
-		GridBagConstraints gbc_separator_2 = new GridBagConstraints();
-		gbc_separator_2.insets = new Insets(0, 0, 5, 5);
-		gbc_separator_2.gridx = 1;
-		gbc_separator_2.gridy = 1;
-		add(separator_2, gbc_separator_2);
-
-		JLabel lblNewLabel = new JLabel("Name");
-		GridBagConstraints gbc_lblNewLabel = new GridBagConstraints();
-		gbc_lblNewLabel.insets = new Insets(0, 0, 5, 5);
-		gbc_lblNewLabel.anchor = GridBagConstraints.NORTHEAST;
-		gbc_lblNewLabel.gridx = 0;
-		gbc_lblNewLabel.gridy = 2;
-		add(lblNewLabel, gbc_lblNewLabel);
-
-		nameField = new JTextField();
-		nameField.setText("Draven");
-		GridBagConstraints gbc_nameField = new GridBagConstraints();
-		gbc_nameField.insets = new Insets(0, 0, 5, 5);
-		gbc_nameField.fill = GridBagConstraints.HORIZONTAL;
-		gbc_nameField.gridx = 1;
-		gbc_nameField.gridy = 2;
-		add(nameField, gbc_nameField);
-		nameField.setColumns(10);
-
-		JSeparator separator_1 = new JSeparator();
-		GridBagConstraints gbc_separator_1 = new GridBagConstraints();
-		gbc_separator_1.insets = new Insets(0, 0, 5, 5);
-		gbc_separator_1.gridx = 1;
-		gbc_separator_1.gridy = 3;
-		add(separator_1, gbc_separator_1);
-
-		JLabel lblRace = new JLabel("Race");
-		GridBagConstraints gbc_lblRace = new GridBagConstraints();
-		gbc_lblRace.anchor = GridBagConstraints.EAST;
-		gbc_lblRace.insets = new Insets(0, 0, 5, 5);
-		gbc_lblRace.gridx = 0;
-		gbc_lblRace.gridy = 4;
-		add(lblRace, gbc_lblRace);
-
-		final JComboBox raceBox = new JComboBox();
-		raceBox.setEditable(true);
-		raceBox.setModel(new DefaultComboBoxModel(Race.values()));
-		GridBagConstraints gbc_raceBox = new GridBagConstraints();
-		gbc_raceBox.insets = new Insets(0, 0, 5, 5);
-		gbc_raceBox.fill = GridBagConstraints.HORIZONTAL;
-		gbc_raceBox.gridx = 1;
-		gbc_raceBox.gridy = 4;
-		add(raceBox, gbc_raceBox);
-
-		JSeparator separator = new JSeparator();
-		GridBagConstraints gbc_separator = new GridBagConstraints();
-		gbc_separator.insets = new Insets(0, 0, 5, 0);
-		gbc_separator.gridx = 3;
-		gbc_separator.gridy = 5;
-		add(separator, gbc_separator);
-
-		JLabel lblClass = new JLabel("Class");
-		GridBagConstraints gbc_lblClass = new GridBagConstraints();
-		gbc_lblClass.anchor = GridBagConstraints.EAST;
-		gbc_lblClass.insets = new Insets(0, 0, 5, 5);
-		gbc_lblClass.gridx = 0;
-		gbc_lblClass.gridy = 6;
-		add(lblClass, gbc_lblClass);
-
-		final JComboBox classBox = new JComboBox();
-		classBox.setEditable(true);
-		classBox.setModel(new DefaultComboBoxModel(Profession.default_professions));
-		GridBagConstraints gbc_classBox = new GridBagConstraints();
-		gbc_classBox.insets = new Insets(0, 0, 5, 5);
-		gbc_classBox.fill = GridBagConstraints.HORIZONTAL;
-		gbc_classBox.gridx = 1;
-		gbc_classBox.gridy = 6;
-		add(classBox, gbc_classBox);
-
-		Component horizontalStrut = Box.createHorizontalStrut(20);
-		GridBagConstraints gbc_horizontalStrut = new GridBagConstraints();
-		gbc_horizontalStrut.gridheight = 5;
-		gbc_horizontalStrut.insets = new Insets(0, 0, 5, 5);
-		gbc_horizontalStrut.gridx = 2;
-		gbc_horizontalStrut.gridy = 2;
-		add(horizontalStrut, gbc_horizontalStrut);
-
-		JSeparator separator_3 = new JSeparator();
-		GridBagConstraints gbc_separator_3 = new GridBagConstraints();
-		gbc_separator_3.insets = new Insets(0, 0, 5, 5);
-		gbc_separator_3.gridx = 1;
-		gbc_separator_3.gridy = 7;
-		add(separator_3, gbc_separator_3);
-
-		JButton btnStart = new JButton("Start");
-		btnStart.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				// END CREATION EVENT
-				CreationPanel.name = nameField.getText();
-				race = Race.values()[raceBox.getSelectedIndex()];
-				profession = Profession.default_professions[classBox.getSelectedIndex()];
-				Main.p = new Party(new Hero(name,race,profession));
-				//Main.p.leader.setWeapon(profession.weapon);
-				Main.endCreation();
+		super();
+		
+		JPanel splash = new GamePanel(){
+			public void paint(Graphics g){
+				drawSplash(g);
+				drawFog(g);
 			}
-		});
-		GridBagConstraints gbc_btnStart = new GridBagConstraints();
-		gbc_btnStart.insets = new Insets(0, 0, 5, 5);
-		gbc_btnStart.gridx = 1;
-		gbc_btnStart.gridy = 8;
-		add(btnStart, gbc_btnStart);
+			
+			int fogSize = 400;
+			void drawFog(Graphics g){
+				int xCenter = (GameWindow.width - fogSize)/2;
+				int yCenter = (GameWindow.height - fogSize)/2;
+				g.setColor(Color.BLACK);
+				g.fillRect(0, 0, xCenter, GameWindow.height); // left black out
+				g.fillRect(0, 0, GameWindow.width, yCenter); // top black out
+				g.fillRect(xCenter + fogSize, 0, GameWindow.height, GameWindow.width); // right black out
+				g.fillRect(0, yCenter + fogSize, GameWindow.width, GameWindow.height); // bottom black out
+
+				g.drawImage(Images.fog, xCenter, yCenter, fogSize, fogSize, null);
+
+			}
+
+			public void keyPressed(KeyEvent arg0) { }
+			public void keyReleased(KeyEvent arg0) { }
+		};
+		splash.setBounds(0, 0, 300, 300);
+
+		int 
+		leftEdge = 50,
+		width = GameWindow.width - leftEdge*2,
+		height = 25,
+		buffer = 25,
+		titleY = 20,
+		titleHeight = height - 5,
+		nameFieldY = titleY + titleHeight + buffer,
+		nameFieldHeight = height,
+		raceSelectY = nameFieldY + nameFieldHeight + buffer,
+		raceSelectHeight = height,
+		professionSelectY = raceSelectY + raceSelectHeight + buffer,
+		professionSelectHeight = height,
+		buttonY = professionSelectY + professionSelectHeight + buffer,
+		buttonHeight = height
+		;
+		
+		title.setHorizontalAlignment(JLabel.CENTER);
+		title.setFont(new Font("Tahoma", Font.BOLD, 24));
+		title.setForeground(Color.white);
+		title.setBounds(leftEdge,titleY,width,titleHeight);
+		
+		nameField.setBounds(leftEdge,nameFieldY,width,nameFieldHeight);
+		nameField.addActionListener(end);
+		
+		raceSelect.setBounds(leftEdge, raceSelectY, width, raceSelectHeight);
+		
+		professionSelect.setBounds(leftEdge, professionSelectY, width, professionSelectHeight);
+		
+		startButton.setBounds(leftEdge, buttonY, width, buttonHeight);
+		startButton.addActionListener(end);
+		
+		add(title);
+		add(nameField);
+		add(raceSelect);
+		add(professionSelect);
+		add(startButton);
+		add(splash);
+		
+	}
+
+	int fogSize = 400;
+	void drawFog(Graphics g){
+		int xCenter = (GameWindow.width - fogSize)/2;
+		int yCenter = (GameWindow.height - fogSize)/2;
+		g.setColor(Color.BLACK);
+		g.fillRect(0, 0, xCenter, GameWindow.height); // left black out
+		g.fillRect(0, 0, GameWindow.width, yCenter); // top black out
+		g.fillRect(xCenter + fogSize, 0, GameWindow.height, GameWindow.width); // right black out
+		g.fillRect(0, yCenter + fogSize, GameWindow.width, GameWindow.height); // bottom black out
+
+		g.drawImage(Images.fog, xCenter, yCenter, fogSize, fogSize, null);
 
 	}
 
 
 	@Override
 	public void keyPressed(KeyEvent e) {
-		// TODO Auto-generated method stub
 
 	}
 
 
 	@Override
 	public void keyReleased(KeyEvent e) {
-		// TODO Auto-generated method stub
-
+		if(e.getKeyCode() == Hotkeys.ENTER){
+			Main.endCreation();
+		}
 	}
 
 
 	@Override
 	public void keyTyped(KeyEvent e) {
-		// TODO Auto-generated method stub
 
 	}
 
