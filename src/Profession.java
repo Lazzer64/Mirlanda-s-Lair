@@ -1,17 +1,6 @@
-public class Profession {
-	// points add up to 18
-	static public Profession
-	explorer = new Profession("Explorer",6,6,6,Equipment.weak_sword,new CombatAction[]{}),
-	gladiator = new Profession("Gladiator",10,5,3,Equipment.weak_sword,new CombatAction[]{}),
-	thief = new Profession("Thief",4,11,3,Equipment.weak_dagger,new CombatAction[]{}),
-	sorcerer = new Profession("Sorcerer",3,3,12,Equipment.weak_staff,new CombatAction[]{}),
-	enchanter = new Profession("Enchanter",5,3,10,Equipment.weak_tome,new CombatAction[]{}),
-	mage = new Profession("Mage",2,2,14,Equipment.weak_staff,new CombatAction[]{}),
-	ranger = new Profession("Ranger",5,10,3,Equipment.weak_bow,new CombatAction[]{}),
-	cleric = new Profession("Cleric", 2, 2, 14, Equipment.weak_staff, new CombatAction[]{new ReviveAction()})
-	;
+public abstract class Profession {
 	
-	static Profession[] default_professions = {explorer,gladiator,thief,sorcerer,enchanter,mage,ranger};
+	static Profession[] default_professions = {new Warrior(), new Mage(), new Ranger()};
 	
 	String name;
 	int strength,dexterity,intelligence;
@@ -40,6 +29,20 @@ public class Profession {
 		
 	}
 	
+	public void addCombatAction(CombatAction newAction){
+		for(CombatAction a: abilities){
+			if(a.equals(newAction)) return;
+		}
+		CombatAction[] newAbilities = new CombatAction[abilities.length + 1];
+		for(int i = 0; i < abilities.length; i++){
+			newAbilities[i] = abilities[i];
+		}
+		newAbilities[abilities.length] = newAction;
+		abilities = newAbilities;
+	}
+	
+	public abstract void levelUp(int level);
+	public abstract Profession clone();
 
 	public String toString(){
 		return name;

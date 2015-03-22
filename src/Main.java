@@ -49,8 +49,8 @@ public class Main {
 		p.leader.give(new Item[]{Consumable.red_potion,Consumable.blue_potion,Consumable.red_potion});
 		p.leader.give(Map.full_map);
 		
-		Hero alvin = new Hero("Alvin", Race.elf, Profession.thief);
-		Hero meepo = new Hero("Meepo", Race.goblin, Profession.cleric);
+		Hero alvin = new Hero("Alvin", Race.elf, new Ranger());
+		Hero meepo = new Hero("Meepo", Race.goblin, new Mage());
 		
 		p.add(meepo);
 		p.add(alvin);

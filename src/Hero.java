@@ -21,7 +21,7 @@ public class Hero extends Character{
 	}
 
 	public Hero(String name, Race race, Profession profession) {
-		super(name,race,profession);
+		super(name,race,profession.clone());
 		this.setWeapon(profession.weapon);
 	}
 
@@ -75,23 +75,16 @@ public class Hero extends Character{
 
 	public void levelUp(int level){
 		// Level up rewards
+		profession.levelUp(level);
 		switch(level){
-		case 2:
-			break;
-		case 3:
-			break;
-		case 4:
-			break;
-		case 5:
-			break;
-		case 6:
-			break;
-		case 7:
-			break;
-		case 8:
-			break;
 		case 9:
-			break;
+		case 8:
+		case 7:
+		case 6:
+		case 5:		
+		case 4:
+		case 3:
+		case 2:
 		}
 		this.level = level;
 		this.strength = this.profession.strength + (level * 1);
