@@ -71,6 +71,7 @@ public class StatsPanel extends GamePanel {
 
 		charOptions.hideBack();
 		charOptions.draw(xImageBuffer, lineSize * 15, GameWindow.width - xImageBuffer*2, this, g);
+		
 
 	}
 

@@ -1,3 +1,6 @@
+import java.awt.Color;
+import java.awt.Graphics;
+import java.awt.event.KeyEvent;
 import java.awt.image.BufferedImage;
 import java.io.File;
 
@@ -60,6 +63,27 @@ class Equipment implements Item {
 	public String getDescription(){
 		return name;
 		//TODO
+	}
+
+	public void drawInfoPanel(Graphics g){
+		GamePanel info = new GamePanel(){
+			int x = 0, y = 0, size = 200;
+			public void paint(Graphics g){
+				g.setColor(Color.WHITE);
+				g.fillRect(x, y, size, size);
+				g.setColor(Color.BLACK);
+				g.drawRect(x, y, size, size);
+				g.drawImage(icon, x + 3, y + 4, null);
+				String text = name + " \n ";
+				for(CombatAction a: abilities){
+					text += a.toString() + " \n ";
+				}
+				wrapedText(text, 16, y, size - 16, g);
+			}
+		};
+		
+		info.paint(g);
+		
 	}
 	
 }
