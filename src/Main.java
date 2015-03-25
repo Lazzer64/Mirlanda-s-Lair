@@ -37,11 +37,13 @@ public class Main {
 		Profession profession = (Profession) cp.professionSelect.getSelectedItem();
 		Main.p = new Party(new Hero(name,race,profession));
 		
-		d.removeEncounter(Room.RoomType.mini_boss);
-		d.removeEncounter(Room.RoomType.altar);
-		d.addEncounter(Room.RoomType.altar, 2);
-		d.addEncounter(Room.RoomType.monster, 7);
-		d.addEncounter(Room.RoomType.mini_boss, 3);
+//		d.addEncounter(Room.RoomType.altar, 2);
+//		d.addEncounter(Room.RoomType.monster, 20);
+//		d.addEncounter(Room.RoomType.mini_boss, 3);
+
+		Monster skel = new Monster("Skelleton", 0, 0, 0, 0, null, null);
+		skel.setLocation(d.getStart().x + 2, d.getStart().y);
+		d.addEnemy(skel);
 		
 		openScreen(dp);
 		p.leader.setLocation(d.getStart().x, d.getStart().y);

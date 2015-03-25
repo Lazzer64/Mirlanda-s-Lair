@@ -1,4 +1,5 @@
 import java.util.ArrayList;
+import java.util.Vector;
 
 public class Hero extends Character{
 
@@ -8,8 +9,8 @@ public class Hero extends Character{
 	Jewelry jewelry = Jewelry.none;
 	Legs legs = Legs.cloth;
 	int exp = 0;
-	CombatAction[] defaultActions = {Magic_Ability.weak_heal, CombatAction.bag, CombatAction.run};
-
+	Ability currentAbility = Ability.None;
+	int abilityIndex = 0;
 
 	public Hero(String name, int strength, int dexterity, int intelligence) {
 		super(name, strength, dexterity, intelligence);
@@ -23,15 +24,6 @@ public class Hero extends Character{
 	public Hero(String name, Race race, Profession profession) {
 		super(name,race,profession.clone());
 		this.setWeapon(profession.weapon);
-	}
-
-	public String useCombatAction(CombatAction ability, Character target){
-		if(mana >= ability.getCost()){
-			manaBurn(ability.getCost());
-			weapon.cast(ability,this,target);
-			return weapon.getActionFlavor();
-		}
-		return "No mana";
 	}
 
 	public void move(int x, int y){
@@ -51,6 +43,14 @@ public class Hero extends Character{
 		checkLevelUp();
 	}
 
+	public void nextAbility(){
+		abilityIndex ++;
+		if(abilityIndex == this.getAbilities().length){
+			abilityIndex = 0;
+		}
+		currentAbility = getAbilities()[abilityIndex];
+	}
+	
 	public void checkLevelUp(){
 
 		if(exp > 85 && level < 9){
@@ -116,20 +116,13 @@ public class Hero extends Character{
 		this.legs = w;
 	}	
 
-	public CombatAction[] getCombatActions(){
-
-		ArrayList<CombatAction> act = new ArrayList<CombatAction>();
-
-		for(CombatAction a: weapon.abilities){act.add(a);}
-		for(CombatAction a: profession.abilities){act.add(a);}
-		for(CombatAction a: defaultActions){act.add(a);}
-
-		CombatAction[] acts = new CombatAction[act.size()];
-		for(int i = 0; i < act.size(); i++){
-			acts[i] = act.get(i);
-		}
-
-		return acts;
+	public Ability[] getAbilities(){
+		Vector<Ability> abils = new Vector<Ability>();
+		abils.add(Ability.None);
+		for(Ability a: weapon.abilities) abils.add(a);
+		Ability[] retAbils = new Ability[abils.size()];
+		abils.toArray(retAbils);
+		return retAbils;
 	}
 
 	public void revealRooms(){

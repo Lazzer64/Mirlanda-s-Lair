@@ -19,8 +19,10 @@ public class Dungeon {
 	Room[][] rooms;
 	int width,height;
 
-	private void setRoom(Room r, int x, int y){
+	public void setRoom(Room r, int x, int y){
+		r.setLocation(x, y);
 		rooms[y][x] = r;
+		
 	}
 
 	public void setAllRoomsViewable(Room.Viewable v){
@@ -106,6 +108,10 @@ public class Dungeon {
 				}
 			}
 		}
+	}
+	
+	public void addEnemy(Monster m){
+		setRoom(new MonsterRoom(m),m.x,m.y);
 	}
 
 	public Room getStart(){
@@ -221,7 +227,7 @@ class DungeonPanel extends GamePanel{
 		if(fogEnabled) drawFog(g);
 		if(miniMapEnabled) drawMiniMap(g);
 
-		currAtk.draw(g);
+		if(Main.p.leader != null)Main.p.leader.currentAbility.draw(g);
 
 		drawPopup(g);
 
@@ -308,8 +314,6 @@ class DungeonPanel extends GamePanel{
 		g.drawRect(Main.p.leader.x * cell_size + xOff, Main.p.leader.y * cell_size + yOff, cell_size, cell_size);
 	}
 
-	Attack currAtk = Attack.Slash;
-
 	public void keyPressed(KeyEvent e) {
 		switch(e.getKeyCode()){
 		case Hotkeys.UP:
@@ -327,22 +331,31 @@ class DungeonPanel extends GamePanel{
 		case Hotkeys.RIGHT:
 			Main.p.leader.move(1, 0);
 			break;
+		}
+		if(Main.p.leader != null){
+			switch(e.getKeyCode()){
+			case Hotkeys.AIM_UP:
+				Main.p.leader.currentAbility.rotate(Ability.UP);
+				break;
 
-		case Hotkeys.AIM_UP:
-			currAtk.rotate(Attack.UP);
-			break;
-			
-		case Hotkeys.AIM_DOWN:
-			currAtk.rotate(Attack.DOWN);
-			break;
-			
-		case Hotkeys.AIM_LEFT:
-			currAtk.rotate(Attack.LEFT);
-			break;
-			
-		case Hotkeys.AIM_RIGHT:
-			currAtk.rotate(Attack.RIGHT);
-			break;
+			case Hotkeys.AIM_DOWN:
+				Main.p.leader.currentAbility.rotate(Ability.DOWN);
+				break;
+
+			case Hotkeys.AIM_LEFT:
+				Main.p.leader.currentAbility.rotate(Ability.LEFT);
+				break;
+
+			case Hotkeys.AIM_RIGHT:
+				Main.p.leader.currentAbility.rotate(Ability.RIGHT);
+				break;
+			case Hotkeys.NEXT_ABILITY:
+				Main.p.leader.nextAbility();
+				break;
+			case Hotkeys.CAST:
+				Main.p.leader.currentAbility.cast();
+				break;
+			}
 		}
 	}
 
@@ -368,11 +381,11 @@ class DungeonPanel extends GamePanel{
 			break;
 
 		case KeyEvent.VK_K:
-			Main.openScreen(new FightPanel(Main.p.members,new Monster[] {Monsters.skeleton(1),Monsters.skeleton(2)}));
+			//Main.openScreen(new FightPanel(Main.p.members,new Monster[] {Monsters.skeleton(1),Monsters.skeleton(2)}));
 			break;
 
 		case KeyEvent.VK_P:
-			Main.openScreen(new FightPanel(Main.p.members, new Monster[] {Monsters.spook(1)}));
+			//Main.openScreen(new FightPanel(Main.p.members, new Monster[] {Monsters.spook(1)}));
 			break;
 
 		case KeyEvent.VK_X:

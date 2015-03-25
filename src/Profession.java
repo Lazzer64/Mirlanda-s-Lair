@@ -5,10 +5,10 @@ public abstract class Profession {
 	String name;
 	int strength,dexterity,intelligence;
 	int primaryStat;
-	CombatAction[] abilities;
+	Ability[] abilities;
 	Equipment weapon;
 	
-	public Profession(String name, int str, int dex, int intel, Equipment weapon, CombatAction[] abilities){
+	public Profession(String name, int str, int dex, int intel, Equipment weapon, Ability[] abilities){
 		this.name = name;
 		this.strength = str;
 		this.dexterity = dex;
@@ -29,11 +29,11 @@ public abstract class Profession {
 		
 	}
 	
-	public void addCombatAction(CombatAction newAction){
-		for(CombatAction a: abilities){
+	public void addCombatAction(Ability newAction){
+		for(Ability a: abilities){
 			if(a.equals(newAction)) return;
 		}
-		CombatAction[] newAbilities = new CombatAction[abilities.length + 1];
+		Ability[] newAbilities = new Ability[abilities.length + 1];
 		for(int i = 0; i < abilities.length; i++){
 			newAbilities[i] = abilities[i];
 		}

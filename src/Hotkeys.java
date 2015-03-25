@@ -17,7 +17,9 @@ public class Hotkeys {
 	AIM_UP = KeyEvent.VK_W,
 	AIM_LEFT = KeyEvent.VK_A,
 	AIM_DOWN = KeyEvent.VK_S,
-	AIM_RIGHT = KeyEvent.VK_D;
+	AIM_RIGHT = KeyEvent.VK_D,
+	NEXT_ABILITY = KeyEvent.VK_Q,
+	CAST = KeyEvent.VK_E;
 	;
 
 }

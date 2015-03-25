@@ -12,7 +12,7 @@ public class Mage extends Profession {
 	final static Equipment
 	baseWEAPON = Equipment.weak_staff;
 	
-	final static CombatAction[] baseABILITIES = {};
+	final static Ability[] baseABILITIES = {};
 	
 	public Mage() {
 		super(name, baseSTR, baseDEX, baseINT, baseWEAPON, baseABILITIES);

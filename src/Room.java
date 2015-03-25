@@ -27,6 +27,7 @@ public class Room {
 	int x,y;
 	Viewable viewable = Viewable.hidden;
 	enum Viewable {peeked,seen,hidden,unknown};
+	Monster monster = null;
 	public enum RoomType{
 
 		start(green), 
@@ -53,6 +54,7 @@ public class Room {
 		this.type = type;
 		this.color = type.roomColor;
 		this.name = type.toString();
+
 	}
 
 	public void setLocation(int x, int y){
@@ -113,51 +115,20 @@ public class Room {
 			Main.d.rooms[Main.p.leader.y][Main.p.leader.x] = replaceRoom;
 			break;
 		case boss:
-			Monster Boss = Monsters.dragon(Main.p.leader.level);
-			Boss.level = 8;
-			Main.openScreen(new FightPanel(Main.p.members,new Monster[] {Boss}));
-			//
-			replaceRoom = new Room(RoomType.room);
-			replaceRoom.color = faded_pink; // change to faded red?
-			Main.d.rooms[Main.p.leader.y][Main.p.leader.x] = replaceRoom;
-			Main.gw.repaint();
-			panel.closePopup();
 			break;
 		case horizontal_hidden:
-			panel.closePopup();
 			break;
 		case mini_boss:
-			// Mini boss encounter
-			Monster miniB = Monsters.guard(Main.p.leader.level);
-			miniB.level = 3;
-			Main.openScreen(new FightPanel(Main.p.members,new Monster[] {miniB}));
-			//
-			replaceRoom = new Room(RoomType.room);
-			replaceRoom.color = faded_orange;
-			Main.d.rooms[Main.p.leader.y][Main.p.leader.x] = replaceRoom;
-			Main.gw.repaint();
 			break;
 		case monster:
-			// Monster encounter
-			Monster enemy = Monsters.skeleton(Main.p.leader.level);
-			Main.openScreen(new FightPanel(Main.p.members,new Monster[] {enemy}));
-			//
-			Main.gw.repaint();
-			replaceRoom = new Room(RoomType.room);
-			replaceRoom.color = faded_purple;
-			Main.d.rooms[Main.p.leader.y][Main.p.leader.x] = replaceRoom;
 			break;
 		case no_room:
 			break;
 		case room:
-			panel.closePopup();
 			break;
 		case stair:
-			panel.closePopup();
-			Main.nextLevel();
 			break;
 		case start:
-			panel.closePopup();
 			break;
 		case treasure:
 			// Loot from treasure room
@@ -178,6 +149,10 @@ public class Room {
 		}
 	}
 
+	public void update(){
+
+	}
+
 	public String toString(){
 		return name + " (" + x + "," + y + ")";
 	}
@@ -185,4 +160,21 @@ public class Room {
 	public boolean isType(RoomType r){
 		return (r.equals(type));
 	}
+}
+
+class MonsterRoom extends Room{
+
+	public MonsterRoom(Monster m) {
+		super(RoomType.monster);
+		monster = m;
+	}
+
+	public void update(){
+		if(monster.dead){
+			Room nr = new Room(RoomType.room);
+			nr.viewable = Viewable.seen;
+			Main.d.setRoom(nr, x, y);
+		}
+	}
+
 }

@@ -1,358 +1,127 @@
+import java.awt.Color;
+import java.awt.Graphics;
 
-public class Ability implements CombatAction {
+public class Ability {
 
-	// Basic abilities
-	static Ability
-	hit = new Ability("Hit",false,2,0,0),
-	whack = new Ability("Whack",false,2,0,0),
-	// Basic Profession abilities
-	slash = new Ability("Slash",false,4,0,0),
-	smash = new Ability("Smash",false,7,0,6),
-	pierce = new Ability("Pierce",false,4,0,0),
-	snipe = new Ability("Snipe",false,10,0,8),
-	backstab = new Ability("Backstab",false,7,0,6),
-	// Medium abilities
-	doubleStrike = new MultiStrike("Double Strike",2,2,2),
-	// Advanced abilities
-	tripleStrike = new MultiStrike("Triple Strike",2,3,4),
-	// Legendary abilities
-	bladeFlurry = new MultiStrike("Blade flurry",2,5,8)
-	;
+	private final static boolean X = true, O = false, C = false;
+	final static int RIGHT = 0, UP = 90, LEFT = 180, DOWN = 270;
+
+	final static Ability 
 	
-	String name, flavor;
-	boolean targeted;
-	int damage,heal,cost;
-
-	Ability(String name, boolean targeted, int damage, int heal, int cost){
-		this.targeted = targeted;
-		this.name = name;
-		this.damage = damage;
-		this.heal = heal;
-		this.cost = cost;
-	}
+	None = new Ability( new boolean[][] {
+			{O}	
+	}),
 	
-	public void use(int str, int dex, int intel, Character caster, Character target){
-		if(target != null){
-			flavor = "";
-			int use_damage = damage;
-			boolean crit = false;
-			double roll = Math.random();
-			double chance = (dex/50.0);
-			double crit_mult = 2 + (dex/10);
+	FireBall = new Ability( new boolean[][] {
+			{O,O,O,O,O,O,O,X,O},
+			{O,O,O,O,C,O,X,X,X},
+			{O,O,O,O,O,O,O,X,O},
+	}),
 
-			crit = (roll <= chance);
+	Jab = new Ability( new boolean[][] {
+			{O,O,C,X,X}
+	}),
 
-			use_damage += (int) (str/5); // Strength addition to hit
-			if(crit){use_damage *= crit_mult; flavor += " *i *cDEX CRIT! *c * ";}
+	Slash = new Ability( new boolean[][] {
+			{O,O,X},
+			{O,C,X},
+			{O,O,X}
+	}),
+	
+	Arrow = new Ability( new boolean[][]{
+			{O,O,O,O,C,O,O,X,X}
+	});
 
+	final boolean[][] range;
+	boolean[][] currentRange;
 
-			if(damage > 0 && heal <= 0){ // If damage ability
-				target.damage(use_damage);
-				flavor += " *b " + name + " * , dealing *cSTR *b " + use_damage + " * *c damage.";
-			} 
+	public Ability(boolean[][] range){
 
-			else if(heal > 0 && damage <= 0){ // if healing ability
-				target.heal(heal);
-				flavor += " *b " + name + " * , healing for *cINT " + heal + " *c ";
-			} 
+		if(range.length % 2 == 0 || range[0].length % 2 == 0){
+			System.err.println("Error: " + this + " should have a proper center.");
+		}
 
-			else { // if damage and healing
-				target.damage(use_damage);
-				caster.heal(heal);
-				flavor += " *b " + name + " * , dealing " + use_damage + " damage, and healing for " + heal + ".";
+		int size = Math.max(range.length, range[0].length);
+
+		int yAdj = (size - range.length)/2;
+
+		this.range = new boolean[size][size];
+
+		for(int y = 0; y < range.length; y++){
+			for(int x = 0; x < range[0].length; x++){
+				this.range[y + yAdj][x] = range[y][x];
 			}
 		}
-	}
 
-	public void use(Character caster, Character target){
-		use(caster.strength, caster.dexterity, caster.intelligence, caster, target);
-	}
+		this.currentRange = this.range;
 
-	public String getFlavorText(){
-		return flavor;
-	}
-
-	public String toString(){
-		return name;
-	}
-
-	public int getCost(){
-		return cost;
-	}
-
-	public boolean targeted(){
-		return targeted;
-	}
-
-}
-
-class MultiStrike extends Ability {
-
-	int numStrikes;
-	
-	/**
-	 * Create an ability that hits multiple times at the cost of low base damage and lower crit chance.
-	 * @param name Name of the Ability
-	 * @param baseDmg Base damage that each hit does
-	 * @param numStrikes Number of times the ability hits
-	 * @param cost Amount of mana it takes to use this ability
-	 */
-	MultiStrike(String name, int baseDmg, int numStrikes, int cost) {
-		super(name, false, baseDmg, 0, cost);
-		this.numStrikes = numStrikes;
 	}
 	
-	public void use(int str, int dex, int intel, Character caster, Character target){
-		if(target != null){
-			flavor = " *b " + name + "  * hitting *b  " + numStrikes + " * times for ";
-			
-			for(int i = 0; i < numStrikes; i++){
-				
-				int use_damage = damage;
-				boolean crit = false;
-				double roll = Math.random();
-				double chance = (dex/(50.0 * numStrikes)); // Lower crit chance than normal
-				double crit_mult = 2 + (dex/10);
-				crit = (roll <= chance);
-
-				use_damage += (int) (str/5); // Strength addition to hit
-				if(crit){use_damage *= crit_mult;}
-				
-				if(i != numStrikes - 1){
-					if(crit)flavor += " *i *cDEX CRIT! *c * ";
-					flavor += " *cSTR *b " + use_damage + ", * *c ";
-				} else {
-					flavor += " and ";
-					if(crit)flavor += " *i *cDEX CRIT! *c * ";
-					flavor += " *cSTR *b " + use_damage + " * *c ";
+	public void cast(){
+		int
+		cx = Main.p.leader.x - range.length/2,
+		cy = Main.p.leader.y - range.length/2;
+		
+		for(int y = 0; y < range.length; y++){
+			for(int x = 0; x < range.length; x++){
+				Room target = Main.d.rooms[cy + y][cx + x];
+				if(currentRange[y][x]){
+					switch(target.type){
+					case monster:
+						target.monster.damage(2);
+						target.update();
+						break;
+						
+					}
 				}
-				target.damage(use_damage);
 			}
 		}
-	}
-	
-}
-
-class Magic_Ability implements CombatAction {
-	static  Magic_Ability
-	weak_heal = new Magic_Ability("Attend Wounds",true,0,5,3),
-	flare = new Magic_Ability("Flare",false,6,0,3),
-	fireball = new Magic_Ability("Fireball",false,12,0,9),
-	spark = new Magic_Ability("Spark",false,5,0,2),
-	lightning = new Magic_Ability("Lightning",false,10,0,7),
-	inferno = new RangeOfDamage("Inferno", 10, 10, 10);
-
-	String name, flavor;
-	boolean targeted;
-	int damage,heal,cost;
-
-	Magic_Ability(String name, boolean targeted, int damage, int heal, int cost){
-		this.targeted = targeted;
-		this.name = name;
-		this.damage = damage;
-		this.heal = heal;
-		this.cost = cost;
+		
 	}
 
-	public void use(int str, int dex, int intel, Character caster, Character target){
-		if(target != null){
-			flavor = "";
-			int use_damage = damage;
+	public void draw(Graphics g){
+		int 
+		cell_size = DungeonPanel.cell_size,
+		xCenter = (GameWindow.width - cell_size)/2,
+		yCenter = (GameWindow.height - cell_size)/2,
+		aY = yCenter - cell_size * (range.length/2);
 
-			use_damage += (int) (intel/5); // Intelligence addition to hit
+		for(boolean[] row: currentRange){
+			int aX = xCenter - cell_size * (range.length/2);
+			for(boolean b: row){
+				if(b){
+					g.setColor(new Color(255,100,100,50));
+					g.fillRect(aX, aY, cell_size, cell_size);
+					g.setColor(Color.RED);
+					g.drawRect(aX, aY, cell_size, cell_size);
+				}
+				aX += cell_size;
+			}
+			aY += cell_size;
+		}
+	}
 
-			if(damage > 0 && heal <= 0){ // If damage ability
-				target.damage(use_damage);
-				flavor += " *b " + name + " * , dealing *cINT  *b " + use_damage + " * *c damage.";
-			} 
-
-			else if(heal > 0 && damage <= 0){ // if healing ability
-				target.heal(heal);
-				flavor += " *b " + name + " * , healing for *cINT  *b " + heal + " * *c ";
-			} 
-
-			else { // if damage and healing
-				target.damage(use_damage);
-				caster.heal(heal);
-				flavor += " *b " + name + " *b , dealing " + use_damage + " damage, and healing for " + heal + ".";
+	public void rotate(int orientation){
+		boolean[][] temp = new boolean[range.length][range.length];
+		for(int y = 0; y < range.length; y++){
+			for(int x = 0; x < range[0].length; x++){
+				switch(orientation){
+				case UP:
+					temp[y][x] = range[x][(range.length - 1) - y];
+					break;
+				case DOWN:
+					temp[y][x] = range[x][y];
+					break;
+				case LEFT:
+					temp[y][x] = range[y][(range[0].length - 1) - x];
+					break;
+				case RIGHT:
+					temp[y][x] = range[y][x];
+					break;
+				}
 			}
 		}
+		currentRange = temp;
+
 	}
-
-	public void use(Character caster, Character target){
-		use(caster.strength, caster.dexterity, caster.intelligence, caster, target);
-	}
-
-	public String getFlavorText(){
-		return flavor;
-	}
-
-	public String toString(){
-		return name;
-	}
-
-	public int getCost(){
-		return cost;
-	}
-
-	public boolean targeted(){
-		return targeted;
-	}
-}
-
-class Effect_Ability extends Magic_Ability {
-
-	Effect effect;
-	
-	Effect_Ability(String name, Effect effect, boolean targeted, int cost) {
-		super(name, targeted, 0, 0, cost);
-		this.effect = effect;
-	}
-	
-	public void use(int str, int dex, int intel, Character caster, Character target){
-		effect.use(caster, target);
-	}
-}
-
-class RangeOfDamage extends Magic_Ability {
-
-	int minDamage, damageRange;
-	
-	RangeOfDamage(String name, int minDamage, int damageRange, int cost) {
-		super(name, false, 0, 0, cost);
-		this.minDamage = minDamage;
-		this.damageRange = damageRange;
-	}
-	
-	public void use(int str, int dex, int intel, Character caster, Character target) {
-		if(target != null){
-			flavor = "";
-			
-			int use_damage = minDamage;
-			use_damage += (int) (intel/5); // Intelligence addition to hit
-			double roll = Math.random();
-			int percentPower = (int) (roll * 10);
-			use_damage += (percentPower * damageRange)/10;
-			flavor += " *b " + name + " * at *b " + percentPower + "0% * power hitting for *b *cINT " + use_damage + " * *c ";
-			target.damage(use_damage);
-		}
-	}
-	
-}
-
-class ReviveAction implements CombatAction {
-
-	String flav = "";
-
-	public void use(int str, int dex, int intel, Character caster, Character target) {
-		use(caster,target);
-	}
-
-	public void use(Character caster, Character target) {
-		if(target.dead){
-			target.revive(.30);
-			flav = " *b resurrect *  on " + target.name + "!";
-		} else {
-			flav = " resurrect on " + target.name + " but it *cRED failed. *c";
-		}
-	}
-
-	public int getCost() {
-		return 20;
-	}
-
-	public String getFlavorText() {
-		return flav;
-	}
-
-	public boolean targeted() {
-		return true;
-	}
-
-	public String toString(){
-		return "Resurrect";
-	}
-
-
-}
-
-class BagAction implements CombatAction {
-
-	public void use(int str, int dex, int intel, Character caster, Character target) {
-		use(caster,target);
-	}
-
-	public void use(Character caster,Character target) {
-		if(Main.p.inventory.size() > 0){
-			Main.openScreen(new CombatInventoryPanel());
-		}
-	}
-
-	public int getCost(){
-		return 0;
-	}
-
-	public String getFlavorText(){
-		return "opened bag.";
-	}
-
-	public String toString(){
-		return "Bag";
-	}
-
-	public boolean targeted(){
-		return false;
-	}
-
-}
-
-class RunAction implements CombatAction {
-
-	String flavor;
-
-	public void use(int str, int dex, int intel, Character caster, Character target) {
-		double chance = (dex - target.dexterity);
-		double roll =  Math.random() * 50;
-		if(roll <= chance){
-			flavor = "You *b escape! * ";
-			Main.openScreen(Main.dp);
-			Main.dp.setPopText(" \n You escaped the " + target.name + "!");
-			Main.dp.openPopup();
-		} else {
-			flavor = " *b Flee. * You *cRED *b fail * *c to escape.";
-		}
-	}
-
-	public void use(Character caster,Character target) {
-		use(caster.strength, caster.dexterity, caster.intelligence, caster, target);
-	}
-
-	public int getCost(){
-		return 0;
-	}
-
-	public String getFlavorText(){
-		return flavor;
-	}
-
-	public String toString(){
-		return "Flee";
-	}
-
-	public boolean targeted(){
-		return false;
-	}
-}
-
-interface CombatAction{
-
-	CombatAction 
-	bag = new BagAction(),
-	run = new RunAction();
-
-	public void use(int str, int dex, int intel, Character caster, Character target);
-	public void use(Character caster, Character target);
-	public int getCost();
-	public String getFlavorText();
-	public boolean targeted();
 }

@@ -12,7 +12,7 @@ public class Ranger extends Profession {
 	final static Equipment
 	baseWEAPON = Equipment.weak_bow;
 
-	final static CombatAction[] baseABILITIES = {};
+	final static Ability[] baseABILITIES = {};
 
 	public Ranger() {
 		super(name, baseSTR, baseDEX, baseINT, baseWEAPON, baseABILITIES);

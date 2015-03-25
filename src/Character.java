@@ -126,18 +126,9 @@ public class Character {
 		}
 	}
 
-	public CombatAction[] getCombatActions(){
+	public Ability[] getAbilities(){
 		//TODO abilities for non heroes
-		return new CombatAction[]{Ability.hit};
-	}
-
-	public String useCombatAction(CombatAction ability, Character target){
-		if(mana >= ability.getCost()){
-			manaBurn(ability.getCost());
-			ability.use(this,target);
-			return ability.getFlavorText();
-		}
-		return "No mana";
+		return null;
 	}
 
 	public int calculateHp(){
