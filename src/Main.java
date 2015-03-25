@@ -9,7 +9,7 @@ public class Main {
 	static GameWindow gw = new GameWindow();
 	static final String level_dir = ("levels/");
 	static final String level_extension = ".dngflr";
-	static final String[] level_list = {"dungeon","dungeon2","dungeon3","dungeon4","dungeon5","dungeon6","huge"};
+	static final String[] level_list = {"square"};
 	static Party p;
 	static int current_level = 0;
 	static Dungeon d = Dungeon.parse(new File(level_dir + level_list[current_level] + level_extension));
@@ -49,11 +49,11 @@ public class Main {
 		p.leader.give(new Item[]{Consumable.red_potion,Consumable.blue_potion,Consumable.red_potion});
 		p.leader.give(Map.full_map);
 		
-		Hero alvin = new Hero("Alvin", Race.elf, new Ranger());
-		Hero meepo = new Hero("Meepo", Race.goblin, new Mage());
-		
-		p.add(meepo);
-		p.add(alvin);
+//		Hero alvin = new Hero("Alvin", Race.elf, new Ranger());
+//		Hero meepo = new Hero("Meepo", Race.goblin, new Mage());
+//		
+//		p.add(meepo);
+//		p.add(alvin);
 	}
 	
 	static boolean running(){

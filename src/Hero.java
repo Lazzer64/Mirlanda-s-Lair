@@ -161,7 +161,8 @@ public class Hero extends Character{
 			Main.dp.fogEnabled = true;
 			break;
 		default: // Other races see 2 units ahead
-			for(Room r: Main.d.getSurrounding(this.x, this.y, 2)){changeRoomState(r);} 
+			for(Room r: Main.d.getSurrounding(this.x, this.y, 4)){changeRoomState(r);}
+			for(Room r: Main.d.getSurrounding(this.x, this.y, 2)){r.viewable = Room.Viewable.seen;} 
 		}
 
 	}

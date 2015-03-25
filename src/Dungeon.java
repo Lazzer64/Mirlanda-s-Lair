@@ -190,7 +190,7 @@ public class Dungeon {
 class DungeonPanel extends GamePanel{
 
 	Dungeon dungeon;
-	final int cell_size = 30;
+	final static int cell_size = 15;
 	boolean fogEnabled = true;
 	boolean miniMapEnabled = false;
 
@@ -200,7 +200,7 @@ class DungeonPanel extends GamePanel{
 	}
 
 
-	
+
 	public void paint(Graphics g){
 
 		g.setColor(Room.black);
@@ -217,12 +217,14 @@ class DungeonPanel extends GamePanel{
 		g.fillRect(Main.p.leader.x * cell_size + xOff, Main.p.leader.y * cell_size + yOff, cell_size, cell_size);
 		g.setColor(Room.black);
 		g.drawRect(Main.p.leader.x * cell_size + xOff, Main.p.leader.y * cell_size + yOff, cell_size, cell_size);
-		
+
 		if(fogEnabled) drawFog(g);
 		if(miniMapEnabled) drawMiniMap(g);
-		
+
+		currAtk.draw(g);
+
 		drawPopup(g);
-		
+
 	}
 
 	void drawRooms(int xOff, int yOff, Graphics g){
@@ -274,8 +276,8 @@ class DungeonPanel extends GamePanel{
 			if(y > 0 && dungeon.rooms[y - 1][x].viewable == Room.Viewable.peeked) g.drawImage(Images.fade_vert, xPos, yPos + cell_size, cell_size, -cell_size, null);
 		}
 		if(left || right){
-			if(y < dungeon.rooms[0].length  && dungeon.rooms[y][x + 1].viewable == Room.Viewable.peeked) g.drawImage(Images.fade_hor, xPos, yPos, cell_size, cell_size, null);
-			if(y > 0 && dungeon.rooms[y][x - 1].viewable == Room.Viewable.peeked) g.drawImage(Images.fade_hor, xPos + cell_size, yPos, -cell_size, cell_size, null);
+			if(x < dungeon.rooms[0].length - 1  && dungeon.rooms[y][x + 1].viewable == Room.Viewable.peeked) g.drawImage(Images.fade_hor, xPos, yPos, cell_size, cell_size, null);
+			if(x > 0 && dungeon.rooms[y][x - 1].viewable == Room.Viewable.peeked) g.drawImage(Images.fade_hor, xPos + cell_size, yPos, -cell_size, cell_size, null);
 		}
 	}
 
@@ -306,55 +308,73 @@ class DungeonPanel extends GamePanel{
 		g.drawRect(Main.p.leader.x * cell_size + xOff, Main.p.leader.y * cell_size + yOff, cell_size, cell_size);
 	}
 
+	Attack currAtk = Attack.Slash;
 
 	public void keyPressed(KeyEvent e) {
 		switch(e.getKeyCode()){
 		case Hotkeys.UP:
 			Main.p.leader.move(0, -1);
 			break;
-			
+
 		case Hotkeys.DOWN:
 			Main.p.leader.move(0, 1);
 			break;
-			
+
 		case Hotkeys.LEFT:
 			Main.p.leader.move(-1, 0);
 			break;
-			
+
 		case Hotkeys.RIGHT:
 			Main.p.leader.move(1, 0);
+			break;
+
+		case Hotkeys.AIM_UP:
+			currAtk.rotate(Attack.UP);
+			break;
+			
+		case Hotkeys.AIM_DOWN:
+			currAtk.rotate(Attack.DOWN);
+			break;
+			
+		case Hotkeys.AIM_LEFT:
+			currAtk.rotate(Attack.LEFT);
+			break;
+			
+		case Hotkeys.AIM_RIGHT:
+			currAtk.rotate(Attack.RIGHT);
 			break;
 		}
 	}
 
 
 	public void keyReleased(KeyEvent e) {
+
 		switch(e.getKeyCode()){
 		case Hotkeys.INVENTORY:
 			Main.openScreen(Main.ip);
 			break;
-			
+
 		case Hotkeys.MINIMAP:
 			miniMapEnabled = !miniMapEnabled;
 			break;
-			
+
 		case Hotkeys.STATS:
 			Main.openScreen(Main.sp);
 			break;
-			
+
 			// TODO remove after testing
 		case KeyEvent.VK_L:
 			Main.nextLevel();
 			break;
-			
+
 		case KeyEvent.VK_K:
 			Main.openScreen(new FightPanel(Main.p.members,new Monster[] {Monsters.skeleton(1),Monsters.skeleton(2)}));
 			break;
-			
+
 		case KeyEvent.VK_P:
 			Main.openScreen(new FightPanel(Main.p.members, new Monster[] {Monsters.spook(1)}));
 			break;
-			
+
 		case KeyEvent.VK_X:
 			Main.restartGame();
 			break;
