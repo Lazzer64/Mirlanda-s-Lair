@@ -236,33 +236,12 @@ class DungeonPanel extends GamePanel{
 	void drawRooms(int xOff, int yOff, Graphics g){
 		for(int y = 0; y < dungeon.height; y++){
 			for(int x = 0; x < dungeon.width; x++){
-				switch(dungeon.rooms[y][x].viewable){
-				case hidden:
-					g.setColor(Room.black);
-					break;
-				case peeked:
-					g.setColor(Room.darkGray);
-					break;
-				case seen:
-					g.setColor(dungeon.rooms[y][x].color);
-					break;
-				case unknown:
-					if(!dungeon.rooms[y][x].isType(Room.RoomType.start)){
-						g.setColor(Room.violet);
-					} else {
-						g.setColor(Room.green);
-					}
-					break;
-				default:
-					break;
-				}
 
 				int xPos = x * cell_size + xOff;
 				int yPos = y * cell_size + yOff;
 
-				g.fillRect(xPos,yPos, cell_size, cell_size);
-				g.setColor(Room.black);
-				g.drawRect(xPos,yPos, cell_size, cell_size);
+				dungeon.rooms[y][x].draw(xPos, yPos, g);
+				
 				if(dungeon.rooms[y][x].viewable != Room.Viewable.hidden){
 					drawFade(x,y,xPos,yPos,cell_size,g);
 				}

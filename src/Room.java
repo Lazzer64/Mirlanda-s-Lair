@@ -1,4 +1,5 @@
 import java.awt.Color;
+import java.awt.Graphics;
 
 public class Room {
 
@@ -28,6 +29,7 @@ public class Room {
 	Viewable viewable = Viewable.hidden;
 	enum Viewable {peeked,seen,hidden,unknown};
 	Monster monster = null;
+	Item[] loot;
 	public enum RoomType{
 
 		start(green), 
@@ -148,6 +150,40 @@ public class Room {
 
 		}
 	}
+	
+	public void draw(int x, int y, Graphics g){
+		
+		switch(viewable){
+		case hidden:
+			g.setColor(Room.black);
+			break;
+		case peeked:
+			g.setColor(Room.darkGray);
+			break;
+		case seen:
+			g.setColor(color);
+			if(color == white && loot != null && loot.length > 0){
+				g.setColor(yellow);
+			}
+			break;
+		case unknown:
+			if(!isType(Room.RoomType.start)){
+				g.setColor(Room.violet);
+			} else {
+				g.setColor(Room.green);
+			}
+			break;
+		default:
+			if(loot != null && loot.length > 0){
+				g.setColor(yellow);
+			}
+			break;
+		}
+		
+		g.fillRect(x, y, DungeonPanel.cell_size, DungeonPanel.cell_size);
+		g.setColor(Color.BLACK);
+		g.drawRect(x, y, DungeonPanel.cell_size, DungeonPanel.cell_size);
+	}
 
 	public void update(){
 
@@ -173,8 +209,45 @@ class MonsterRoom extends Room{
 		if(monster.dead){
 			Room nr = new Room(RoomType.room);
 			nr.viewable = Viewable.seen;
+			nr.loot = new Item[] {Consumable.red_potion};
 			Main.d.setRoom(nr, x, y);
 		}
+	}
+	
+	public void draw(int x, int y, Graphics g){
+		
+		switch(viewable){
+		case hidden:
+			g.setColor(black);
+			break;
+		case peeked:
+			g.setColor(darkGray);
+			break;
+		case seen:
+			g.setColor(color);
+			if(color == white && loot != null && loot.length > 0){
+				g.setColor(yellow);
+			}
+			break;
+		case unknown:
+			if(!isType(Room.RoomType.start)){
+				g.setColor(violet);
+			} else {
+				g.setColor(green);
+			}
+			break;
+		default:
+			break;
+		}
+		
+		
+		g.fillRect(x, y, DungeonPanel.cell_size, DungeonPanel.cell_size);
+		g.setColor(Color.RED);
+		g.fillRect(x, y, DungeonPanel.cell_size, 3);
+		g.setColor(Color.GREEN);
+		g.fillRect(x, y, (DungeonPanel.cell_size * monster.health/monster.max_health), 3);
+		g.setColor(Color.BLACK);
+		g.drawRect(x, y, DungeonPanel.cell_size, DungeonPanel.cell_size);
 	}
 
 }
