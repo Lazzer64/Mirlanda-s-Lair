@@ -41,9 +41,11 @@ public class Main {
 //		d.addEncounter(Room.RoomType.monster, 20);
 //		d.addEncounter(Room.RoomType.mini_boss, 3);
 
-		Monster skel = new Monster("Skelleton", 0, 0, 0, 0, null, null);
-		skel.setLocation(d.getStart().x + 2, d.getStart().y);
-		d.addEnemy(skel);
+		for(int i = 0; i < 100; i++){
+			Monster skel = new Monster("Skelleton", 0, 0, 0, 0, null, LootTable.skeleton);
+			skel.setLocation((int)(Math.random()*d.rooms[0].length),(int)(Math.random()*d.rooms.length));
+			d.addEnemy(skel);
+		}
 		
 		openScreen(dp);
 		p.leader.setLocation(d.getStart().x, d.getStart().y);

@@ -294,6 +294,9 @@ class DungeonPanel extends GamePanel{
 	}
 
 	public void keyPressed(KeyEvent e) {
+		
+		if(showPop) return;
+		
 		switch(e.getKeyCode()){
 		case Hotkeys.UP:
 			Main.p.leader.move(0, -1);
@@ -341,6 +344,10 @@ class DungeonPanel extends GamePanel{
 
 	public void keyReleased(KeyEvent e) {
 
+		if(showPop && waitForKey()){
+				closePopup();
+		}
+		
 		switch(e.getKeyCode()){
 		case Hotkeys.INVENTORY:
 			Main.openScreen(Main.ip);

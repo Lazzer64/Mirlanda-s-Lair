@@ -32,7 +32,7 @@ public class Hero extends Character{
 			if(!Main.d.rooms[this.y + y][this.x + x].isType(Room.RoomType.no_room)){
 				this.x += x;
 				this.y += y;
-				Room.encounter(this.getCurrentRoom().type);
+				Main.d.rooms[this.y][this.x].encounter(this);
 			}
 		}
 		revealRooms();

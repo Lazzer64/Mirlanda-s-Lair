@@ -1,5 +1,6 @@
 import java.awt.Color;
 import java.awt.Graphics;
+import java.util.Arrays;
 
 public class Room {
 
@@ -151,6 +152,15 @@ public class Room {
 		}
 	}
 	
+	public void encounter(Character c){
+		GamePanel panel = ((GamePanel)Main.gw.getContentPane());
+		if(loot != null){
+			panel.openPopup(" \n You find treasure! \n  \n " + Main.itemsToText(loot) + " added to your inventory.");
+			c.give(loot);
+			loot = null;
+		}
+	}
+	
 	public void draw(int x, int y, Graphics g){
 		
 		switch(viewable){
@@ -188,7 +198,7 @@ public class Room {
 	public void update(){
 
 	}
-
+	
 	public String toString(){
 		return name + " (" + x + "," + y + ")";
 	}
@@ -209,7 +219,7 @@ class MonsterRoom extends Room{
 		if(monster.dead){
 			Room nr = new Room(RoomType.room);
 			nr.viewable = Viewable.seen;
-			nr.loot = new Item[] {Consumable.red_potion};
+			nr.loot = monster.getLoot();
 			Main.d.setRoom(nr, x, y);
 		}
 	}

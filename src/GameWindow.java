@@ -63,6 +63,7 @@ abstract class GamePanel extends JPanel implements KeyListener{
 
 	boolean showPop = false;
 	boolean showTarget = false;
+	boolean waitForRelease = false;
 	String popText = "";
 	String text = "";
 	Color textColor = Color.BLACK;
@@ -79,6 +80,11 @@ abstract class GamePanel extends JPanel implements KeyListener{
 		if(keyPressed == keyNeeded){
 			closePopup();
 		}
+	}
+	
+	public boolean waitForKey(){
+		waitForRelease = !waitForRelease;
+		return !waitForRelease;
 	}
 
 	public void togglePopup(){
