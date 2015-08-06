@@ -1,0 +1,7 @@
+<SPELL>
+	<name>Spark</name>
+	<cost>2</cost>
+	<targeted>false</targeted>
+	<damage>5</damage>
+	<heal>0</heal>
+</SPELL>

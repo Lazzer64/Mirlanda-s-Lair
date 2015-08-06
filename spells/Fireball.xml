@@ -1,0 +1,7 @@
+<SPELL>
+	<name>Fireball</name>
+	<cost>9</cost>
+	<targeted>false</targeted>
+	<damage>12</damage>
+	<heal>0</heal>
+</SPELL>

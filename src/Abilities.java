@@ -22,11 +22,11 @@ public final class Abilities {
 	doubleStrike = new MultiStrike("Double Strike",2,2,2),
 	tripleStrike = new MultiStrike("Triple Strike",2,3,4),
 	bladeFlurry = new MultiStrike("Blade flurry",2,5,8),
-	weak_heal = new MagicAbility("Attend Wounds",true,0,5,3),
-	flare = new MagicAbility("Flare",false,6,0,3),
-	fireball = new MagicAbility("Fireball",false,12,0,9),
-	spark = new MagicAbility("Spark",false,5,0,2),
-	lightning = new MagicAbility("Lightning",false,10,0,7),
+	weak_heal = parse("WeakHeal"),
+	flare = parse("Flare"),
+	fireball = parse("Fireball"),
+	spark = parse("Spark"),
+	lightning = parse("Lightning"),
 	inferno = new RangeOfDamage("Inferno", 10, 10, 10)
 	;
 
@@ -49,8 +49,9 @@ public final class Abilities {
 				
 				public void startElement(String uri, String localName, String qName, Attributes attributes){
 					if(qName.equalsIgnoreCase("SPELL")){
-						if(currentValue.equalsIgnoreCase("ATTACK")) a = new Ability();
-						else if(currentValue.equalsIgnoreCase("SPELL")) a = new MagicAbility();
+						if(qName.equalsIgnoreCase("ATTACK")) a = new Ability();
+						else if(qName.equalsIgnoreCase("SPELL")) a = new MagicAbility();
+						else System.err.println("Unknown ability type: " + qName);
 					}
 				}
 				
@@ -148,7 +149,7 @@ class Ability implements CombatAction {
 	public void use(Character caster, Character target){
 		use(caster.strength, caster.dexterity, caster.intelligence, caster, target);
 	}
-
+	
 	public String getFlavorText(){
 		return flavor;
 	}
@@ -230,10 +231,6 @@ class MultiStrike extends Ability {
 
 class MagicAbility extends Ability {
 
-	String name, flavor;
-	boolean targeted;
-	int damage,heal,cost;
-
 	MagicAbility(){
 		this.name = "NAME MISSING";
 		this.cost = 0;
@@ -273,26 +270,6 @@ class MagicAbility extends Ability {
 				flavor += " *b " + name + " *b , dealing " + use_damage + " damage, and healing for " + heal + ".";
 			}
 		}
-	}
-
-	public void use(Character caster, Character target){
-		use(caster.strength, caster.dexterity, caster.intelligence, caster, target);
-	}
-
-	public String getFlavorText(){
-		return flavor;
-	}
-
-	public String toString(){
-		return name;
-	}
-
-	public int getCost(){
-		return cost;
-	}
-
-	public boolean targeted(){
-		return targeted;
 	}
 }
 

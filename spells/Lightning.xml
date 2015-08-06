@@ -1,0 +1,7 @@
+<SPELL>
+	<name>Lightning</name>
+	<cost>7</cost>
+	<targeted>false</targeted>
+	<damage>10</damage>
+	<heal>0</heal>
+</SPELL>

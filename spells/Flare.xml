@@ -1,0 +1,7 @@
+<SPELL>
+	<name>Flare</name>
+	<cost>3</cost>
+	<targeted>false</targeted>
+	<damage>6</damage>
+	<heal>0</heal>
+</SPELL>
