@@ -1,0 +1,7 @@
+<ATTACK>
+	<name>Snipe</name>
+	<cost>8</cost>
+	<targeted>0</targeted>
+	<damage>10</damage>
+	<heal>0</heal>
+</ATTACK>

@@ -1,0 +1,7 @@
+<ATTACK>
+	<name>Hit</name>
+	<cost>0</cost>
+	<targeted>0</targeted>
+	<damage>2</damage>
+	<heal>0</heal>
+</ATTACK>

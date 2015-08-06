@@ -1,0 +1,7 @@
+<SPELL>
+	<name>Attend Wounds</name>
+	<cost>3</cost>
+	<targeted>true</targeted>
+	<damage>0</damage>
+	<heal>5</heal>
+</SPELL>

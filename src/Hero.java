@@ -8,7 +8,7 @@ public class Hero extends Character{
 	Jewelry jewelry = Jewelry.none;
 	Legs legs = Legs.cloth;
 	int exp = 0;
-	CombatAction[] defaultActions = {Magic_Ability.weak_heal, CombatAction.bag, CombatAction.run};
+	CombatAction[] defaultActions = {Abilities.weak_heal, CombatAction.bag, CombatAction.run};
 
 
 	public Hero(String name, int strength, int dexterity, int intelligence) {

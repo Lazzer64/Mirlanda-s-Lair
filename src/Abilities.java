@@ -1,27 +1,108 @@
+import java.io.File;
+import java.io.IOException;
 
-public class Ability implements CombatAction {
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.parsers.SAXParser;
+import javax.xml.parsers.SAXParserFactory;
 
-	// Basic abilities
-	static Ability
-	hit = new Ability("Hit",false,2,0,0),
-	whack = new Ability("Whack",false,2,0,0),
-	// Basic Profession abilities
-	slash = new Ability("Slash",false,4,0,0),
-	smash = new Ability("Smash",false,7,0,6),
-	pierce = new Ability("Pierce",false,4,0,0),
-	snipe = new Ability("Snipe",false,10,0,8),
-	backstab = new Ability("Backstab",false,7,0,6),
-	// Medium abilities
+import org.xml.sax.Attributes;
+import org.xml.sax.SAXException;
+import org.xml.sax.helpers.DefaultHandler;
+
+public final class Abilities {
+
+	final static Ability
+	hit = parse("Hit"),
+	whack = parse("Whack"),
+	slash = parse("Slash"),
+	smash = parse("Smash"),
+	pierce = parse("Pierce"),
+	snipe = parse("Snipe"),
+	backstab = parse("Backstab"),
 	doubleStrike = new MultiStrike("Double Strike",2,2,2),
-	// Advanced abilities
 	tripleStrike = new MultiStrike("Triple Strike",2,3,4),
-	// Legendary abilities
-	bladeFlurry = new MultiStrike("Blade flurry",2,5,8)
+	bladeFlurry = new MultiStrike("Blade flurry",2,5,8),
+	weak_heal = new MagicAbility("Attend Wounds",true,0,5,3),
+	flare = new MagicAbility("Flare",false,6,0,3),
+	fireball = new MagicAbility("Fireball",false,12,0,9),
+	spark = new MagicAbility("Spark",false,5,0,2),
+	lightning = new MagicAbility("Lightning",false,10,0,7),
+	inferno = new RangeOfDamage("Inferno", 10, 10, 10)
 	;
+
+	static Ability a;
 	
+	static Ability parse(String f){
+		return parse(new File("spells/" + f + ".xml"));
+	}
+
+	static Ability parse(File f){
+		System.out.println("Loading " + f.getName() + "...");
+		a = new Ability();
+		try {
+
+			SAXParserFactory spf = SAXParserFactory.newInstance();
+			SAXParser sp = spf.newSAXParser();
+			sp.parse(f, new DefaultHandler(){
+				
+				String currentValue = "";
+				
+				public void startElement(String uri, String localName, String qName, Attributes attributes){
+					if(qName.equalsIgnoreCase("SPELL")){
+						if(currentValue.equalsIgnoreCase("ATTACK")) a = new Ability();
+						else if(currentValue.equalsIgnoreCase("SPELL")) a = new MagicAbility();
+					}
+				}
+				
+				public void endElement(String uri, String localName, String qName){
+					if(qName.equalsIgnoreCase("NAME")){
+						a.name = currentValue;
+					} else if(qName.equalsIgnoreCase("TARGETED")){
+						if(currentValue.equalsIgnoreCase("TRUE") || currentValue.equalsIgnoreCase("1")) a.targeted = true;
+						else if (currentValue.equalsIgnoreCase("FALSE") || currentValue.equalsIgnoreCase("0")) a.targeted = false;
+						else System.err.println("Invalid \"Targeted\" property");
+					} else if(qName.equalsIgnoreCase("DAMAGE")){
+						int val = Integer.parseInt(currentValue);
+						a.damage = val;
+					} else if(qName.equalsIgnoreCase("HEAL")){
+						int val = Integer.parseInt(currentValue);
+						a.heal = val;
+					} else if(qName.equalsIgnoreCase("COST")){
+						int val = Integer.parseInt(currentValue);
+						a.cost = val;
+					}
+					currentValue = "";
+				}
+
+				public void characters(char[] ch, int start, int length) {
+					currentValue = new String(ch,start,length);
+				}
+			});
+
+		} catch (ParserConfigurationException e) {
+			e.printStackTrace();
+		} catch (SAXException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}		
+		return a;
+	}
+}
+
+class Ability implements CombatAction {
+
 	String name, flavor;
 	boolean targeted;
 	int damage,heal,cost;
+
+	Ability(){
+		this.name = "NAME MISSING";
+		this.cost = 0;
+		this.targeted = false;
+		this.damage = 0;
+		this.heal = 0;
+	}
 
 	Ability(String name, boolean targeted, int damage, int heal, int cost){
 		this.targeted = targeted;
@@ -30,7 +111,7 @@ public class Ability implements CombatAction {
 		this.heal = heal;
 		this.cost = cost;
 	}
-	
+
 	public void use(int str, int dex, int intel, Character caster, Character target){
 		if(target != null){
 			flavor = "";
@@ -76,6 +157,20 @@ public class Ability implements CombatAction {
 		return name;
 	}
 
+	public String info(){
+		String text = "";
+
+		text += name + "\n"
+				+ "------\n"
+				+ "Cost: " + cost + "\n"
+				+ "Targeted: " + targeted + "\n"
+				+ "Damage: " + damage + "\n"
+				+ "Heal: " + heal + "\n"
+				;
+
+		return text;
+	}
+
 	public int getCost(){
 		return cost;
 	}
@@ -89,7 +184,7 @@ public class Ability implements CombatAction {
 class MultiStrike extends Ability {
 
 	int numStrikes;
-	
+
 	/**
 	 * Create an ability that hits multiple times at the cost of low base damage and lower crit chance.
 	 * @param name Name of the Ability
@@ -101,13 +196,13 @@ class MultiStrike extends Ability {
 		super(name, false, baseDmg, 0, cost);
 		this.numStrikes = numStrikes;
 	}
-	
+
 	public void use(int str, int dex, int intel, Character caster, Character target){
 		if(target != null){
 			flavor = " *b " + name + "  * hitting *b  " + numStrikes + " * times for ";
-			
+
 			for(int i = 0; i < numStrikes; i++){
-				
+
 				int use_damage = damage;
 				boolean crit = false;
 				double roll = Math.random();
@@ -117,7 +212,7 @@ class MultiStrike extends Ability {
 
 				use_damage += (int) (str/5); // Strength addition to hit
 				if(crit){use_damage *= crit_mult;}
-				
+
 				if(i != numStrikes - 1){
 					if(crit)flavor += " *i *cDEX CRIT! *c * ";
 					flavor += " *cSTR *b " + use_damage + ", * *c ";
@@ -130,23 +225,24 @@ class MultiStrike extends Ability {
 			}
 		}
 	}
-	
+
 }
 
-class Magic_Ability implements CombatAction {
-	static  Magic_Ability
-	weak_heal = new Magic_Ability("Attend Wounds",true,0,5,3),
-	flare = new Magic_Ability("Flare",false,6,0,3),
-	fireball = new Magic_Ability("Fireball",false,12,0,9),
-	spark = new Magic_Ability("Spark",false,5,0,2),
-	lightning = new Magic_Ability("Lightning",false,10,0,7),
-	inferno = new RangeOfDamage("Inferno", 10, 10, 10);
+class MagicAbility extends Ability {
 
 	String name, flavor;
 	boolean targeted;
 	int damage,heal,cost;
 
-	Magic_Ability(String name, boolean targeted, int damage, int heal, int cost){
+	MagicAbility(){
+		this.name = "NAME MISSING";
+		this.cost = 0;
+		this.targeted = false;
+		this.damage = 0;
+		this.heal = 0;
+	}
+
+	MagicAbility(String name, boolean targeted, int damage, int heal, int cost){
 		this.targeted = targeted;
 		this.name = name;
 		this.damage = damage;
@@ -200,34 +296,34 @@ class Magic_Ability implements CombatAction {
 	}
 }
 
-class Effect_Ability extends Magic_Ability {
+class Effect_Ability extends MagicAbility {
 
 	Effect effect;
-	
+
 	Effect_Ability(String name, Effect effect, boolean targeted, int cost) {
 		super(name, targeted, 0, 0, cost);
 		this.effect = effect;
 	}
-	
+
 	public void use(int str, int dex, int intel, Character caster, Character target){
 		effect.use(caster, target);
 	}
 }
 
-class RangeOfDamage extends Magic_Ability {
+class RangeOfDamage extends MagicAbility {
 
 	int minDamage, damageRange;
-	
+
 	RangeOfDamage(String name, int minDamage, int damageRange, int cost) {
 		super(name, false, 0, 0, cost);
 		this.minDamage = minDamage;
 		this.damageRange = damageRange;
 	}
-	
+
 	public void use(int str, int dex, int intel, Character caster, Character target) {
 		if(target != null){
 			flavor = "";
-			
+
 			int use_damage = minDamage;
 			use_damage += (int) (intel/5); // Intelligence addition to hit
 			double roll = Math.random();
@@ -237,7 +333,7 @@ class RangeOfDamage extends Magic_Ability {
 			target.damage(use_damage);
 		}
 	}
-	
+
 }
 
 class ReviveAction implements CombatAction {

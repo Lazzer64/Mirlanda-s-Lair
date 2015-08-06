@@ -5,17 +5,17 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 
 class Equipment implements Item {
-	static Equipment
-	testItem = new Equipment("Test Weapon", new CombatAction[]{Magic_Ability.inferno}),
+	final static Equipment
+	testItem = new Equipment("Test Weapon", new CombatAction[]{Abilities.inferno}),
 	// Useless 
-	stick = new Equipment("Stick", new CombatAction[]{Ability.hit}),
-	bone = new Equipment("Bone", new CombatAction[]{Ability.whack}),
+	stick = new Equipment("Stick", new CombatAction[]{Abilities.hit}),
+	bone = new Equipment("Bone", new CombatAction[]{Abilities.whack}),
 	// Starter 
-	weak_sword = new Equipment("Feeble sword", new CombatAction[]{Ability.slash,Ability.smash}),
-	weak_bow = new Equipment("Flimsy bow", new CombatAction[]{Ability.pierce, Ability.snipe}),
-	weak_staff = new Equipment("Frail staff", new CombatAction[]{Ability.hit, Magic_Ability.spark, Magic_Ability.lightning}),
-	weak_dagger = new Equipment("Paltry Dagger", new CombatAction[]{Ability.slash, Ability.backstab}),
-	weak_tome = new Equipment("Fragile Tome", new CombatAction[]{Ability.hit, Magic_Ability.flare, Magic_Ability.fireball}),
+	weak_sword = new Equipment("Feeble sword", new CombatAction[]{Abilities.slash,Abilities.smash}),
+	weak_bow = new Equipment("Flimsy bow", new CombatAction[]{Abilities.pierce, Abilities.snipe}),
+	weak_staff = new Equipment("Frail staff", new CombatAction[]{Abilities.hit, Abilities.spark, Abilities.lightning}),
+	weak_dagger = new Equipment("Paltry Dagger", new CombatAction[]{Abilities.slash, Abilities.backstab}),
+	weak_tome = new Equipment("Fragile Tome", new CombatAction[]{Abilities.hit, Abilities.flare, Abilities.fireball}),
 	// Medium TODO
 	// Advanced TODO
 	// Legendary
@@ -93,11 +93,11 @@ class DoubleCastStaff extends Equipment {
 	String actFlavor = "";
 	
 	public DoubleCastStaff(){
-		super("Mirror Staff",new CombatAction[]{Ability.hit,Magic_Ability.spark, Magic_Ability.fireball});
+		super("Mirror Staff",new CombatAction[]{Abilities.hit,Abilities.spark, Abilities.fireball});
 	}
 
 	public void cast(CombatAction action, Character caster, Character target){
-		if(action.getClass() != Magic_Ability.class){
+		if(action.getClass() != MagicAbility.class){
 			action.use(caster, target); 
 			actFlavor = action.getFlavorText();
 		}else{
@@ -123,7 +123,7 @@ class FireBow extends Equipment {
 	int fireMult = 2;
 	
 	public FireBow() {
-		super("Wings of the Phoenix", new CombatAction[]{Ability.pierce, Ability.snipe});
+		super("Wings of the Phoenix", new CombatAction[]{Abilities.pierce, Abilities.snipe});
 	}
 	
 	public void cast(CombatAction action, Character caster, Character target){
@@ -151,7 +151,7 @@ class CritSword extends Equipment {
 	
 	
 	public CritSword() {
-		super("Blade of Fortuna", new CombatAction[]{Ability.slash, Ability.smash, Ability.bladeFlurry});
+		super("Blade of Fortuna", new CombatAction[]{Abilities.slash, Abilities.smash, Abilities.bladeFlurry});
 	}
 	
 	public void cast(CombatAction action, Character caster, Character target){

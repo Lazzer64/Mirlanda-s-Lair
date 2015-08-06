@@ -128,7 +128,7 @@ public class Character {
 
 	public CombatAction[] getCombatActions(){
 		//TODO abilities for non heroes
-		return new CombatAction[]{Ability.hit};
+		return new CombatAction[]{Abilities.hit};
 	}
 
 	public String useCombatAction(CombatAction ability, Character target){
