@@ -19,9 +19,9 @@ public final class Abilities {
 	pierce = parse("Pierce"),
 	snipe = parse("Snipe"),
 	backstab = parse("Backstab"),
-	doubleStrike = new MultiStrike("Double Strike",2,2,2),
-	tripleStrike = new MultiStrike("Triple Strike",2,3,4),
-	bladeFlurry = new MultiStrike("Blade flurry",2,5,8),
+	doubleStrike = parse("DoubleStrike"),
+	tripleStrike  = parse("TripleStrike"),
+	bladeFlurry =  parse("BladeFlurry"),
 	weak_heal = parse("WeakHeal"),
 	flare = parse("Flare"),
 	fireball = parse("Fireball"),
@@ -71,6 +71,9 @@ public final class Abilities {
 					} else if(qName.equalsIgnoreCase("COST")){
 						int val = Integer.parseInt(currentValue);
 						a.cost = val;
+					} else if(qName.equalsIgnoreCase("STRIKES")){
+						int val = Integer.parseInt(currentValue);
+						a = new MultiStrike(a.name,a.damage,val,a.cost);
 					}
 					currentValue = "";
 				}
