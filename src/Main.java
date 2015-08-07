@@ -53,6 +53,7 @@ public class Main {
 		
 		p.add(meepo);
 		p.add(alvin);
+		p.give(new Equipment("MMM",new CombatAction[]{Abilities.bladeFlurry}));
 	}
 	
 	static boolean running(){

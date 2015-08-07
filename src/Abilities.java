@@ -27,11 +27,11 @@ public final class Abilities {
 	fireball = parse("Fireball"),
 	spark = parse("Spark"),
 	lightning = parse("Lightning"),
-	inferno = new RangeOfDamage("Inferno", 10, 10, 10)
+	inferno = parse("Inferno")
 	;
 
 	static Ability a;
-	
+
 	static Ability parse(String f){
 		return parse(new File("spells/" + f + ".xml"));
 	}
@@ -44,17 +44,16 @@ public final class Abilities {
 			SAXParserFactory spf = SAXParserFactory.newInstance();
 			SAXParser sp = spf.newSAXParser();
 			sp.parse(f, new DefaultHandler(){
-				
+
 				String currentValue = "";
-				
+
 				public void startElement(String uri, String localName, String qName, Attributes attributes){
-					if(qName.equalsIgnoreCase("SPELL")){
 						if(qName.equalsIgnoreCase("ATTACK")) a = new Ability();
 						else if(qName.equalsIgnoreCase("SPELL")) a = new MagicAbility();
-						else System.err.println("Unknown ability type: " + qName);
-					}
+						else if(qName.equalsIgnoreCase("MULTI")) a = new MultiStrike("MISSING NAME", 0, 0, 0);
+						else if(qName.equalsIgnoreCase("RANGE")) a = new RangeOfDamage("MISSING NAME", 0, 0, 0);
 				}
-				
+
 				public void endElement(String uri, String localName, String qName){
 					if(qName.equalsIgnoreCase("NAME")){
 						a.name = currentValue;
@@ -73,10 +72,17 @@ public final class Abilities {
 						a.cost = val;
 					} else if(qName.equalsIgnoreCase("STRIKES")){
 						int val = Integer.parseInt(currentValue);
-						a = new MultiStrike(a.name,a.damage,val,a.cost);
+						((MultiStrike)a).numStrikes = val;
+					} else if(qName.equalsIgnoreCase("MIN")){
+						int val = Integer.parseInt(currentValue);
+						((RangeOfDamage)a).minDamage = val;
+					} else if(qName.equalsIgnoreCase("SCALE")){
+						int val = Integer.parseInt(currentValue);
+						((RangeOfDamage)a).damageRange = val;
 					}
 					currentValue = "";
 				}
+
 
 				public void characters(char[] ch, int start, int length) {
 					currentValue = new String(ch,start,length);
@@ -152,7 +158,7 @@ class Ability implements CombatAction {
 	public void use(Character caster, Character target){
 		use(caster.strength, caster.dexterity, caster.intelligence, caster, target);
 	}
-	
+
 	public String getFlavorText(){
 		return flavor;
 	}
