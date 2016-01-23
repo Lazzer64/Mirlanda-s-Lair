@@ -232,19 +232,57 @@ abstract class GamePanel extends JPanel implements KeyListener{
 		repaint();
 	}
 
+	/** Print text to a graphics object that will stay within certain bounds.<p>
+	 *  Flags: 
+	 *  <li> \t - tab
+	 *  <li> \n - new line
+	 *  <li> *c - color (RED, BLUE, GREEN, YELLOW, WHITE, HEALTH, MANA, STR, DEX, INT)
+	 *  <li> *b - bold
+	 *  <li> *i - italics
+	 *  <li> *l - double space
+	 *  <li> * - plain text
+	 * 
+	 * @param text String to be displayed
+	 * @param x Starting x position of the text
+	 * @param y Starting y position of the text
+	 * @param width Width of the text box
+	 * @param g Graphics object for the text to be printed on
+	 */
 	void wrapedText(String text, int x, int y, int width, Graphics g){
 		wrapedText(text,x,y,14,width,g);
 	}
 
+	/** Print text to a graphics object that will stay within certain bounds.<p>
+	 *  Flags: 
+	 *  <li> \t - tab
+	 *  <li> \n - new line
+	 *  <li> *c - color (RED, BLUE, GREEN, YELLOW, WHITE, HEALTH, MANA, STR, DEX, INT)
+	 *  <li> *b - bold
+	 *  <li> *i - italics
+	 *  <li> *l - double space
+	 *  <li> * - plain text
+	 * 
+	 * @param text String to be displayed
+	 * @param x Starting x position of the text
+	 * @param y Starting y position of the text
+	 * @param spacing Space between lines
+	 * @param width Width of the text box
+	 * @param g Graphics object for the text to be printed on
+	 */
 	void wrapedText(String text, int x, int y, int spacing, int width, Graphics g){
+		
 		int y_move = y + spacing;
 		int x_buffer = x;
 		int curr_x = x_buffer;
 		int end = text.indexOf(' ');
+		
 		Font normalFont = getFont();
+		
 		g.setColor(Color.BLACK);
 		while(end!=-1){ // While there are spaces in the text
+			
 			String word = text.substring(0, end); // Isolate the word
+			
 			if(word.compareTo("\t") == 0){ // Check if the word is a tab
 				word += "    ";
 			} else if(word.compareTo("\n") == 0){ // Check if the word is a new line
@@ -257,16 +295,23 @@ abstract class GamePanel extends JPanel implements KeyListener{
 			} else if(word.compareTo("*b") == 0){ // Check if the word is a bold
 				g.setFont(new Font(null, Font.BOLD, g.getFont().getSize()));
 				word = "";
-			} else if(word.compareTo("*i") == 0){ // Check if the word is a bold
+			} else if(word.compareTo("*i") == 0){ // Check if the word is a italic
 				g.setFont(new Font(null, Font.ITALIC, g.getFont().getSize()));
 				word = "";
 			} else if(word.compareTo("*") == 0){ // Check for plain text
 				g.setFont(normalFont);
 				word = "";
+			} else if(word.compareTo("*l") == 0){ // Check for double space
+				spacing *= 2;
+				word = "";
 			}
+			
 			if(word != "") word += " ";
 			int wordWidth = getFontMetrics(getFont()).stringWidth(word);
-			if(curr_x + wordWidth > x + width){y_move += spacing;curr_x = x_buffer;} // If the word needs to be wrapped
+			if(curr_x + wordWidth > x + width){ // If the word needs to be wrapped
+				y_move += spacing;
+				curr_x = x_buffer;
+			} 
 			g.drawString(word, curr_x, y_move); // Draw the String at curr_x and y_move
 			text = text.substring(end + 1); // Remove the word from the text String
 			curr_x += wordWidth;
@@ -294,6 +339,8 @@ abstract class GamePanel extends JPanel implements KeyListener{
 			return Color.GREEN;
 		case "YELLOW":
 			return Color.YELLOW;
+		case "WHITE":
+			return Color.WHITE;
 		case "HEALTH":
 			return healthColor;
 		case "MANA":
