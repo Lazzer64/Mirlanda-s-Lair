@@ -1,5 +1,6 @@
 import java.awt.event.KeyListener;
 import java.io.File;
+import java.util.Stack;
 
 import javax.swing.JPanel;
 
@@ -19,7 +20,7 @@ public class Main {
 
 
 	public static void main(String[] args) {
-		openScreen(cp);
+		gw.pushPanel(cp);
 		while(running()){
 			repaint();
 			try {
@@ -31,6 +32,7 @@ public class Main {
 	}
 	
 	public static void endCreation() {
+		
 		String name = cp.nameField.getText();
 		Race race = (Race) cp.raceSelect.getSelectedItem();
 		Profession profession = (Profession) cp.professionSelect.getSelectedItem();
@@ -60,7 +62,7 @@ public class Main {
 				+ "after each addition. Gradually beat in flour *cGREEN mixture. *cWHITE Stir in morsels "
 				+ "and nuts. Drop by rounded tablespoon onto ungreased *cMANA baking sheets. "); 
 		
-		openScreen(new CutScene(intro, dp));
+		gw.replacePanel(new CutScene(intro, dp));
 	}
 	
 	static boolean running(){
@@ -71,17 +73,10 @@ public class Main {
 		gw.repaint();
 	}
 
-	public static void openScreen(JPanel p){
-		gw.setContentPane(p);
-		gw.setKeyListener((KeyListener) p);
-		gw.pack();
-		gw.repaint();
-	}
-
 	public static void restartGame(){
-
 		loadLevel(0);
-		openScreen(cp);
+		gw.panels = new Stack<GamePanel>();
+		gw.pushPanel(cp);
 	}
 
 	public static String itemsToText(Item[] items){
@@ -103,7 +98,7 @@ public class Main {
 		d = Dungeon.parse(new File(level_dir + level_list[current_level] + level_extension));
 		dp = new DungeonPanel(d);
 		p.leader.setLocation(d.getStart().x, d.getStart().y);
-		openScreen(dp);
+		gw.replacePanel(dp);
 	}
 
 	public static void nextLevel(){

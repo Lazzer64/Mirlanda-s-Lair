@@ -137,7 +137,7 @@ public class StatsPanel extends GamePanel {
 	public void keyReleased(KeyEvent arg0) {
 		switch(arg0.getKeyCode()){
 		case Hotkeys.STATS:
-			Main.openScreen(Main.dp);
+			Main.gw.popPanel();
 			break;
 		case Hotkeys.RIGHT:
 			next();

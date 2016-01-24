@@ -251,7 +251,7 @@ class FightPanel extends GamePanel{
 	void giveRewards(){
 		String s = "";
 		int exp_reward = 0;
-		Main.openScreen(Main.dp);
+		Main.gw.popPanel();
 
 		ArrayList<Item> sumLoot = new ArrayList<Item>();
 		for(Monster m: enemies){
@@ -401,7 +401,7 @@ class FightPanel extends GamePanel{
 		switch(e.getKeyCode()){
 		// TODO Remove after testing
 		case KeyEvent.VK_K:
-			Main.openScreen(Main.dp);
+			Main.gw.popPanel();
 			
 			break;
 		}

@@ -331,7 +331,7 @@ class DungeonPanel extends GamePanel{
 	public void keyReleased(KeyEvent e) {
 		switch(e.getKeyCode()){
 		case Hotkeys.INVENTORY:
-			Main.openScreen(Main.ip);
+			Main.gw.pushPanel(Main.ip);
 			break;
 			
 		case Hotkeys.MINIMAP:
@@ -339,7 +339,7 @@ class DungeonPanel extends GamePanel{
 			break;
 			
 		case Hotkeys.STATS:
-			Main.openScreen(Main.sp);
+			Main.gw.pushPanel(Main.sp);
 			break;
 			
 			// TODO remove after testing
@@ -348,11 +348,11 @@ class DungeonPanel extends GamePanel{
 			break;
 			
 		case KeyEvent.VK_K:
-			Main.openScreen(new FightPanel(Main.p.members,new Monster[] {Monsters.skeleton(1),Monsters.skeleton(2)}));
+			Main.gw.pushPanel(new FightPanel(Main.p.members,new Monster[] {Monsters.skeleton(1),Monsters.skeleton(2)}));
 			break;
 			
 		case KeyEvent.VK_P:
-			Main.openScreen(new FightPanel(Main.p.members, new Monster[] {Monsters.spook(1)}));
+			Main.gw.pushPanel(new FightPanel(Main.p.members, new Monster[] {Monsters.spook(1)}));
 			break;
 			
 		case KeyEvent.VK_X:

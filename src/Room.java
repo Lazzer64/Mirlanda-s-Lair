@@ -115,7 +115,7 @@ public class Room {
 		case boss:
 			Monster Boss = Monsters.dragon(Main.p.leader.level);
 			Boss.level = 8;
-			Main.openScreen(new FightPanel(Main.p.members,new Monster[] {Boss}));
+			Main.gw.pushPanel(new FightPanel(Main.p.members,new Monster[] {Boss}));
 			//
 			replaceRoom = new Room(RoomType.room);
 			replaceRoom.color = faded_pink; // change to faded red?
@@ -130,7 +130,7 @@ public class Room {
 			// Mini boss encounter
 			Monster miniB = Monsters.guard(Main.p.leader.level);
 			miniB.level = 3;
-			Main.openScreen(new FightPanel(Main.p.members,new Monster[] {miniB}));
+			Main.gw.pushPanel(new FightPanel(Main.p.members,new Monster[] {miniB}));
 			//
 			replaceRoom = new Room(RoomType.room);
 			replaceRoom.color = faded_orange;
@@ -140,7 +140,7 @@ public class Room {
 		case monster:
 			// Monster encounter
 			Monster enemy = Monsters.skeleton(Main.p.leader.level);
-			Main.openScreen(new FightPanel(Main.p.members,new Monster[] {enemy}));
+			Main.gw.pushPanel(new FightPanel(Main.p.members,new Monster[] {enemy}));
 			//
 			Main.gw.repaint();
 			replaceRoom = new Room(RoomType.room);

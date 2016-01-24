@@ -137,7 +137,7 @@ class InventoryPanel extends GamePanel{
 					if(Main.p.leader.inventory.size() > 0){
 						this.showTarget = true;
 					} else {
-						Main.openScreen(Main.dp);
+						Main.gw.popPanel();
 					}
 					break;
 				case 1: // Inspect
@@ -195,7 +195,7 @@ class InventoryPanel extends GamePanel{
 	public void keyReleased(KeyEvent e) {
 		switch(e.getKeyCode()){
 		case Hotkeys.INVENTORY:
-			Main.openScreen(Main.dp);
+			Main.gw.popPanel();
 			break;
 		}
 	}
@@ -204,12 +204,12 @@ class InventoryPanel extends GamePanel{
 
 class CombatInventoryPanel extends InventoryPanel {
 
-	JPanel p;
+	GamePanel p;
 
 	public CombatInventoryPanel(){
 		super();
 
-		this.p = (JPanel) Main.gw.getContentPane();
+		this.p = (GamePanel) Main.gw.getContentPane();
 		// TODO fix no more items
 	}
 
@@ -225,7 +225,7 @@ class CombatInventoryPanel extends InventoryPanel {
 			break;
 		case Hotkeys.SELECT:
 			Main.p.leader.use(getSelected());
-			Main.openScreen(p);
+			// TODO Main.openScreen(p);
 			
 		}
 	}

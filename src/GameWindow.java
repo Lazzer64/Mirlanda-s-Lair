@@ -10,6 +10,7 @@ import java.awt.image.BufferStrategy;
 import java.io.File;
 import java.io.IOException;
 import java.util.Collection;
+import java.util.Stack;
 
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
@@ -25,6 +26,8 @@ public class GameWindow extends JFrame{
 	final static ImageIcon icon = new ImageIcon("mirlandaIcon.png");
 	final static Color Back_Color = new Color(238,238,238);
 
+	Stack<GamePanel> panels = new Stack<GamePanel>();
+	
 	public GameWindow(){
 		setTitle("Mirlanda's Lair");
 		setIconImage(icon.getImage());
@@ -48,7 +51,37 @@ public class GameWindow extends JFrame{
 		setLocationRelativeTo(null);
 
 	}
-
+	
+	void loadPanel(GamePanel p){
+		if(p == null) return;
+		setContentPane(p);
+		setKeyListener((KeyListener) p);
+		pack();
+		repaint();
+		System.out.print("Switching to: " + panels.peek().getClass() + "\n[ ");
+		for(int i = 0; i < panels.size(); i++){
+			System.out.print(panels.get(i).getClass() + ", ");
+		}
+		System.out.println("]");
+	}
+	
+	void replacePanel(GamePanel p){
+		panels.pop();
+		panels.push(p);
+		loadPanel(panels.peek());
+	}
+	
+	public void pushPanel(GamePanel p){
+		panels.push(p);
+		loadPanel(panels.peek());
+	}
+	
+	public GamePanel popPanel(){
+		GamePanel popped = panels.pop();
+		loadPanel(panels.peek());
+		return popped;
+	}
+	
 	public void setKeyListener(KeyListener k){
 
 		for(int i = 0; i < this.getKeyListeners().length; i++){

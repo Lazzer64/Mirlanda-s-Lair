@@ -17,7 +17,7 @@ public class CutScene extends GamePanel {
 		CutScene b = new CutScene(":^)",null);
 		CutScene cutscene = new CutScene(text,b);
 		
-		Main.openScreen(cutscene);
+		Main.gw.pushPanel(cutscene);
 			
 		while(true){
 			Main.gw.repaint();
@@ -51,6 +51,8 @@ public class CutScene extends GamePanel {
 	
 	@Override
 	public void keyReleased(KeyEvent e) {
-		if(nextPanel!=null) Main.openScreen(nextPanel);
+		if(nextPanel != null){
+			Main.gw.replacePanel(nextPanel);
+		}
 	}
 }

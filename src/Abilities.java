@@ -366,7 +366,7 @@ class BagAction implements CombatAction {
 
 	public void use(Character caster,Character target) {
 		if(Main.p.inventory.size() > 0){
-			Main.openScreen(new CombatInventoryPanel());
+			Main.gw.pushPanel(new CombatInventoryPanel());
 		}
 	}
 
@@ -397,7 +397,7 @@ class RunAction implements CombatAction {
 		double roll =  Math.random() * 50;
 		if(roll <= chance){
 			flavor = "You *b escape! * ";
-			Main.openScreen(Main.dp);
+			Main.gw.popPanel();
 			Main.dp.setPopText(" \n You escaped the " + target.name + "!");
 			Main.dp.openPopup();
 		} else {
