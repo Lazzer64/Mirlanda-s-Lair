@@ -42,7 +42,6 @@ public class Main {
 		d.addEncounter(Room.RoomType.monster, 7);
 		d.addEncounter(Room.RoomType.mini_boss, 3);
 		
-		openScreen(dp);
 		p.leader.setLocation(d.getStart().x, d.getStart().y);
 		p.leader.revealRooms();
 		p.leader.give(new Item[]{Consumable.red_potion,Consumable.blue_potion,Consumable.red_potion});
@@ -54,6 +53,14 @@ public class Main {
 		p.add(meepo);
 		p.add(alvin);
 		p.give(new Equipment("MMM",new CombatAction[]{Abilities.bladeFlurry}));
+		
+		String intro = (" *cRED COMBINE *cWHITE flour, *i baking soda * *cWHITE and *b salt * in small bowl. "
+				+ "Beat butter, *cBLUE granulated sugar, *cWHITE brown sugar and vanilla extract "
+				+ "in large mixer bowl until *cHEALTH creamy. *cWHITE Add *cYELLOW *b eggs, * *cWHITE one at a time, beating well "
+				+ "after each addition. Gradually beat in flour *cGREEN mixture. *cWHITE Stir in morsels "
+				+ "and nuts. Drop by rounded tablespoon onto ungreased *cMANA baking sheets. "); 
+		
+		openScreen(new CutScene(intro, dp));
 	}
 	
 	static boolean running(){
